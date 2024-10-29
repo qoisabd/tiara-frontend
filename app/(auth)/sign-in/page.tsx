@@ -16,27 +16,74 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Bounce, toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { loginUser } from "@/features/auth/authThunk";
 
 // Schema for form validation
 const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  input: z.string().min(5, "Username or email must be at least 5 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 type SignInFormValues = z.infer<typeof formSchema>;
 
 const Login = () => {
-  // Initialize the useForm hook with zod schema
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      input: "",
       password: "",
     },
   });
 
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const { status, errorMessage } = useSelector(
+    (state: RootState) => state.loginReducer
+  );
+
   const imgLogin = "/assets/images/img-sign-in.svg";
   const logoDiamond = "/assets/logos/logo-rifqi-top-up.svg";
+
+  const onSubmit = async (data: SignInFormValues) => {
+    try {
+      const dataValue = {
+        input: data.input,
+        us_password: data.password,
+      };
+      await dispatch(loginUser(dataValue)).unwrap();
+
+      toast.success("Login Success", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      router.push("/");
+    } catch (error: any) {
+      console.log(errorMessage);
+      const message = errorMessage || error.message;
+      toast.error(`User Login Failed: ${message}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  };
 
   return (
     <div className="w-full flex">
@@ -44,13 +91,11 @@ const Login = () => {
         <div className="w-1/2">
           <img src={imgLogin} alt="login" />
         </div>
-        <div className="mt-10">
-          <p className="text-white text-lg text-center">
+        <div className="mt-10 text-white text-center">
+          <p className="text-lg">
             Level up your gaming experience with Rifqi top-ups!
           </p>
-          <p className="text-white text-sm text-center">
-            Login to your account now!
-          </p>
+          <p className="text-sm">Login to your account now!</p>
         </div>
       </div>
       <div className="flex flex-1 justify-center">
@@ -65,12 +110,9 @@ const Login = () => {
                 height={50}
               />
             </div>
-            <div className="flex items-center justify-center">
-              <h2>
-                <span className="text-[#285CC4] font-bold text-2xl">Rifqi</span>
-                <span className="text-[#FBB017] font-bold text-2xl">
-                  Top-up
-                </span>
+            <div className="flex items-center">
+              <h2 className="text-[#285CC4] font-bold text-2xl">
+                Rifqi<span className="text-[#FBB017]">Top-up</span>
               </h2>
             </div>
           </div>
@@ -85,24 +127,24 @@ const Login = () => {
             <Form {...form}>
               <form
                 className="space-y-4 w-full"
-                onSubmit={form.handleSubmit((data) => console.log(data))}
+                onSubmit={form.handleSubmit(onSubmit)}
               >
                 <div className="flex flex-col gap-2">
                   <FormField
                     control={form.control}
-                    name="email"
+                    name="input"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email Address</FormLabel>
+                        <FormLabel>Username or Email Address</FormLabel>
                         <FormControl>
                           <Input
-                            type="email"
-                            placeholder="Enter your email address"
+                            type="text"
+                            placeholder="Enter your username or email"
                             {...field}
                           />
                         </FormControl>
                         <FormMessage>
-                          {form.formState.errors.email?.message}
+                          {form.formState.errors.input?.message}
                         </FormMessage>
                       </FormItem>
                     )}
@@ -118,8 +160,8 @@ const Login = () => {
                           <Input
                             type="password"
                             placeholder="Enter your password"
-                            isPassword
                             {...field}
+                            isPassword
                           />
                         </FormControl>
                         <FormMessage>
@@ -129,23 +171,26 @@ const Login = () => {
                     )}
                   />
                 </div>
-                <div className="flex flex-row justify-between text-center">
-                  <div className="flex items-center">
-                    <input type="checkbox" className="mr-1" />
-                    <label className="text-sm font-semibold">Remember me</label>
-                  </div>
+
+                <div className="flex flex-row justify-between items-center text-center">
+                  <label className="flex items-center text-sm font-normal">
+                    <input type="checkbox" className="mr-1" /> Remember me
+                  </label>
                   <p className="text-[#285CC4] text-sm underline">
                     <Link href="/auth/forgot-password">Forgot Password?</Link>
                   </p>
                 </div>
+
                 <Button type="submit" className="w-full bg-[#285CC4]">
-                  Sign In
+                  {status === "loading" ? "Signing In..." : "Sign In"}
                 </Button>
+
                 <div className="my-1 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
                   <p className="mx-2 mb-0 text-center font-semibold text-slate-500">
                     Or
                   </p>
                 </div>
+
                 <Button
                   type="button"
                   className="w-full border border-black hover:bg-[#285CC4] hover:text-white"
@@ -153,6 +198,7 @@ const Login = () => {
                 >
                   Sign In with Google
                 </Button>
+
                 <p className="text-center text-gray-400 mt-1">
                   Don't have an account?{" "}
                   <span className="text-[#285CC4] font-semibold underline">
