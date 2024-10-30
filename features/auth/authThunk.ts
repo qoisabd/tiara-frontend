@@ -34,6 +34,64 @@ export const loginUser = createAsyncThunk(
       if (!error.response) {
         throw error;
       }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+      return;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotPassword",
+  async (data: { us_email: string }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/forgot-password`,
+        data
+      );
+      return response.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateResetPassword = createAsyncThunk(
+  "auth/updateResetPassword",
+  async (data: { us_password: string }, { rejectWithValue }) => {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get("token");
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/update-reset-password?token=${token}`,
+        data
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
       return rejectWithValue(error.response.data.message);
     }
   }

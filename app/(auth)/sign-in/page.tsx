@@ -69,8 +69,7 @@ const Login = () => {
       });
       router.push("/");
     } catch (error: any) {
-      console.log(errorMessage);
-      const message = errorMessage || error.message;
+      const message = error.message;
       toast.error(`User Login Failed: ${message}`, {
         position: "top-right",
         autoClose: 5000,
@@ -87,15 +86,20 @@ const Login = () => {
 
   return (
     <div className="w-full flex">
-      <div className="flex flex-1 flex-col items-center justify-center min-h-screen bg-[#285CC4]">
-        <div className="w-1/2">
-          <img src={imgLogin} alt="login" />
-        </div>
-        <div className="mt-10 text-white text-center">
-          <p className="text-lg">
+      <div className="sm:flex hidden w-1/2 flex-1 flex-col items-center justify-center min-h-screen bg-[#285CC4] ">
+        <div className="text-center p-8">
+          <h1 className="text-5xl font-bold text-white mb-4">Login</h1>
+          <p className="text-white text-lg">
             Level up your gaming experience with Rifqi top-ups!
           </p>
-          <p className="text-sm">Login to your account now!</p>
+          <div className="mt-8 flex items-center justify-center">
+            <Image
+              src={imgLogin}
+              alt="Create New Password Illustration"
+              width={450}
+              height={450}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-1 justify-center">
@@ -176,12 +180,15 @@ const Login = () => {
                   <label className="flex items-center text-sm font-normal">
                     <input type="checkbox" className="mr-1" /> Remember me
                   </label>
-                  <p className="text-[#285CC4] text-sm underline">
-                    <Link href="/auth/forgot-password">Forgot Password?</Link>
+                  <p className="text-[#285CC4] text-sm underline hover:text-blue-900">
+                    <Link href="/forgot-password">Forgot Password?</Link>
                   </p>
                 </div>
 
-                <Button type="submit" className="w-full bg-[#285CC4]">
+                <Button
+                  type="submit"
+                  className="w-full bg-[#285CC4] hover:bg-[#1A4C8B] text-white"
+                >
                   {status === "loading" ? "Signing In..." : "Sign In"}
                 </Button>
 

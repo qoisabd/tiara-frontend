@@ -105,7 +105,7 @@ const Register = () => {
 
   return (
     <div className="w-full flex">
-      <div className="flex flex-1 flex-col items-center justify-center min-h-screen bg-[#285CC4]">
+      <div className="sm:flex hidden flex-1 flex-col items-center justify-center min-h-screen bg-[#285CC4]">
         <div className="w-1/2">
           <img src={imgRegister} alt="login" />
         </div>

@@ -10,3 +10,12 @@ export interface LoginType {
   input: string;
   us_password: string;
 }
+
+export interface ForgotPasswordType {
+  us_email: string;
+}
+
+export interface UpdateResetPasswordType {
+  us_password: string;
+  confirmPassword?: string;
+}
