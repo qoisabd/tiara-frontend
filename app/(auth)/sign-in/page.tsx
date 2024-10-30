@@ -21,6 +21,10 @@ import { Bounce, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { loginUser } from "@/features/auth/authThunk";
+import { auth, googleProvider, signInWithPopup } from "@/lib/firebase";
+import { loginWithGoogle } from "@/features/auth/authThunk";
+import { resetLoginWithGoogle } from "@/features/auth/loginWithGoogleSlice";
+import { FcGoogle } from "react-icons/fc";
 
 // Schema for form validation
 const formSchema = z.object({
@@ -71,6 +75,42 @@ const Login = () => {
     } catch (error: any) {
       const message = error.message;
       toast.error(`User Login Failed: ${message}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  };
+
+  const handleLoginWithGoogle = async () => {
+    try {
+      googleProvider.setCustomParameters({ prompt: "select_account" });
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+      await dispatch(loginWithGoogle({ idToken })).unwrap();
+      toast.success("Google login success", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      router.push("/");
+    } catch (error: any) {
+      dispatch(resetLoginWithGoogle());
+      console.error(error.message);
+      toast.error(`Google login failed: ${error.message}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -200,9 +240,11 @@ const Login = () => {
 
                 <Button
                   type="button"
-                  className="w-full border border-black hover:bg-[#285CC4] hover:text-white"
+                  className="w-full bg-white text-[#285CC4] border-[#285CC4] hover:bg-[#FBB017] hover:text-white border hover:border-[#FBB017]"
                   variant="ghost"
+                  onClick={handleLoginWithGoogle}
                 >
+                  <FcGoogle />
                   Sign In with Google
                 </Button>
 
