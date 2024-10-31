@@ -4,6 +4,7 @@ import registerReducer from "@/features/auth/registerSlice";
 import forgotPasswordReducer from "@/features/auth/forgotPasswordSlice";
 import updateResetPasswordReducer from "@/features/auth/updateResetPasswordSlice";
 import loginWithGoogleReducer from "@/features/auth/loginWithGoogleSlice";
+import themeReducer from "@/features/theme/themeSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -13,6 +14,7 @@ export const makeStore = () => {
       forgotPasswordReducer,
       updateResetPasswordReducer,
       loginWithGoogleReducer,
+      themeReducer,
     },
   });
 };
