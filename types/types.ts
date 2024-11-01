@@ -19,3 +19,9 @@ export interface UpdateResetPasswordType {
   us_password: string;
   confirmPassword?: string;
 }
+
+export interface CategoryType {
+  ct_name: string;
+  ct_game_publisher: string;
+  ct_image: string;
+}
