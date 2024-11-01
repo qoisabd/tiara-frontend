@@ -23,7 +23,7 @@ const ThemeToggle = () => {
     } else {
       document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+    localStorage.setItem("dark", JSON.stringify(darkMode));
   }, [darkMode]);
   return (
     <DropdownMenu>
