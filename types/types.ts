@@ -20,7 +20,7 @@ export interface UpdateResetPasswordType {
   confirmPassword?: string;
 }
 
-export interface CategoryType {
+export interface CategoryCardType {
   ct_name: string;
   ct_game_publisher: string;
   ct_image: string;

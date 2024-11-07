@@ -2,10 +2,11 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { fetchAllCategory } from "@/features/home/homeThunk";
+import { fetchCategoryCard } from "@/features/home/homeThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { Status } from "@/utils/Status";
+import PopularCardGameSkeleton from "./skeleton/PopularCardGameSkeleton";
 
 const PopularCardGame = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -14,7 +15,7 @@ const PopularCardGame = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchAllCategory());
+    dispatch(fetchCategoryCard());
   }, [dispatch]);
 
   const imgFire = "/assets/images/img-fire.png";
@@ -32,7 +33,7 @@ const PopularCardGame = () => {
   );
 
   if (status === Status.LOADING) {
-    return <p>Loading...</p>;
+    return <PopularCardGameSkeleton />;
   }
 
   if (status === Status.FAILED) {
@@ -57,7 +58,6 @@ const PopularCardGame = () => {
           >
             <Link href="/game">
               <div className="relative w-full h-full">
-                {/* Gambar dengan efek grayscale dan zoom saat hover */}
                 <Image
                   src={item.ct_image}
                   layout="fill"
@@ -66,7 +66,6 @@ const PopularCardGame = () => {
                   className="filter grayscale transition duration-500 ease-in-out transform group-hover:grayscale-0 group-hover:scale-110"
                 />
 
-                {/* Overlay kuning dengan teks biru saat hover */}
                 <div className="absolute bottom-0 left-0 right-0 bg-yellow-400 p-3 opacity-90 group-hover:opacity-100 transition duration-300 ease-in-out">
                   <h3 className="text-md font-semibold text-blue-900">
                     {item.ct_name}

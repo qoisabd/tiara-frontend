@@ -1,10 +1,10 @@
 import { Status } from "@/utils/Status";
 import { createSlice } from "@reduxjs/toolkit";
-import { CategoryType } from "@/types/types";
-import { fetchAllCategory } from "./homeThunk";
+import { CategoryCardType } from "@/types/types";
+import { fetchCategoryCard } from "./homeThunk";
 
 interface CategoryState {
-  category: CategoryType[];
+  category: CategoryCardType[];
   status: string;
   errorMessage: string;
 }
@@ -21,15 +21,15 @@ export const categorySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllCategory.pending, (state) => {
+      .addCase(fetchCategoryCard.pending, (state) => {
         state.status = Status.LOADING;
         state.errorMessage = "";
       })
-      .addCase(fetchAllCategory.fulfilled, (state, action) => {
+      .addCase(fetchCategoryCard.fulfilled, (state, action) => {
         state.status = Status.SUCCESS;
-        state.category = action.payload.data;
+        state.category = action.payload;
       })
-      .addCase(fetchAllCategory.rejected, (state, action) => {
+      .addCase(fetchCategoryCard.rejected, (state, action) => {
         state.status = Status.FAILED;
         state.errorMessage = action.error.message || "Failed to fetch category";
       });
