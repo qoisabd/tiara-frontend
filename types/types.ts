@@ -22,6 +22,19 @@ export interface UpdateResetPasswordType {
 
 export interface CategoryCardType {
   ct_name: string;
+  ct_code: string;
   ct_game_publisher: string;
   ct_image: string;
+}
+
+export interface CategoryDetailType {
+  ct_id: number;
+  ct_name: string;
+  ct_code: string;
+  ct_game_publisher: string;
+  ct_image: string;
+  ct_image_cover: string;
+  ct_currency_type: string;
+  ct_currency_type_image: string;
+  ct_steps: JSON;
 }

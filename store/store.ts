@@ -6,6 +6,7 @@ import updateResetPasswordReducer from "@/features/auth/updateResetPasswordSlice
 import loginWithGoogleReducer from "@/features/auth/loginWithGoogleSlice";
 import themeReducer from "@/features/theme/themeSlice";
 import categoryReducer from "@/features/home/categorySlice";
+import categoryDetailReducer from "@/features/home/categoryDetailSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -17,6 +18,7 @@ export const makeStore = () => {
       loginWithGoogleReducer,
       themeReducer,
       categoryReducer,
+      categoryDetailReducer,
     },
   });
 };

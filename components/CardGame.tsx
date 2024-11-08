@@ -42,7 +42,7 @@ const CardGame = () => {
             key={index}
             className="relative w-[180px] h-[280px] group overflow-hidden rounded-2xl shadow-md transform transition duration-300 ease-in-out hover:shadow-2xl"
           >
-            <Link href="/game">
+            <Link href={`/games/${item.ct_code}`}>
               <div className="relative w-full h-full">
                 <Image
                   src={item.ct_image}
