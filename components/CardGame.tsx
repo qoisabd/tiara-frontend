@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { fetchCategoryCard } from "@/features/home/homeThunk";
+import { fetchCategoryCard } from "@/features/category/categoryThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { Status } from "@/utils/Status";

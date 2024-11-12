@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchCategoryDetail } from "./homeThunk";
+import { fetchCategoryDetail } from "./categoryThunk";
 import { Status } from "@/utils/Status";
 import { CategoryDetailType } from "@/types/types";
 

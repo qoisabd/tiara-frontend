@@ -38,3 +38,10 @@ export interface CategoryDetailType {
   ct_currency_type_image: string;
   ct_steps: JSON;
 }
+
+export interface ProductDetailType {
+  pr_id: string;
+  pr_name: string;
+  pr_price: number;
+  pr_stock_quantity: number;
+}

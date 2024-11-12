@@ -1,7 +1,7 @@
 import { Status } from "@/utils/Status";
 import { createSlice } from "@reduxjs/toolkit";
 import { CategoryCardType } from "@/types/types";
-import { fetchCategoryCard } from "./homeThunk";
+import { fetchCategoryCard } from "./categoryThunk";
 
 interface CategoryState {
   category: CategoryCardType[];

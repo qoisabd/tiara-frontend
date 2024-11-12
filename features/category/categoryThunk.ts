@@ -1,13 +1,13 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { CategoryCardType, CategoryDetailType } from "@/types/types";
+import { CategoryCardType } from "@/types/types";
 
 export const fetchCategoryCard = createAsyncThunk(
   "category/fetchAllCategory",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/home/get-all-category`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/category/get-all-category`
       );
 
       // Check if the actual data is nested in `response.data.data`
@@ -44,7 +44,7 @@ export const fetchCategoryDetail = createAsyncThunk(
   async (categoryCode: string, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/home/get-category-detail/${categoryCode}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/category/get-category-detail/${categoryCode}`
       );
 
       const data = response.data.data;

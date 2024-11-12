@@ -5,8 +5,9 @@ import forgotPasswordReducer from "@/features/auth/forgotPasswordSlice";
 import updateResetPasswordReducer from "@/features/auth/updateResetPasswordSlice";
 import loginWithGoogleReducer from "@/features/auth/loginWithGoogleSlice";
 import themeReducer from "@/features/theme/themeSlice";
-import categoryReducer from "@/features/home/categorySlice";
-import categoryDetailReducer from "@/features/home/categoryDetailSlice";
+import categoryReducer from "@/features/category/categorySlice";
+import categoryDetailReducer from "@/features/category/categoryDetailSlice";
+import productDetailReducer from "@/features/product/productDetailSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -19,6 +20,7 @@ export const makeStore = () => {
       themeReducer,
       categoryReducer,
       categoryDetailReducer,
+      productDetailReducer,
     },
   });
 };
