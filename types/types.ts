@@ -43,5 +43,30 @@ export interface ProductDetailType {
   pr_id: string;
   pr_name: string;
   pr_price: number;
-  pr_stock_quantity: number;
+  pr_quantity: number;
+}
+
+export interface OrderType {
+  account_name: string;
+  account_id: number;
+  order_email: string;
+  id?: number;
+  name?: string;
+  quantity?: number;
+  price?: number;
+  or_platform_token?: string;
+}
+
+export interface OrderProductType {
+  pr_id?: number;
+  pr_name?: string;
+  pr_price?: number;
+  pr_quantity?: number;
+}
+
+export interface OrderResponseType {
+  oi_product: OrderType[];
+  or_total_amount: number;
+  userId: number;
+  email: string;
 }

@@ -21,18 +21,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { z } from "zod";
-import { fetchProductDetail } from "@/features/product/productThunk";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { fetchProductDetail } from "@/features/product/productThunk";
+import { createOrder } from "@/features/order/orderThunk";
+import { OrderType, OrderProductType } from "@/types/types";
 
 const formSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters"),
-  accountId: z.string().min(5, "Account ID must be at least 5 characters"),
-  product: z.string().min(1, "Please select a product"),
-  quantity: z.number().min(1, "Quantity must be at least 1"),
-  promo: z.string().optional(),
-  email: z.string().email("Invalid email address"),
-  whatsapp: z.string().min(10, "Invalid whatsapp number"),
+  account_name: z.string().min(3, "Username must be at least 3 characters"),
+  account_id: z.string().min(5, "Account ID must be at least 5 characters"),
+  order_product: z.number().min(1, "Please select a product"),
+  order_quantity: z.number().min(1, "Quantity must be at least 1"),
+  order_promo_code: z.string().optional(),
+  order_email: z.string().email("Invalid email address"),
+  order_whatsapp: z.string().min(10, "Invalid whatsapp number"),
 });
 
 type OrderFormValues = z.infer<typeof formSchema>;
@@ -43,13 +45,13 @@ const GameDetail = () => {
   const form = useForm<OrderFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
-      accountId: "",
-      product: "",
-      quantity: 1,
-      promo: "",
-      email: "",
-      whatsapp: "",
+      account_name: "",
+      account_id: "",
+      order_product: 1,
+      order_quantity: 1,
+      order_promo_code: "",
+      order_email: "",
+      order_whatsapp: "",
     },
   });
 
@@ -65,6 +67,8 @@ const GameDetail = () => {
     (state: RootState) => state.productDetailReducer
   );
 
+  const { order } = useSelector((state: RootState) => state.orderReducer);
+
   useEffect(() => {
     if (categoryCode) {
       dispatch(fetchCategoryDetail(categoryCode));
@@ -79,12 +83,114 @@ const GameDetail = () => {
     }
   }, [categoryDetailId, dispatch]);
 
+  useEffect(() => {
+    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
+    const snapUrl = process.env.NEXT_MIDTRANS_SNAP_URL;
+    const script = document.createElement("script");
+    if (snapUrl) {
+      script.src = snapUrl;
+    }
+    if (clientKey) {
+      script.setAttribute("data-client-key", clientKey);
+    }
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  // get order from redux
+  useEffect(() => {
+    console.log("Order", order);
+
+    // Ensure `order` is not null and there are orders in the array
+    if (order && order.length > 0) {
+      order.forEach((item) => {
+        if (item.or_platform_token) {
+          window.snap.pay(item.or_platform_token, {
+            onSuccess: function (result: any) {
+              console.log("Payment success:", result);
+            },
+            onPending: function (result: any) {
+              console.log("Payment pending:", result);
+            },
+            onError: function (result: any) {
+              console.log("Payment error:", result);
+            },
+            onClose: function () {
+              console.log(
+                "Customer closed the popup without finishing the payment"
+              );
+            },
+          });
+        }
+      });
+    }
+  }, [order]);
+
   const sections = [
     {
       title: "Instant Process",
       products: productDetail.slice(0, 6),
     },
   ];
+
+  const onSubmit = async (data: OrderFormValues) => {
+    try {
+      const orderProduct: any = productDetail.find(
+        (product) => product.pr_id === selectedProduct
+      );
+      const orderData: OrderType = {
+        account_id: parseInt(data.account_id, 10),
+        account_name: data.account_name,
+        id: orderProduct.pr_id,
+        name: orderProduct.pr_name,
+        quantity: data.order_quantity,
+        price: orderProduct.pr_price,
+        order_email: data.order_email,
+      };
+      console.log(orderData);
+      const result = await dispatch(
+        createOrder({
+          oi_product: [orderData],
+          or_total_amount: data.order_quantity * orderProduct.pr_price,
+          userId: 777,
+          email: data.order_email,
+        })
+      ).unwrap();
+
+      console.log(result);
+
+      // Open Midtrans snap after successful order creation
+      if (result && result.token) {
+        // @ts-ignore
+        window.snap.pay(result.token, {
+          onSuccess: function (result: any) {
+            console.log("Payment success:", result);
+            // Handle success (e.g., show success message, redirect)
+          },
+          onPending: function (result: any) {
+            console.log("Payment pending:", result);
+            // Handle pending (e.g., show pending message)
+          },
+          onError: function (result: any) {
+            console.log("Payment error:", result);
+            // Handle error (e.g., show error message)
+          },
+          onClose: function () {
+            console.log(
+              "Customer closed the popup without finishing the payment"
+            );
+            // Handle popup closed (e.g., ask customer to complete payment)
+          },
+        });
+      }
+      console.log("Order created successfully", result);
+    } catch (error: any) {
+      console.error(error);
+      // Handle error (e.g., show error message to user)
+    }
+  };
 
   return (
     <section className="">
@@ -104,7 +210,7 @@ const GameDetail = () => {
             {/* Detail game */}
             <div className="min-h-[120px] bg-[#3D92BF] shadow-2xl md:min-h-[140px]">
               <div className="container px-4 md:px-8 lg:px-32 flex flex-row flex-wrap items-center gap-4">
-                <div className="flex-shrink-0 my-5">
+                <div className="flex-shrink-0 my-2 sm:my-5">
                   <Image
                     src={category.ct_image}
                     width={160}
@@ -114,7 +220,7 @@ const GameDetail = () => {
                   />
                 </div>
 
-                <div className="flex-1 mt-5">
+                <div className="flex-1 mt-0 sm:mt-5 mb-3">
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="flex flex-row gap-3">
@@ -147,7 +253,7 @@ const GameDetail = () => {
 
             {/* main content */}
             <div className="px-4 md:px-8 lg:px-32 py-8 bg-gradient-detail">
-              <div className="flex flex-row gap-5">
+              <div className="flex flex-col sm:flex-row gap-0 sm:gap-5 items-center sm:items-start justify-center">
                 {/* card to steps */}
                 <div className="basis-1/3">
                   <Card className="bg-blue-80 text-white">
@@ -176,16 +282,21 @@ const GameDetail = () => {
                         For Customer Support, please contact Admin on our
                         official Whatsapp at +62 123-4567-8910 {""}
                         <span className="text-yellow-500">
-                          <a href="https://wa.me/12345678910">or click here</a>
+                          <a href="https://wa.me/12345678910" target="_blank">
+                            or click here
+                          </a>
                         </span>
                       </p>
                     </CardContent>
                   </Card>
                 </div>
                 {/* FORM DOWN BELOW */}
-                <div className="basis-2/3">
+                <div className="flex-grow sm:basis-2/3 flex items-center justify-center mt-5 sm:mt-0">
                   <Form {...form}>
-                    <form className="space-y-5 w-full">
+                    <form
+                      className="space-y-5 w-full"
+                      onSubmit={form.handleSubmit(onSubmit)}
+                    >
                       {/* account detail*/}
                       <div className="rounded-xl bg-[#006994] shadow-2xl">
                         <div className="flex border-b border-blue-400">
@@ -193,55 +304,58 @@ const GameDetail = () => {
                             1
                           </div>
                           <h3 className="flex w-full items-center rounded-tr-xl bg-gradient-to-b from-blue-800/50 to-blue-900/50 px-4 text-sm md:text-lg font-semibold text-white">
-                            Enter your Account ID
+                            Enter your Account Detail
                           </h3>
                         </div>
 
                         <div className="p-4 sm:px-6 sm:pb-4 flex flex-row gap-3">
-                          <FormField
-                            control={form.control}
-                            name="accountId"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-white">
-                                  Account ID
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    type="text"
-                                    placeholder="Enter your account ID"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="username"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-white">
-                                  Username
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    type="text"
-                                    placeholder="Enter your username"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                          <div className="flex-grow">
+                            <FormField
+                              control={form.control}
+                              name="account_name"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-white">
+                                    Account Name
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="text"
+                                      placeholder="Enter your username"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="flex-grow">
+                            <FormField
+                              control={form.control}
+                              name="account_id"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-white">
+                                    Account ID
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="text"
+                                      placeholder="Enter your account ID"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
                         </div>
                         <div className="px-4 pb-4 text-[10px] sm:px-6 sm:pb-6">
                           <div>
                             <p className="text-white">
-                              <em>Contoh = IlhamGanteng#1234</em>
+                              <em>Contoh = Rifqi#1234</em>
                             </p>
                           </div>
                         </div>
@@ -261,7 +375,7 @@ const GameDetail = () => {
                         <div className="p-4 sm:px-6 sm:pb-4">
                           <FormField
                             control={form.control}
-                            name="product"
+                            name="order_product"
                             render={({ field }) => (
                               <FormItem>
                                 <FormControl>
@@ -270,7 +384,7 @@ const GameDetail = () => {
                                       field.onChange(value);
                                       setSelectedProduct(value);
                                     }}
-                                    defaultValue={field.value}
+                                    defaultValue={field.value.toString()}
                                     className="space-y-6"
                                   >
                                     {sections.map((section, idx) => (
@@ -353,7 +467,7 @@ const GameDetail = () => {
                         <div className="p-4 sm:px-6 sm:pb-4">
                           <FormField
                             control={form.control}
-                            name="quantity"
+                            name="order_quantity"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel className="text-white">
@@ -375,7 +489,7 @@ const GameDetail = () => {
                                       type="button"
                                       onClick={() =>
                                         form.setValue(
-                                          "quantity",
+                                          "order_quantity",
                                           field.value + 1
                                         )
                                       }
@@ -387,7 +501,7 @@ const GameDetail = () => {
                                       type="button"
                                       onClick={() =>
                                         form.setValue(
-                                          "quantity",
+                                          "order_quantity",
                                           Math.max(1, field.value - 1)
                                         )
                                       }
@@ -423,7 +537,7 @@ const GameDetail = () => {
                         <div className="p-4 sm:px-6 sm:pb-4">
                           <FormField
                             control={form.control}
-                            name="promo"
+                            name="order_promo_code"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel className="text-white">
@@ -457,7 +571,7 @@ const GameDetail = () => {
                         <div className="p-4 sm:px-6 sm:pb-4">
                           <FormField
                             control={form.control}
-                            name="email"
+                            name="order_email"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel className="text-white">
@@ -478,7 +592,7 @@ const GameDetail = () => {
                           {/* wa number */}
                           <FormField
                             control={form.control}
-                            name="whatsapp"
+                            name="order_whatsapp"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel className="text-white">
