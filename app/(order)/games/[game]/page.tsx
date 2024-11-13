@@ -25,7 +25,8 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { fetchProductDetail } from "@/features/product/productThunk";
 import { createOrder } from "@/features/order/orderThunk";
-import { OrderType, OrderProductType } from "@/types/types";
+import { OrderType } from "@/types/types";
+import useSnap from "@/hooks/useSnap";
 
 const formSchema = z.object({
   account_name: z.string().min(3, "Username must be at least 3 characters"),
@@ -41,6 +42,9 @@ type OrderFormValues = z.infer<typeof formSchema>;
 
 const GameDetail = () => {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  // const snap = (window as any).snap;
+
+  const { snapEmbed } = useSnap();
 
   const form = useForm<OrderFormValues>({
     resolver: zodResolver(formSchema),
@@ -83,51 +87,6 @@ const GameDetail = () => {
     }
   }, [categoryDetailId, dispatch]);
 
-  useEffect(() => {
-    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
-    const snapUrl = process.env.NEXT_MIDTRANS_SNAP_URL;
-    const script = document.createElement("script");
-    if (snapUrl) {
-      script.src = snapUrl;
-    }
-    if (clientKey) {
-      script.setAttribute("data-client-key", clientKey);
-    }
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  // get order from redux
-  useEffect(() => {
-    console.log("Order", order);
-
-    // Ensure `order` is not null and there are orders in the array
-    if (order && order.length > 0) {
-      order.forEach((item) => {
-        if (item.or_platform_token) {
-          window.snap.pay(item.or_platform_token, {
-            onSuccess: function (result: any) {
-              console.log("Payment success:", result);
-            },
-            onPending: function (result: any) {
-              console.log("Payment pending:", result);
-            },
-            onError: function (result: any) {
-              console.log("Payment error:", result);
-            },
-            onClose: function () {
-              console.log(
-                "Customer closed the popup without finishing the payment"
-              );
-            },
-          });
-        }
-      });
-    }
-  }, [order]);
-
   const sections = [
     {
       title: "Instant Process",
@@ -158,13 +117,11 @@ const GameDetail = () => {
           email: data.order_email,
         })
       ).unwrap();
-
-      console.log(result);
-
+      console.log(result.order.or_platform_token);
       // Open Midtrans snap after successful order creation
-      if (result && result.token) {
-        // @ts-ignore
-        window.snap.pay(result.token, {
+      if (result && result.order.or_platform_token) {
+        console.log(result.order.or_platform_token);
+        snapEmbed(result.order.or_platform_token, {
           onSuccess: function (result: any) {
             console.log("Payment success:", result);
             // Handle success (e.g., show success message, redirect)
@@ -181,9 +138,28 @@ const GameDetail = () => {
             console.log(
               "Customer closed the popup without finishing the payment"
             );
-            // Handle popup closed (e.g., ask customer to complete payment)
           },
         });
+        // snap.pay(result.token, {
+        //   onSuccess: function (result: any) {
+        //     console.log("Payment success:", result);
+        //     // Handle success (e.g., show success message, redirect)
+        //   },
+        //   onPending: function (result: any) {
+        //     console.log("Payment pending:", result);
+        //     // Handle pending (e.g., show pending message)
+        //   },
+        //   onError: function (result: any) {
+        //     console.log("Payment error:", result);
+        //     // Handle error (e.g., show error message)
+        //   },
+        //   onClose: function () {
+        //     console.log(
+        //       "Customer closed the popup without finishing the payment"
+        //     );
+        //     // Handle popup closed (e.g., ask customer to complete payment)
+        //   },
+        // });
       }
       console.log("Order created successfully", result);
     } catch (error: any) {
