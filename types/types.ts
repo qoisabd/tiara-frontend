@@ -69,4 +69,5 @@ export interface OrderResponseType {
   or_total_amount: number;
   userId: number;
   email: string;
+  voucher_code?: string | null;
 }

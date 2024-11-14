@@ -42,8 +42,6 @@ type OrderFormValues = z.infer<typeof formSchema>;
 
 const GameDetail = () => {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
-  // const snap = (window as any).snap;
-
   const { snapEmbed } = useSnap();
 
   const form = useForm<OrderFormValues>({
@@ -70,8 +68,6 @@ const GameDetail = () => {
   const { productDetail } = useSelector(
     (state: RootState) => state.productDetailReducer
   );
-
-  const { order } = useSelector((state: RootState) => state.orderReducer);
 
   useEffect(() => {
     if (categoryCode) {
@@ -108,31 +104,26 @@ const GameDetail = () => {
         price: orderProduct.pr_price,
         order_email: data.order_email,
       };
-      console.log(orderData);
       const result = await dispatch(
         createOrder({
           oi_product: [orderData],
           or_total_amount: data.order_quantity * orderProduct.pr_price,
           userId: 777,
           email: data.order_email,
+          voucher_code: data.order_promo_code || null,
         })
       ).unwrap();
-      console.log(result.order.or_platform_token);
       // Open Midtrans snap after successful order creation
       if (result && result.order.or_platform_token) {
-        console.log(result.order.or_platform_token);
         snapEmbed(result.order.or_platform_token, {
           onSuccess: function (result: any) {
             console.log("Payment success:", result);
-            // Handle success (e.g., show success message, redirect)
           },
           onPending: function (result: any) {
             console.log("Payment pending:", result);
-            // Handle pending (e.g., show pending message)
           },
           onError: function (result: any) {
             console.log("Payment error:", result);
-            // Handle error (e.g., show error message)
           },
           onClose: function () {
             console.log(
@@ -140,31 +131,10 @@ const GameDetail = () => {
             );
           },
         });
-        // snap.pay(result.token, {
-        //   onSuccess: function (result: any) {
-        //     console.log("Payment success:", result);
-        //     // Handle success (e.g., show success message, redirect)
-        //   },
-        //   onPending: function (result: any) {
-        //     console.log("Payment pending:", result);
-        //     // Handle pending (e.g., show pending message)
-        //   },
-        //   onError: function (result: any) {
-        //     console.log("Payment error:", result);
-        //     // Handle error (e.g., show error message)
-        //   },
-        //   onClose: function () {
-        //     console.log(
-        //       "Customer closed the popup without finishing the payment"
-        //     );
-        //     // Handle popup closed (e.g., ask customer to complete payment)
-        //   },
-        // });
       }
       console.log("Order created successfully", result);
     } catch (error: any) {
       console.error(error);
-      // Handle error (e.g., show error message to user)
     }
   };
 
