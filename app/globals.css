@@ -33,6 +33,20 @@ html {
   .no-spinner {
     -moz-appearance: textfield;
   }
+
+  .bg-footer {
+    background-color: #0e587c;
+  }
+
+  .bg-header {
+    background-color: hsla(
+      213.818182,
+      38.5%,
+      40%,
+      0.7
+    ); /* Transparansi warna */
+    opacity: 0.9; /* Transparansi elemen */
+  }
 }
 
 @layer base {

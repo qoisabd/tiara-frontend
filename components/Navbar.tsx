@@ -11,7 +11,7 @@ export default function Navbar() {
   const logoImage = "/assets/logos/logo-rifqi-top-up.svg";
 
   return (
-    <nav className="flex items-center justify-between p-4 bg-white shadow-md md:px-32">
+    <nav className="flex items-center justify-between bg-header p-4 sticky top-0 z-40 border-b border-transparent backdrop-blur-md md:px-32">
       {/* Logo and Primary Links */}
       <div className="flex items-center gap-4">
         {/* Logo */}
@@ -28,21 +28,21 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-4 ml-4">
           <Link
             href="/"
-            className="flex items-center gap-2 text-black font-bold hover:text-yellow-400"
+            className="flex items-center gap-2 text-white font-bold hover:text-yellow-400"
           >
             <House size={24} />
             <span>Home</span>
           </Link>
           <Link
             href="/check-transaction"
-            className="flex items-center gap-2 text-black font-bold hover:text-yellow-400"
+            className="flex items-center gap-2 text-white font-bold hover:text-yellow-400"
           >
             <Search size={24} />
             <span>Transaction Check</span>
           </Link>
           <Link
             href="/contact"
-            className="flex items-center gap-2 text-black font-bold hover:text-yellow-400"
+            className="flex items-center gap-2 text-white font-bold hover:text-yellow-400"
           >
             <ScrollTextIcon size={24} />
             <span>Create Ticket</span>
@@ -52,7 +52,7 @@ export default function Navbar() {
 
       {/* Desktop Actions */}
       <div className="hidden sm:flex items-center gap-3">
-        <Button className="flex items-center gap-2 px-3 py-2 rounded-md border border-blue-500 bg-blue-600 text-white hover:bg-blue-300 hover:text-black">
+        <Button className="flex items-center gap-2 px-3 py-2 rounded-md border border-blue-500 bg-blue-600 text-white hover:bg-blue-300 hover:text-white">
           <Search size={20} />
           <span className="hidden lg:inline">Search</span>
         </Button>
@@ -85,7 +85,7 @@ export default function Navbar() {
             <Link
               href="/"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 text-black hover:text-yellow-400"
+              className="flex items-center gap-2 text-white hover:text-yellow-400"
             >
               <House size={20} />
               <span>Home</span>
@@ -93,7 +93,7 @@ export default function Navbar() {
             <Link
               href="/check-transaction"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 text-black hover:text-yellow-400"
+              className="flex items-center gap-2 text-white hover:text-yellow-400"
             >
               <Search size={20} />
               <span>Transaction Check</span>
@@ -101,7 +101,7 @@ export default function Navbar() {
             <Link
               href="/contact"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 text-black hover:text-yellow-400"
+              className="flex items-center gap-2 text-white hover:text-yellow-400"
             >
               <ScrollTextIcon size={20} />
               <span>Create Ticket</span>
@@ -109,7 +109,7 @@ export default function Navbar() {
             <Link
               href="/sign-in"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 text-black bg-gray-200 rounded-lg hover:bg-gray-300"
+              className="px-4 py-2 text-white bg-gray-200 rounded-lg hover:bg-gray-300"
             >
               Sign in
             </Link>

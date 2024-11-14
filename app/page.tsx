@@ -16,8 +16,6 @@ export default function Home() {
       : null;
   const orderIdMidtrans = queryParams ? queryParams.get("order_id") : null;
 
-  console.log(orderIdMidtrans);
-
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -28,7 +26,7 @@ export default function Home() {
 
   return (
     <>
-      <div>
+      <div className="bg-gradient-detail">
         <Navbar />
         <BannerSwiper />
         <PopularCardGame />
