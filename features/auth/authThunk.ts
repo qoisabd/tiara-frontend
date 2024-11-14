@@ -86,7 +86,6 @@ export const updateResetPassword = createAsyncThunk(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/update-reset-password?token=${token}`,
         data
       );
-      console.log(response.data);
       return response.data;
     } catch (error: any) {
       if (!error.response) {
@@ -113,7 +112,6 @@ export const loginWithGoogle = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(response.data);
       return response.data;
     } catch (error: any) {
       if (!error.response) {

@@ -14,6 +14,25 @@ html {
   .text-balance {
     text-wrap: balance;
   }
+  .bg-gradient-detail {
+    background: linear-gradient(
+        to bottom left,
+        #ffd861 0%,
+        #07bce4 60%,
+        hsl(240deg 8.96% 51.73%)
+      )
+      50%;
+  }
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  .no-spinner {
+    -moz-appearance: textfield;
+  }
 }
 
 @layer base {

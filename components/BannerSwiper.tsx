@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { Autoplay, Pagination, Parallax } from "swiper/modules";
 import { swiperContent } from "@/lib/swiperContent";
 
 const BannerSwiper = () => {
@@ -15,21 +15,20 @@ const BannerSwiper = () => {
     <div className="mt-10 px-4 md:px-32">
       <div className="w-full h-[500px] relative">
         <Swiper
-          modules={[Autoplay, Pagination, Navigation]}
+          slidesPerView={1}
+          grabCursor={true}
+          rewind={true}
           spaceBetween={30}
-          centeredSlides={true}
+          loop={true}
           autoplay={{
-            delay: 5000,
+            delay: 2500,
             disableOnInteraction: false,
           }}
           pagination={{
             clickable: true,
           }}
-          loop={true}
-          navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          }}
+          parallax={true}
+          modules={[Autoplay, Pagination, Parallax]}
           className="w-full h-full"
         >
           {swiperContent.map((item, index) => (

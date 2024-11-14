@@ -2,10 +2,11 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { fetchAllCategory } from "@/features/home/homeThunk";
+import { fetchCategoryCard } from "@/features/category/categoryThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { Status } from "@/utils/Status";
+import CardGameSkeleton from "./skeleton/CardGameSkeleton";
 
 const CardGame = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -14,13 +15,13 @@ const CardGame = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchAllCategory());
+    dispatch(fetchCategoryCard());
   }, [dispatch]);
 
   const imgCart = "/assets/images/img-cart.png";
 
   if (status === Status.LOADING) {
-    return <p>Loading...</p>;
+    return <CardGameSkeleton />;
   }
 
   if (status === Status.FAILED) {
@@ -41,7 +42,7 @@ const CardGame = () => {
             key={index}
             className="relative w-[180px] h-[280px] group overflow-hidden rounded-2xl shadow-md transform transition duration-300 ease-in-out hover:shadow-2xl"
           >
-            <Link href="/game">
+            <Link href={`/games/${item.ct_code}`}>
               <div className="relative w-full h-full">
                 <Image
                   src={item.ct_image}
