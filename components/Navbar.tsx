@@ -1,45 +1,68 @@
-"use client";
-import { useState } from "react";
-import { Search, Menu, X, House, ScrollTextIcon } from "lucide-react";
+import {
+  Search,
+  Menu,
+  House,
+  ScrollTextIcon,
+  BellDot,
+  History,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import ThemeToggle from "./ThemeToggle";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Input } from "@/components/ui/input";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const logoImage = "/assets/logos/logo-rifqi-top-up.svg";
 
   return (
-    <nav className="flex items-center justify-between bg-header p-4 sticky top-0 z-40 border-b border-transparent backdrop-blur-md md:px-32">
+    <nav className="flex items-center justify-between p-4 sticky top-0 z-40 border-b bg-header backdrop-blur-md md:px-8">
+      {/* Logo Section */}
       <div className="flex items-center gap-4">
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center gap-2">
           <Image
             src={logoImage}
             alt="Rifqi Top-up Logo"
             width={50}
             height={50}
           />
+          <span className="font-bold text-xl text-white">
+            Rifqi
+            <span className="text-[#FBB017]">TopUp</span>
+          </span>
         </Link>
+      </div>
 
-        <div className="hidden md:flex items-center gap-4 ml-4">
+      {/* Desktop Center Section */}
+      <div className="hidden md:flex items-center justify-center flex-1 px-8">
+        <div className="relative max-w-md w-full">
+          <Input
+            type="text"
+            placeholder="Search..."
+            className="w-full bg-white text-black border-gray-700 focus:border-blue-500"
+          />
+          <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
+        </div>
+
+        <div className="flex items-center gap-6 ml-6">
           <Link
             href="/"
-            className="flex items-center gap-2 text-white font-bold hover:text-yellow-400"
+            className="flex items-center gap-2 text-white hover:text-blue-400"
           >
-            <House size={24} />
+            <House size={20} />
             <span>Home</span>
           </Link>
           <Link
-            href="/check-transaction"
-            className="flex items-center gap-2 text-white font-bold hover:text-yellow-400"
+            href="/notifications"
+            className="flex items-center gap-2 text-white hover:text-blue-400"
           >
             <Search size={24} />
             <span>Transaction Check</span>
           </Link>
           <Link
-            href="/contact"
-            className="flex items-center gap-2 text-white font-bold hover:text-yellow-400"
+            href="/history"
+            className="flex items-center gap-2 text-white hover:text-blue-400"
           >
             <ScrollTextIcon size={24} />
             <span>Create Ticket</span>
@@ -47,85 +70,83 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className="hidden sm:flex items-center gap-3">
-        <Button className="flex items-center gap-2 px-3 py-2 rounded-md border border-blue-500 bg-blue-600 text-white hover:bg-blue-300 hover:text-white">
-          <Search size={20} />
-          <span className="hidden lg:inline">Search</span>
-        </Button>
-        <Link
-          href="/sign-in"
-          className="px-4 py-2 bg-gray-200 rounded-lg text-black hover:bg-gray-300"
-        >
-          Sign in
+      {/* Desktop Auth Buttons */}
+      <div className="hidden md:flex items-center gap-4">
+        <Link href="/sign-in" className="text-white hover:text-blue-400">
+          Log in
         </Link>
         <Link
           href="/sign-up"
-          className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-400"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          Sign up
+          Register
         </Link>
         <ThemeToggle />
       </div>
 
-      <div className="sm:hidden">
-        <button onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+      {/* Mobile Menu */}
+      <div className="md:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-white">
+              <Menu className="h-6 w-6" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="bg-navy-900 border-gray-800">
+            <div className="flex flex-col space-y-4 mt-8">
+              <div className="relative">
+                <Input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-full bg-gray-800 text-white border-gray-700"
+                />
+                <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
+              </div>
+
+              <Link
+                href="/"
+                className="flex items-center gap-2 text-white hover:text-blue-400 p-2"
+              >
+                <House size={20} />
+                <span>Home</span>
+              </Link>
+              <Link
+                href="/notifications"
+                className="flex items-center gap-2 text-white hover:text-blue-400 p-2"
+              >
+                <Search size={24} />
+                <span>Transaction Check</span>
+              </Link>
+              <Link
+                href="/history"
+                className="flex items-center gap-2 text-white hover:text-blue-400 p-2"
+              >
+                <ScrollTextIcon size={24} />
+                <span>Create Ticket</span>
+              </Link>
+
+              <hr className="border-gray-800" />
+
+              <Link
+                href="/sign-in"
+                className="text-white hover:text-blue-400 p-2"
+              >
+                Log in
+              </Link>
+              <Link
+                href="/sign-up"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center"
+              >
+                Register
+              </Link>
+
+              <div className="pt-4">
+                <ThemeToggle />
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
-
-      {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white shadow-lg sm:hidden">
-          <div className="flex flex-col items-center space-y-4 py-4">
-            <Link
-              href="/"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 text-white hover:text-yellow-400"
-            >
-              <House size={20} />
-              <span>Home</span>
-            </Link>
-            <Link
-              href="/check-transaction"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 text-white hover:text-yellow-400"
-            >
-              <Search size={20} />
-              <span>Transaction Check</span>
-            </Link>
-            <Link
-              href="/contact"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 text-white hover:text-yellow-400"
-            >
-              <ScrollTextIcon size={20} />
-              <span>Create Ticket</span>
-            </Link>
-            <Link
-              href="/sign-in"
-              onClick={() => setIsOpen(false)}
-              className="px-4 py-2 text-white bg-gray-200 rounded-lg hover:bg-gray-300"
-            >
-              Sign in
-            </Link>
-            <Link
-              href="/sign-up"
-              onClick={() => setIsOpen(false)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-400"
-            >
-              Sign up
-            </Link>
-          </div>
-
-          <div className="flex items-center bg-gray-100 rounded-full px-4 py-2 mx-4 mt-4">
-            <Search className="text-gray-500" size={20} />
-            <input
-              type="text"
-              placeholder="Cari Product di UXIOSTORE"
-              className="bg-transparent px-2 py-1 w-full focus:outline-none"
-            />
-          </div>
-        </div>
-      )}
     </nav>
   );
 }
