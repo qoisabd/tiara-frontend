@@ -17,10 +17,6 @@ const CardGameSkeleton = () => {
           .map((_, index) => (
             <div key={index} className="w-[180px] h-[280px]">
               <Skeleton className="w-full h-full rounded-2xl" />
-              <div className="absolute inset-0 flex flex-col justify-end p-4">
-                <Skeleton className="h-6 w-2/3 rounded-md mb-2" />
-                <Skeleton className="h-4 w-1/2 rounded-md" />
-              </div>
             </div>
           ))}
       </div>

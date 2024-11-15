@@ -29,9 +29,20 @@ html {
     margin: 0;
   }
 
-  /* Firefox */
   .no-spinner {
     -moz-appearance: textfield;
+  }
+
+  .bg-footer {
+    background-color: #0e587c;
+  }
+
+  .bg-header {
+    background-color: hsla(213.818182, 38.5%, 40%, 0.7);
+    opacity: 0.9;
+  }
+  .bg-swiper {
+    background-color: hsla(214, 39%, 40%, 0.5);
   }
 }
 

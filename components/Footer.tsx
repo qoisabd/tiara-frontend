@@ -9,7 +9,7 @@ const Footer = () => {
   const getYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#D9D9D9] text-gray-300 py-10">
+    <footer className="footer bg-footer text-white py-10">
       <div className="container mx-auto px-4 md:px-32 grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-20">
         <div className="md:col-span-2">
           <div className="flex flex-row items-center gap-3">
@@ -20,13 +20,13 @@ const Footer = () => {
               height={50}
               className="mb-4"
             />
-            <h3 className="text-xl font-semibold text-[#285CC4]">
+            <h3 className="text-xl font-semibold text-white">
               Rifqi
               <span className="text-[#FBB017]"> Top Up</span>
             </h3>
           </div>
 
-          <p className="text-sm text-justify text-black">
+          <p className="text-sm text-justify text-white">
             Rifqitopup is the ideal website for gamers looking to top up their
             accounts at affordable and reliable prices. We are trusted as the
             fastest and most responsive top-up provider in Indonesia. We offer
@@ -38,27 +38,30 @@ const Footer = () => {
         </div>
 
         <div>
-          <h4 className="text-lg font-semibold text-red-500 mb-4">Sitemap</h4>
+          <h4 className="text-lg font-semibold text-[#f5960b] mb-4">Sitemap</h4>
           <ul className="space-y-2">
             <li>
-              <Link href="/" className="hover:text-red-400 text-black">
+              <Link href="/" className="hover:text-yellow-300 text-white">
                 Home
               </Link>
             </li>
             <li>
-              <Link href="/login" className="hover:text-red-400 text-black">
+              <Link href="/login" className="hover:text-yellow-300 text-">
                 Login
               </Link>
             </li>
             <li>
-              <Link href="/register" className="hover:text-red-400 text-black">
+              <Link
+                href="/register"
+                className="hover:text-yellow-300 text-white"
+              >
                 Register
               </Link>
             </li>
             <li>
               <Link
                 href="/transaction-check"
-                className="hover:text-red-400 text-black"
+                className="hover:text-yellow-300 text-white"
               >
                 Transaction Check
               </Link>
@@ -66,7 +69,7 @@ const Footer = () => {
             <li>
               <Link
                 href="https://wa.me/6285175999728?text=Halo,%20admin%20saya%20membutuhkan%20bantuan"
-                className="hover:text-red-400 text-black"
+                className="hover:text-yellow-300 text-white"
                 target="_blank"
               >
                 Contact Us
@@ -76,12 +79,12 @@ const Footer = () => {
         </div>
 
         <div>
-          <h4 className="text-lg font-semibold text-red-500 mb-4">Support</h4>
+          <h4 className="text-lg font-semibold text-[#f5960b] mb-4">Support</h4>
           <ul className="space-y-2">
             <li>
               <Link
                 href="/create-ticket"
-                className="text-black hover:text-red-400"
+                className="text-white hover:text-yellow-300"
               >
                 Create Ticket
               </Link>
@@ -90,12 +93,12 @@ const Footer = () => {
         </div>
 
         <div>
-          <h4 className="text-lg font-semibold text-red-500 mb-4">Legal</h4>
+          <h4 className="text-lg font-semibold text-[#f5960b] mb-4">Legal</h4>
           <ul className="space-y-2">
             <li>
               <Link
                 href="/privacy-policy"
-                className="hover:text-red-400 text-black"
+                className="hover:text-yellow-300 text-white"
               >
                 Privacy Policy
               </Link>
@@ -103,7 +106,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/terms-and-conditions"
-                className="hover:text-red-400 text-black"
+                className="hover:text-yellow-300 text-white"
               >
                 Terms & Conditions
               </Link>
@@ -117,7 +120,7 @@ const Footer = () => {
           href="https://instagram.com/rifqi.setiawan18"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-black hover:text-red-400"
+          className="text-white hover:text-yellow-300"
         >
           <FaInstagram />
         </Link>
@@ -125,20 +128,20 @@ const Footer = () => {
           href="https://wa.me/6285175999728?text=Halo,%20admin%20saya%20membutuhkan%20bantuan"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-black hover:text-green-500"
+          className="text-white hover:text-green-500"
         >
           <FaWhatsapp />
         </Link>
         <Link
           href="mailto:rfqtopup@gmail.com"
-          className="text-black hover:text-blue-500"
+          className="text-white hover:text-blue-500"
           rel="noopener noreferrer"
         >
           <MdOutlineEmail />
         </Link>
       </div>
 
-      <div className="mt-8 text-center text-sm text-black">
+      <div className="mt-8 text-center text-sm text-[#64AFD0]">
         <div className="px-4 md:px-32 max-w-screen-lg mx-auto border-t border-[#989898] pt-4">
           © {getYear} RIFQITOPUP All rights reserved.
         </div>

@@ -42,21 +42,19 @@ const PopularCardGame = () => {
 
   return (
     <section className="px-4 md:px-32 mt-10">
-      <div className="flex flex-row items-center gap-3">
+      <div className="flex flex-row items-center gap-3 text-white">
         <Image src={imgFire} width={25} height={25} alt="fire icon" />
         <h2 className="text-2xl font-semibold">Popular Games</h2>
       </div>
-      <p className="text-gray-400 mb-5">
-        List of popular games that you can play
-      </p>
+      <p className="text-white mb-5">List of popular games that you can play</p>
 
-      <div className="flex flex-row flex-wrap gap-5">
+      <div className="flex flex-row flex-wrap gap-3 sm:gap-5">
         {popularGames?.map((item, index) => (
           <div
             key={index}
-            className="relative w-[400px] h-[150px] group overflow-hidden rounded-xl shadow-md transform transition duration-300 ease-in-out hover:shadow-xl"
+            className="relative w-[170px] xl:w-[400px] h-[120px] sm:h-[150px] group overflow-hidden rounded-xl shadow-md transform transition duration-300 ease-in-out hover:shadow-xl"
           >
-            <Link href="/game">
+            <Link href={`/games/${item.ct_code}`}>
               <div className="relative w-full h-full">
                 <Image
                   src={item.ct_image}
@@ -66,11 +64,11 @@ const PopularCardGame = () => {
                   className="filter grayscale transition duration-500 ease-in-out transform group-hover:grayscale-0 group-hover:scale-110"
                 />
 
-                <div className="absolute bottom-0 left-0 right-0 bg-yellow-400 p-3 opacity-90 group-hover:opacity-100 transition duration-300 ease-in-out">
-                  <h3 className="text-md font-semibold text-blue-900">
+                <div className="absolute bottom-0 left-0 right-0 bg-[#3D93BF] p-3 opacity-90 group-hover:opacity-100 transition duration-300 ease-in-out">
+                  <h3 className="text-md font-semibold text-white">
                     {item.ct_name}
                   </h3>
-                  <p className="text-xs text-blue-700">
+                  <p className="text-xs text-yellow-400">
                     {item.ct_game_publisher}
                   </p>
                 </div>

@@ -30,17 +30,17 @@ const CardGame = () => {
 
   return (
     <section className="px-4 md:px-32 mt-10 pb-16">
-      <div className="flex flex-row items-center gap-3">
+      <div className="flex flex-row items-center gap-3 text-white">
         <Image src={imgCart} width={25} height={25} alt="cart" />
         <h2 className="text-2xl font-semibold">All Games</h2>
       </div>
-      <p className="text-gray-400 mb-5">List of games</p>
+      <p className="text-white mb-5">List of games</p>
 
-      <div className="flex flex-row flex-wrap gap-5">
+      <div className="flex flex-row flex-wrap gap-2 sm:gap-5">
         {category?.map((item, index) => (
           <div
             key={index}
-            className="relative w-[180px] h-[280px] group overflow-hidden rounded-2xl shadow-md transform transition duration-300 ease-in-out hover:shadow-2xl"
+            className="relative w-[109px] sm:w-[180px] h-[163px] sm:h-[280px] group overflow-hidden rounded-2xl shadow-md transform transition duration-300 ease-in-out hover:shadow-2xl"
           >
             <Link href={`/games/${item.ct_code}`}>
               <div className="relative w-full h-full">

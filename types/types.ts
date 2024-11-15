@@ -71,3 +71,12 @@ export interface OrderResponseType {
   email: string;
   voucher_code?: string | null;
 }
+
+export interface UserType {
+  us_id: number;
+  us_username: string;
+  us_email: string;
+  us_phone_number: string;
+  us_is_admin: boolean;
+  us_is_active: boolean;
+}

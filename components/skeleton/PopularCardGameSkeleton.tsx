@@ -22,7 +22,7 @@ const PopularCardGameSkeleton: FC = () => {
               className="relative w-[400px] h-[150px] group overflow-hidden rounded-xl shadow-md"
             >
               <Skeleton className="w-full h-full rounded-xl" />
-              <div className="absolute bottom-0 left-0 right-0 bg-yellow-400 p-3 opacity-90">
+              <div className="absolute bottom-0 left-0 right-0 bg-[#3D93BF] p-3 opacity-90">
                 <Skeleton className="h-6 w-32 mb-1" />
                 <Skeleton className="h-4 w-24" />
               </div>

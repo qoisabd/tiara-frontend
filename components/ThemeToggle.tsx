@@ -30,9 +30,9 @@ const ThemeToggle = () => {
       <DropdownMenuTrigger asChild>
         <Button size="sm" variant="ghost">
           {darkMode ? (
-            <Moon size={24} className="text-black" />
+            <Moon size={24} className="text-white" />
           ) : (
-            <Sun size={24} className="text-black" />
+            <Sun size={24} className="text-white" />
           )}
         </Button>
       </DropdownMenuTrigger>
