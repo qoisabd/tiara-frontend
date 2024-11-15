@@ -29,7 +29,6 @@ html {
     margin: 0;
   }
 
-  /* Firefox */
   .no-spinner {
     -moz-appearance: textfield;
   }
@@ -39,13 +38,11 @@ html {
   }
 
   .bg-header {
-    background-color: hsla(
-      213.818182,
-      38.5%,
-      40%,
-      0.7
-    ); /* Transparansi warna */
-    opacity: 0.9; /* Transparansi elemen */
+    background-color: hsla(213.818182, 38.5%, 40%, 0.7);
+    opacity: 0.9;
+  }
+  .bg-swiper {
+    background-color: hsla(214, 39%, 40%, 0.5);
   }
 }
 

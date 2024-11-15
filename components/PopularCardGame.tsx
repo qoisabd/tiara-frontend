@@ -64,11 +64,11 @@ const PopularCardGame = () => {
                   className="filter grayscale transition duration-500 ease-in-out transform group-hover:grayscale-0 group-hover:scale-110"
                 />
 
-                <div className="absolute bottom-0 left-0 right-0 bg-yellow-400 p-3 opacity-90 group-hover:opacity-100 transition duration-300 ease-in-out">
-                  <h3 className="text-md font-semibold text-blue-900">
+                <div className="absolute bottom-0 left-0 right-0 bg-[#3D93BF] p-3 opacity-90 group-hover:opacity-100 transition duration-300 ease-in-out">
+                  <h3 className="text-md font-semibold text-white">
                     {item.ct_name}
                   </h3>
-                  <p className="text-xs text-blue-700">
+                  <p className="text-xs text-yellow-400">
                     {item.ct_game_publisher}
                   </p>
                 </div>
