@@ -4,7 +4,6 @@ import "./globals.css";
 import StoreProvider from "@/store/store-provider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { SessionProvider } from "next-auth/react";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -49,9 +48,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={`${poppins.variable} antialiased`}>
-        {/* <SessionProvider> */}
         <StoreProvider>{children}</StoreProvider>
-        {/* </SessionProvider> */}
         <ToastContainer />
       </body>
     </html>

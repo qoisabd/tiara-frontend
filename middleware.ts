@@ -4,17 +4,20 @@ import { verifyAuth } from "./utils/auth";
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("Authentication")?.value;
-  const protectedPaths = ["/admin/(.*)"];
+  const protectedPaths = ["/admin"];
   const verifiedToken = token ? await verifyAuth(token) : null;
-  const isAdmin = verifiedToken?.payload?.us_is_admin;
 
-  if (!verifiedToken) {
-    if (protectedPaths.some((path) => req.nextUrl.pathname.startsWith(path))) {
-      return NextResponse.redirect(new URL("/sign-in", req.url));
-    }
+  const isAdmin = verifiedToken?.payload?.us_is_admin === true;
+
+  const pathIsProtected = protectedPaths.some((path) =>
+    req.nextUrl.pathname.startsWith(path)
+  );
+
+  if (!verifiedToken && pathIsProtected) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
-  if (verifiedToken && !isAdmin) {
+  if (verifiedToken && !isAdmin && pathIsProtected) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
@@ -28,18 +31,20 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (verifiedToken) {
+  // Redirect pengguna non-admin yang sudah login dari /sign-in atau /sign-up ke halaman utama
+  if (verifiedToken && !isAdmin) {
     if (
       req.nextUrl.pathname.startsWith("/sign-up") ||
       req.nextUrl.pathname.startsWith("/sign-in")
     ) {
-      return NextResponse.redirect(
-        new URL(isAdmin ? "/admin/dashboard" : "/", req.url)
-      );
+      return NextResponse.redirect(new URL("/", req.url));
     }
   }
+
+  // Jika tidak ada pengalihan yang diperlukan, izinkan permintaan berlanjut
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/sign-up", "/sign-in", "/admin/(.*)"],
+  matcher: ["/", "/sign-up", "/sign-in", "/admin/:path*"], // Pastikan `matcher` mencakup semua path di bawah `/admin`
 };
