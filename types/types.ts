@@ -119,3 +119,11 @@ export interface OrderItemType {
   oi_or_id: number;
   oi_product: OrderProductType[];
 }
+
+export interface PromoCodeType {
+  prm_id: number;
+  prm_code_value: string;
+  prm_quantity: number;
+  prm_discount_percentage: number;
+  prm_expired_on: Date;
+}

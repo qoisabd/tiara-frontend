@@ -30,6 +30,7 @@ import useSnap from "@/hooks/useSnap";
 import Navbar from "@/components/Navbar";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import PromoModal from "@/components/PromoModal";
 
 const formSchema = z.object({
   account_name: z.string().min(3, "Username must be at least 3 characters"),
@@ -63,6 +64,10 @@ const GameDetail = () => {
 
   const params = useParams();
   const categoryCode = params.game as string;
+
+  const handleSelectPromo = (code: string) => {
+    form.setValue("order_promo_code", code);
+  };
 
   const dispatch = useDispatch<AppDispatch>();
   const { status, errorMessage, categoryDetail } = useSelector(
@@ -526,6 +531,7 @@ const GameDetail = () => {
                               </FormItem>
                             )}
                           />
+                          <PromoModal onSelectPromo={handleSelectPromo} />
                         </div>
                       </div>
 

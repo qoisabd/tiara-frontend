@@ -10,6 +10,7 @@ import categoryDetailReducer from "@/features/category/categoryDetailSlice";
 import productDetailReducer from "@/features/product/productDetailSlice";
 import orderReducer from "@/features/order/orderSlice";
 import orderHistoryReducer from "@/features/order/orderHistorySlice";
+import promotionReducer from "@/features/promotion/promotionSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -25,6 +26,7 @@ export const makeStore = () => {
       productDetailReducer,
       orderReducer,
       orderHistoryReducer,
+      promotionReducer,
     },
   });
 };

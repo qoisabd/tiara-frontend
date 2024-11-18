@@ -15,10 +15,12 @@ import DataTableComponent from "@/components/DataTables";
 import { fetchOrdersByUserId } from "@/features/order/orderThunk";
 import { Button } from "@/components/ui/button";
 import { OrderDetailModal } from "@/components/OrderDetailModal";
-import { CreditCard, FileTerminal } from "lucide-react";
+import { ArrowLeft, CreditCard, FileTerminal } from "lucide-react";
 import useSnap from "@/hooks/useSnap";
+import { useRouter } from "next/navigation";
 
 export default function OrderHistoryPage() {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { orderHistory, status, errorMessage } = useSelector(
     (state: RootState) => state.orderHistoryReducer
@@ -71,9 +73,9 @@ export default function OrderHistoryPage() {
   const columns = [
     {
       name: "No.",
-      selector: (row: OrderHistoryType) => row.or_id,
-      sortable: true,
-      width: "120px",
+      selector: (row: OrderHistoryType, index: number) => index + 1,
+      sortable: false,
+      width: "80px",
     },
     {
       name: "Date",
@@ -98,7 +100,7 @@ export default function OrderHistoryPage() {
         return categories || "-";
       },
       sortable: true,
-      width: "200px",
+      width: "250px",
     },
     {
       name: "Total",
@@ -178,7 +180,18 @@ export default function OrderHistoryPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <OrderHistoryHeader onSearch={handleSearch} />
+      <div className="mb-4">
+        <Button
+          variant="ghost"
+          onClick={() => router.push("/")}
+          className="flex items-center gap-2 hover:bg-gray-100"
+        >
+          <ArrowLeft size={20} />
+          Back to Home
+        </Button>
+      </div>
+
+      <OrderHistoryHeader onSearch={handleSearch} data={filteredOrders} />
       <Card>
         <CardContent className="p-6">
           <DataTableComponent columns={columns} data={filteredOrders} />
