@@ -267,7 +267,7 @@ const GameDetail = () => {
                                   <FormControl>
                                     <Input
                                       type="text"
-                                      placeholder="Enter your username"
+                                      placeholder="Enter your Account Name"
                                       {...field}
                                     />
                                   </FormControl>

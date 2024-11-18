@@ -1,3 +1,5 @@
+import { JWTPayload } from "jose";
+
 export interface RegisterType {
   us_username: string;
   us_email: string;
@@ -79,4 +81,23 @@ export interface UserType {
   us_phone_number: string;
   us_is_admin: boolean;
   us_is_active: boolean;
+  iat: number;
+  exp: number;
+}
+
+export function isUserPayload(
+  payload: JWTPayload | UserType
+): payload is UserType {
+  return (
+    typeof payload === "object" &&
+    payload !== null &&
+    "us_id" in payload &&
+    "us_username" in payload &&
+    "us_email" in payload &&
+    "us_phone_number" in payload &&
+    "us_is_admin" in payload &&
+    "us_is_active" in payload &&
+    "iat" in payload &&
+    "exp" in payload
+  );
 }

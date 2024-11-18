@@ -1,24 +1,92 @@
-import {
-  Search,
-  Menu,
-  House,
-  ScrollTextIcon,
-  BellDot,
-  History,
-} from "lucide-react";
+import { Search, Menu, House, ScrollTextIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import ThemeToggle from "./ThemeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
+import { UserType } from "@/types/types";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { logoutUser } from "@/features/auth/authThunk";
+import { useRouter } from "next/navigation";
+import { Bounce, toast } from "react-toastify";
 
 export default function Navbar() {
+  const [user, setUser] = useState<UserType | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const logoImage = "/assets/logos/logo-rifqi-top-up.svg";
+
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    const token = Cookies.get("Authentication");
+    if (token) {
+      try {
+        const decoded: UserType = jwtDecode(token);
+
+        if (decoded.exp * 1000 > Date.now()) {
+          setIsAuthenticated(true);
+          setUser(decoded);
+        } else {
+          console.warn("Token has expired.");
+          Cookies.remove("Authentication");
+        }
+      } catch (err) {
+        console.error("Failed to decode token", err);
+      }
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      Cookies.remove("Authentication");
+      setUser(null);
+      setIsAuthenticated(false);
+      toast.success("Logout Success", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        transition: Bounce,
+      });
+      router.push("/");
+    } catch (error: any) {
+      const message = error.message;
+      toast.error(`User Logout Failed: ${message}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        transition: Bounce,
+      });
+    }
+  };
+
+  const getInitials = (username: string, email: string) => {
+    const name = username || email || "Guest";
+    const parts = name.split(" ");
+    if (parts.length === 1) {
+      return parts[0][0].toUpperCase();
+    }
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  };
 
   return (
     <nav className="flex items-center justify-between p-4 sticky top-0 z-40 border-b bg-header backdrop-blur-md md:px-8">
-      {/* Logo Section */}
       <div className="flex items-center gap-4">
         <Link href="/" className="flex items-center gap-2">
           <Image
@@ -70,17 +138,40 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Desktop Auth Buttons */}
+      {/* Desktop Auth Section */}
       <div className="hidden md:flex items-center gap-4">
-        <Link href="/sign-in" className="text-white hover:text-blue-400">
-          Log in
-        </Link>
-        <Link
-          href="/sign-up"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Register
-        </Link>
+        {isAuthenticated && user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Avatar className="h-8 w-8">
+                <AvatarFallback>
+                  {getInitials(user.us_username, user.us_email)}
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>
+                <Link href="/orders" className="w-full">
+                  Order List
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <>
+            <Link href="/sign-in" className="text-white hover:text-blue-400">
+              Log in
+            </Link>
+            <Link
+              href="/sign-up"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Register
+            </Link>
+          </>
+        )}
         <ThemeToggle />
       </div>
 
@@ -127,18 +218,37 @@ export default function Navbar() {
 
               <hr className="border-gray-800" />
 
-              <Link
-                href="/sign-in"
-                className="text-white hover:text-blue-400 p-2"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/sign-up"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center"
-              >
-                Register
-              </Link>
+              {user ? (
+                <>
+                  <Link
+                    href="/orders"
+                    className="text-white hover:text-blue-400 p-2"
+                  >
+                    Order List
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="text-white hover:text-blue-400 p-2"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/sign-in"
+                    className="text-white hover:text-blue-400 p-2"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    href="/sign-up"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
 
               <div className="pt-4">
                 <ThemeToggle />

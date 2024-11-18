@@ -54,6 +54,9 @@ const config: Config = {
           70: "#10587c",
           80: "#0e6896",
         },
+        navy: {
+          900: "#0A192F",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

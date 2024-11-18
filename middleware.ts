@@ -4,14 +4,21 @@ import { verifyAuth } from "./utils/auth";
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("Authentication")?.value;
-  const protectedPaths = ["/admin"];
   const verifiedToken = token ? await verifyAuth(token) : null;
 
   const isAdmin = verifiedToken?.payload?.us_is_admin === true;
 
-  const pathIsProtected = protectedPaths.some((path) =>
+  const pathIsSignInOrSignUp =
+    req.nextUrl.pathname.startsWith("/sign-in") ||
+    req.nextUrl.pathname.startsWith("/sign-up");
+
+  const pathIsProtected = ["/admin"].some((path) =>
     req.nextUrl.pathname.startsWith(path)
   );
+
+  if (verifiedToken && pathIsSignInOrSignUp) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 
   if (!verifiedToken && pathIsProtected) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
@@ -22,29 +29,14 @@ export async function middleware(req: NextRequest) {
   }
 
   if (verifiedToken && isAdmin) {
-    if (
-      req.nextUrl.pathname === "/" ||
-      req.nextUrl.pathname.startsWith("/sign-in") ||
-      req.nextUrl.pathname.startsWith("/sign-up")
-    ) {
+    if (req.nextUrl.pathname === "/" || pathIsSignInOrSignUp) {
       return NextResponse.redirect(new URL("/admin/dashboard", req.url));
     }
   }
 
-  // Redirect pengguna non-admin yang sudah login dari /sign-in atau /sign-up ke halaman utama
-  if (verifiedToken && !isAdmin) {
-    if (
-      req.nextUrl.pathname.startsWith("/sign-up") ||
-      req.nextUrl.pathname.startsWith("/sign-in")
-    ) {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-  }
-
-  // Jika tidak ada pengalihan yang diperlukan, izinkan permintaan berlanjut
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/sign-up", "/sign-in", "/admin/:path*"], // Pastikan `matcher` mencakup semua path di bawah `/admin`
+  matcher: ["/", "/sign-up", "/sign-in", "/admin/:path*"],
 };
