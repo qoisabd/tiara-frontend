@@ -25,8 +25,11 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { fetchProductDetail } from "@/features/product/productThunk";
 import { createOrder } from "@/features/order/orderThunk";
-import { OrderType } from "@/types/types";
+import { OrderType, UserType } from "@/types/types";
 import useSnap from "@/hooks/useSnap";
+import Navbar from "@/components/Navbar";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const formSchema = z.object({
   account_name: z.string().min(3, "Username must be at least 3 characters"),
@@ -42,6 +45,7 @@ type OrderFormValues = z.infer<typeof formSchema>;
 
 const GameDetail = () => {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
   const { snapEmbed } = useSnap();
 
   const form = useForm<OrderFormValues>({
@@ -70,6 +74,24 @@ const GameDetail = () => {
   );
 
   useEffect(() => {
+    const token = Cookies.get("Authentication");
+    if (token) {
+      try {
+        const decoded: UserType = jwtDecode(token);
+
+        if (decoded.exp * 1000 > Date.now()) {
+          setUser(decoded);
+        } else {
+          console.warn("Token has expired.");
+          Cookies.remove("Authentication");
+        }
+      } catch (err) {
+        console.error("Failed to decode token", err);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (categoryCode) {
       dispatch(fetchCategoryDetail(categoryCode));
     }
@@ -95,6 +117,8 @@ const GameDetail = () => {
       const orderProduct: any = productDetail.find(
         (product) => product.pr_id === selectedProduct
       );
+      const userId = user ? user.us_id : 777;
+
       const orderData: OrderType = {
         account_id: parseInt(data.account_id, 10),
         account_name: data.account_name,
@@ -103,12 +127,13 @@ const GameDetail = () => {
         quantity: data.order_quantity,
         price: orderProduct.pr_price,
         order_email: data.order_email,
+        category_name: categoryDetail[0].ct_name,
       };
       const result = await dispatch(
         createOrder({
           oi_product: [orderData],
           or_total_amount: data.order_quantity * orderProduct.pr_price,
-          userId: 777,
+          userId: userId,
           email: data.order_email,
           voucher_code: data.order_promo_code || null,
         })
@@ -140,6 +165,7 @@ const GameDetail = () => {
 
   return (
     <section className="">
+      <Navbar />
       {categoryDetail.length > 0 ? (
         categoryDetail.map((category) => (
           <div className="relative" key={category.ct_id}>

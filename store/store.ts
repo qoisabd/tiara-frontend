@@ -9,6 +9,7 @@ import categoryReducer from "@/features/category/categorySlice";
 import categoryDetailReducer from "@/features/category/categoryDetailSlice";
 import productDetailReducer from "@/features/product/productDetailSlice";
 import orderReducer from "@/features/order/orderSlice";
+import orderHistoryReducer from "@/features/order/orderHistorySlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -23,6 +24,7 @@ export const makeStore = () => {
       categoryDetailReducer,
       productDetailReducer,
       orderReducer,
+      orderHistoryReducer,
     },
   });
 };

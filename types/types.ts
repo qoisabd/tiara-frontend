@@ -1,5 +1,3 @@
-import { JWTPayload } from "jose";
-
 export interface RegisterType {
   us_username: string;
   us_email: string;
@@ -57,6 +55,7 @@ export interface OrderType {
   quantity?: number;
   price?: number;
   or_platform_token?: string;
+  category_name?: string;
 }
 
 export interface OrderProductType {
@@ -85,19 +84,38 @@ export interface UserType {
   exp: number;
 }
 
-export function isUserPayload(
-  payload: JWTPayload | UserType
-): payload is UserType {
-  return (
-    typeof payload === "object" &&
-    payload !== null &&
-    "us_id" in payload &&
-    "us_username" in payload &&
-    "us_email" in payload &&
-    "us_phone_number" in payload &&
-    "us_is_admin" in payload &&
-    "us_is_active" in payload &&
-    "iat" in payload &&
-    "exp" in payload
-  );
+export interface OrderHistoryType {
+  or_id: number;
+  or_us_id: number;
+  or_status: "pending" | "settlement" | "cancelled" | "default";
+  or_platform_id: string;
+  or_vaNumber: { bank: string; va_number: string }[];
+  or_total_amount: number;
+  category_name?: string;
+  or_created_at: string;
+  orderItem: OrderItemType;
+}
+
+export interface OrderStatusType {
+  value: "pending" | "settlement" | "cancelled" | "default";
+  label: string;
+  color: string;
+}
+
+export interface OrderProductType {
+  account_id: number;
+  account_name: string;
+  id: number;
+  name: string;
+  quantity: number;
+  price: number;
+  order_email: string;
+  category_name?: string;
+  type: string;
+}
+
+export interface OrderItemType {
+  oi_id: number;
+  oi_or_id: number;
+  oi_product: OrderProductType[];
 }

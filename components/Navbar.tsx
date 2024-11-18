@@ -1,4 +1,11 @@
-import { Search, Menu, House, ScrollTextIcon } from "lucide-react";
+import {
+  Search,
+  Menu,
+  House,
+  ScrollTextIcon,
+  LogOut,
+  History,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
@@ -151,12 +158,19 @@ export default function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>
-                <Link href="/orders" className="w-full">
-                  Order List
+                <Link
+                  href="/order-history"
+                  className="w-full flex flex-row gap-3 "
+                >
+                  <History className="text-yellow-500" />
+                  Order History
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="text-yellow-500" />
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
