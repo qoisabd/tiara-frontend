@@ -52,7 +52,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                href="/register"
+                href="/sign-up"
                 className="hover:text-yellow-300 text-white"
               >
                 Register

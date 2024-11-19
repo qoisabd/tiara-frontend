@@ -94,6 +94,7 @@ export interface OrderHistoryType {
   category_name?: string;
   or_created_at: string;
   orderItem: OrderItemType;
+  or_platform_token: string;
 }
 
 export interface OrderStatusType {
@@ -126,4 +127,28 @@ export interface PromoCodeType {
   prm_quantity: number;
   prm_discount_percentage: number;
   prm_expired_on: Date;
+}
+
+export interface ConfirmModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  description: string;
+  confirmText: string;
+  cancelText: string;
+}
+
+export interface AdminStateType {
+  totalUser: Object | null;
+  totalProduct: object | null;
+  totalOrder: object | null;
+  totalAmount: object | null;
+  status: string;
+  error: {
+    totalUser: string | null;
+    totalProduct: string | null;
+    totalOrder: string | null;
+    totalAmount: string | null;
+  };
 }

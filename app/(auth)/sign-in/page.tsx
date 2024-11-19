@@ -60,18 +60,33 @@ const Login = () => {
       };
       await dispatch(loginUser(dataValue)).unwrap();
 
-      toast.success("Login Success", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-      router.push("/");
+      if (data.input.includes("@admin")) {
+        toast.success("Redirecting to Admin Dashboard...", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        router.push("/admin/dashboard");
+      } else {
+        toast.success("Login Success", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        router.push("/");
+      }
     } catch (error: any) {
       const message = error.message;
       toast.error(`User Login Failed: ${message}`, {

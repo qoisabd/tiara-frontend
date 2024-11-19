@@ -201,16 +201,20 @@ const GameDetail = () => {
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="flex flex-row gap-3">
-                        <h1 className="text-2xl font-semibold text-white">
+                        <h1 className="text-sm md:text-2xl font-semibold text-white">
                           {category.ct_name}
                         </h1>
-                        <Badge>{category.ct_currency_type}</Badge>
+                        <Badge className="text-xs">
+                          {category.ct_currency_type}
+                        </Badge>
                       </div>
-                      <p className="text-white">{category.ct_game_publisher}</p>
+                      <p className="text-white text-xs">
+                        {category.ct_game_publisher}
+                      </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-col flex-wrap md:flex-row  mt-4 gap-3 text-sm text-white">
+                  <div className="flex flex-col flex-wrap md:flex-row  mt-4 gap-3 text-xs text-white">
                     <div className="flex items-center gap-2">
                       <Zap color="#fbff00" size={16} />
                       <p>1-3 Minute Process</p>
@@ -255,7 +259,7 @@ const GameDetail = () => {
                             </ul>
                           </div>
                         ))}
-                      <p className="mt-10">
+                      <p className="mt-3 md:mt-7">
                         For Customer Support, please contact Admin on our
                         official Whatsapp at +62 123-4567-8910 {""}
                         <span className="text-yellow-500">
@@ -369,7 +373,7 @@ const GameDetail = () => {
                                         <h4 className="mb-3 text-sm md:text-lg font-semibold text-white">
                                           {section.title}
                                         </h4>
-                                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
                                           {section.products.map((product) => (
                                             <Card
                                               key={product.pr_id}
@@ -385,10 +389,10 @@ const GameDetail = () => {
                                                 className="flex cursor-pointer items-center justify-between p-4"
                                               >
                                                 <div className="space-y-1">
-                                                  <div className="font-medium text-sm">
+                                                  <div className="font-medium text-xs lg:text-base">
                                                     {product.pr_name}
                                                   </div>
-                                                  <div className="text-sm text-blue-900">
+                                                  <div className="text-xs lg:text-sm text-blue-900">
                                                     Rp{" "}
                                                     {product.pr_price.toLocaleString(
                                                       "id-ID"
