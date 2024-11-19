@@ -31,8 +31,6 @@ export default function RecentOrdersPage() {
     dispatch(fetchRecentOrder());
   }, [dispatch]);
 
-  console.log(recentOrder);
-
   const handleViewPayment = (row: OrderHistoryType) => {
     const token = row.or_platform_token;
     snapEmbed(token, {

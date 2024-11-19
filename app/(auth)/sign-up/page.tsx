@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -88,8 +87,8 @@ const Register = () => {
         }
       );
       router.push("/sign-in");
-    } catch (error) {
-      toast.error(`User Creation Failed: ${errorMessage}`, {
+    } catch (error: any) {
+      toast.error(`User Creation Failed: ${error.message || errorMessage}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

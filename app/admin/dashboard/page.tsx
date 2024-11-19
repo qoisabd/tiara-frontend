@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect } from "react";
 import { Users, ShoppingBag, ShoppingCart, Wallet } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,6 +30,8 @@ export default function DashboardPage() {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(numberAmount);
   };
 

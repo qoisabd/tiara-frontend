@@ -28,12 +28,16 @@ const menuItems = [
   {
     icon: <LayoutDashboard size={20} />,
     label: "Dashboard",
-    path: "/dashboard",
+    path: "/admin/dashboard",
   },
-  { icon: <Users size={20} />, label: "Users", path: "/users" },
-  { icon: <ShoppingBag size={20} />, label: "Products", path: "/products" },
-  { icon: <ShoppingCart size={20} />, label: "Orders", path: "/orders" },
-  { icon: <List size={20} />, label: "Categories", path: "/categories" },
+  { icon: <Users size={20} />, label: "Users", path: "/admin/users" },
+  {
+    icon: <ShoppingBag size={20} />,
+    label: "Products",
+    path: "/admin/products",
+  },
+  { icon: <ShoppingCart size={20} />, label: "Orders", path: "/admin/orders" },
+  { icon: <List size={20} />, label: "Categories", path: "/admin/categories" },
 ];
 
 export const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
@@ -74,7 +78,8 @@ export const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
         <div className="flex flex-col h-full">
           <div className="p-4 flex items-center justify-between">
             <h1 className={`font-bold text-xl ${!isSidebarOpen && "hidden"}`}>
-              Admin Panel
+              Admin Panel <br />
+              <span>Rifqi Topup</span>
             </h1>
             <Button
               variant="ghost"

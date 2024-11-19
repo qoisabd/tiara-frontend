@@ -1,4 +1,5 @@
 export interface RegisterType {
+  us_id?: number;
   us_username: string;
   us_email: string;
   us_password: string;

@@ -24,7 +24,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (!verifiedToken && (pathIsAdmin || pathIsOrderHistory)) {
-    return NextResponse.redirect(new URL("/sign-up", req.url));
+    return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
   if (isAdmin && req.nextUrl.pathname === "/") {
