@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CreditCard, FileTerminal } from "lucide-react";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -14,10 +14,8 @@ import { OrderDetailModal } from "@/components/OrderDetailModal";
 import DataTableComponent from "@/components/DataTables";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { OrderSearch } from "@/components/AdminComponents/Orders/OrderSearch";
 
 export default function AdminOrderPage() {
-  const [filteredOrders, setFilteredOrders] = useState<OrderHistoryType[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<OrderHistoryType | null>(
     null
@@ -31,18 +29,7 @@ export default function AdminOrderPage() {
 
   useEffect(() => {
     dispatch(fetchAllOrder());
-    setFilteredOrders(adminAllOrder);
-  }, [dispatch, adminAllOrder]);
-
-  const handleSearch = (searchTerm: string) => {
-    const filtered = adminAllOrder.filter((order) =>
-      Object.values(order).some(
-        (val) =>
-          val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-    setFilteredOrders(filtered);
-  };
+  }, [dispatch]);
 
   const handleViewPayment = (row: OrderHistoryType) => {
     const token = row.or_platform_token;
@@ -187,16 +174,12 @@ export default function AdminOrderPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <OrderSearch
-        onSearch={handleSearch}
-        data={filteredOrders.length > 0 ? filteredOrders : adminAllOrder}
-      />
       <Card>
         <CardContent>
-          {filteredOrders && (
+          {adminAllOrder && (
             <DataTableComponent
               columns={columns}
-              data={filteredOrders}
+              data={adminAllOrder}
               pagination
               customStyles={customStyles}
               responsive

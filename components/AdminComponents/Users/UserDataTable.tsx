@@ -33,8 +33,12 @@ const UserDataTable: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<RegisterType[]>([]);
 
-  useEffect(() => {
+  const refreshData = () => {
     dispatch(fetchAllUser());
+  };
+
+  useEffect(() => {
+    refreshData();
   }, [dispatch]);
 
   useEffect(() => {
@@ -54,13 +58,8 @@ const UserDataTable: React.FC = () => {
   const handleDelete = async () => {
     try {
       if (deleteUserId) {
-        await dispatch(deleteUserById(deleteUserId));
-
-        const updatedUsers = users.filter(
-          (user) => user.us_id !== deleteUserId
-        );
-        setFilteredUsers(updatedUsers);
-
+        await dispatch(deleteUserById(deleteUserId)).unwrap();
+        refreshData();
         setIsDeleteModalOpen(false);
         setDeleteUserId(null);
         toast.success("User Delete Successfully", {
@@ -91,6 +90,12 @@ const UserDataTable: React.FC = () => {
   };
 
   const columns = [
+    {
+      name: "No",
+      cell: (row: RegisterType, index: number) => index + 1,
+      sortable: true,
+      width: "80px",
+    },
     {
       name: "Username",
       selector: (row: RegisterType) => row.us_username,
@@ -166,6 +171,7 @@ const UserDataTable: React.FC = () => {
         isOpen={isCreateModalOpen}
         onOpenChange={setIsCreateModalOpen}
         initialData={editUser}
+        onSuccess={refreshData}
       />
 
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>

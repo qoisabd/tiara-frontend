@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -46,25 +46,45 @@ interface UserCreateModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   initialData?: RegisterType | null;
+  onSuccess?: () => void;
 }
 
 const UserCreateModal: React.FC<UserCreateModalProps> = ({
   isOpen,
   onOpenChange,
   initialData,
+  onSuccess,
 }) => {
-  const [users, setUsers] = useState<RegisterType[]>([]);
   const dispatch = useDispatch<AppDispatch>();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
+    defaultValues: {
       us_username: "",
       us_email: "",
       us_password: "",
       us_phone_number: "",
     },
   });
+
+  // Reset form when modal opens with initial data
+  useEffect(() => {
+    if (isOpen && initialData) {
+      form.reset({
+        us_username: initialData.us_username,
+        us_email: initialData.us_email,
+        us_password: "", // Don't show existing password
+        us_phone_number: initialData.us_phone_number,
+      });
+    } else if (isOpen) {
+      form.reset({
+        us_username: "",
+        us_email: "",
+        us_password: "",
+        us_phone_number: "",
+      });
+    }
+  }, [isOpen, initialData, form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -76,11 +96,6 @@ const UserCreateModal: React.FC<UserCreateModalProps> = ({
           })
         ).unwrap();
 
-        const updatedUsers = users.map((user) =>
-          user.us_id === initialData.us_id ? { ...user, ...values } : user
-        );
-
-        setUsers(updatedUsers);
         toast.success("User Successfully Updated", {
           position: "top-right",
           autoClose: 5000,
@@ -93,7 +108,7 @@ const UserCreateModal: React.FC<UserCreateModalProps> = ({
           transition: Bounce,
         });
       } else {
-        await dispatch(createUser(values));
+        await dispatch(createUser(values)).unwrap();
         toast.success("User Successfully Created", {
           position: "top-right",
           autoClose: 5000,
@@ -106,19 +121,29 @@ const UserCreateModal: React.FC<UserCreateModalProps> = ({
           transition: Bounce,
         });
       }
+
+      // Call onSuccess callback to refresh the data
+      if (onSuccess) {
+        onSuccess();
+      }
+
       onOpenChange(false);
+      form.reset();
     } catch (error) {
-      toast.error(`Failed to create or updated user: ${error}`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.error(
+        `Failed to ${initialData ? "update" : "create"} user: ${error}`,
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        }
+      );
     }
   };
 
@@ -171,9 +196,12 @@ const UserCreateModal: React.FC<UserCreateModalProps> = ({
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Enter password"
+                      placeholder={
+                        initialData
+                          ? "Leave blank to keep existing password"
+                          : "Enter password"
+                      }
                       {...field}
-                      isPassword
                     />
                   </FormControl>
                   <FormMessage />

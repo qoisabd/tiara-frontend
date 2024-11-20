@@ -7,6 +7,7 @@ import {
 } from "./adminThunk";
 import { RegisterType } from "@/types/types";
 import { Status } from "@/utils/Status";
+import { Users } from "lucide-react";
 
 interface AdminUserState {
   users: RegisterType[];
@@ -43,14 +44,17 @@ const adminUserSlice = createSlice({
       //   Create User
       .addCase(createUser.fulfilled, (state, action) => {
         state.users.push(action.payload);
+        console.log(state.users);
       })
 
       //   Update User
       .addCase(updateUserById.fulfilled, (state, action) => {
         const userIndex = state.users.findIndex(
-          (user) => user.us_id === action.payload.id
+          (user) => user.us_id === action.payload.userId
         );
-        state.users[userIndex] = action.payload;
+        if (userIndex !== -1) {
+          state.users[userIndex] = action.payload;
+        }
       })
 
       //   Delete User
