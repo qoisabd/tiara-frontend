@@ -1,8 +1,13 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
-import { fetchAllUser, deleteUserById } from "@/features/admin/adminThunk";
+import {
+  fetchAllCategory,
+  deleteProductById,
+  fetchAllProduct,
+} from "@/features/admin/adminThunk";
 import {
   Dialog,
   DialogContent,
@@ -12,56 +17,58 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Trash2, Edit, Plus } from "lucide-react";
-import UserCreateModal from "./UserCreateModal";
-import { UserManagementHeader } from "./UserHeader";
+import ProductCreateModal from "./ProductCreateModal";
 import { RootState, AppDispatch } from "@/store/store";
-import { RegisterType } from "@/types/types";
+import { ProductType } from "@/types/types";
 import { Bounce, toast } from "react-toastify";
+import { ProductHeader } from "./ProductHeader";
 
-const UserDataTable: React.FC = () => {
+const ProductDataTable: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { users, status, errorMessage } = useSelector(
-    (state: RootState) => state.adminUserReducer
+  const { products, status } = useSelector(
+    (state: RootState) => state.adminProductReducer
   );
 
-  const [deleteUserId, setDeleteUserId] = useState<number | null>(null);
-  const [editUser, setEditUser] = useState<RegisterType | null>(null);
+  const [deleteProductId, setDeleteProductId] = useState<number | null>(null);
+  const [editProduct, setEditProduct] = useState<ProductType | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState<RegisterType[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
 
   const refreshData = () => {
-    dispatch(fetchAllUser());
+    dispatch(fetchAllProduct());
   };
 
   useEffect(() => {
+    dispatch(fetchAllCategory());
     refreshData();
   }, [dispatch]);
 
   useEffect(() => {
     if (searchTerm) {
-      const filtered = users.filter(
-        (user) =>
-          user.us_username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user.us_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user.us_phone_number.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = products.filter(
+        (product) =>
+          product.pr_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.category?.ct_name
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase())
       );
-      setFilteredUsers(filtered);
+      setFilteredProducts(filtered);
     } else {
-      setFilteredUsers(users);
+      setFilteredProducts(products);
     }
-  }, [searchTerm, users]);
+  }, [searchTerm, products]);
 
   const handleDelete = async () => {
     try {
-      if (deleteUserId) {
-        await dispatch(deleteUserById(deleteUserId)).unwrap();
-        refreshData();
+      if (deleteProductId) {
+        await dispatch(deleteProductById(deleteProductId)).unwrap();
+        refreshData(); // Refresh the data after successful deletion
         setIsDeleteModalOpen(false);
-        setDeleteUserId(null);
-        toast.success("User Delete Successfully", {
+        setDeleteProductId(null);
+        toast.success("Product Deleted Successfully", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -74,7 +81,7 @@ const UserDataTable: React.FC = () => {
         });
       }
     } catch (error) {
-      toast.error(`Failed to delete user: ${error}`, {
+      toast.error(`Failed to delete product: ${error}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -88,37 +95,54 @@ const UserDataTable: React.FC = () => {
     }
   };
 
+  const formatCurrency = (amount: string | number) => {
+    const numberAmount =
+      typeof amount === "string" ? parseFloat(amount) : amount;
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(numberAmount);
+  };
+
   const columns = [
     {
       name: "No",
-      cell: (row: RegisterType, index: number) => index + 1,
+      cell: (_: ProductType, index: number) => index + 1,
       sortable: true,
       width: "80px",
     },
     {
-      name: "Username",
-      selector: (row: RegisterType) => row.us_username,
+      name: "Product Name",
+      selector: (row: ProductType) => row.pr_name,
       sortable: true,
     },
     {
-      name: "Email",
-      selector: (row: RegisterType) => row.us_email,
+      name: "Category",
+      selector: (row: ProductType) => row.category?.ct_name || "-",
       sortable: true,
     },
     {
-      name: "Phone Number",
-      selector: (row: RegisterType) => row.us_phone_number,
+      name: "Price",
+      selector: (row: ProductType) => row.pr_price,
+      sortable: true,
+      format: (row: ProductType) => formatCurrency(row.pr_price),
+    },
+    {
+      name: "Stock",
+      selector: (row: ProductType) => row.pr_stock_quantity,
       sortable: true,
     },
     {
       name: "Actions",
-      cell: (row: RegisterType) => (
+      cell: (row: ProductType) => (
         <div className="flex space-x-2">
           <Button
             variant="outline"
             size="icon"
             onClick={() => {
-              setEditUser(row);
+              setEditProduct(row);
               setIsCreateModalOpen(true);
             }}
           >
@@ -128,7 +152,7 @@ const UserDataTable: React.FC = () => {
             variant="destructive"
             size="icon"
             onClick={() => {
-              setDeleteUserId(row.us_id as number);
+              setDeleteProductId(row.pr_id as number);
               setIsDeleteModalOpen(true);
             }}
           >
@@ -141,24 +165,21 @@ const UserDataTable: React.FC = () => {
 
   return (
     <div className="p-4">
-      <UserManagementHeader
-        data={users}
-        onSearch={(value) => setSearchTerm(value)}
-      />
+      <ProductHeader onSearch={setSearchTerm} data={products} />
 
       <Button
         className="mb-4"
         onClick={() => {
-          setEditUser(null);
+          setEditProduct(null);
           setIsCreateModalOpen(true);
         }}
       >
-        <Plus className="mr-2 h-4 w-4" /> Create User
+        <Plus className="mr-2 h-4 w-4" /> Create Product
       </Button>
 
       <DataTable
         columns={columns}
-        data={filteredUsers}
+        data={filteredProducts}
         pagination
         responsive
         className="border"
@@ -166,19 +187,19 @@ const UserDataTable: React.FC = () => {
         progressComponent={<div>Loading...</div>}
       />
 
-      <UserCreateModal
+      <ProductCreateModal
         isOpen={isCreateModalOpen}
         onOpenChange={setIsCreateModalOpen}
-        initialData={editUser}
+        initialData={editProduct}
         onSuccess={refreshData}
       />
 
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete User</DialogTitle>
+            <DialogTitle>Delete Product</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this user?
+              Are you sure you want to delete this product?
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end space-x-2">
@@ -198,4 +219,4 @@ const UserDataTable: React.FC = () => {
   );
 };
 
-export default UserDataTable;
+export default ProductDataTable;

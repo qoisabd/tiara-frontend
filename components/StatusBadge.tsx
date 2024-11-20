@@ -22,6 +22,10 @@ export function StatusBadge({ status }: StatusBadgeProps) {
       label: "Cancelled",
       className: "bg-red-100 text-red-800",
     },
+    expire: {
+      label: "Expired",
+      className: "bg-red-100 text-red-800",
+    },
     default: {
       label: "Unknown",
       className: "bg-gray-100 text-gray-800",

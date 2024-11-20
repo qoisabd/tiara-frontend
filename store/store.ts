@@ -15,6 +15,8 @@ import adminReducer from "@/features/admin/adminSlice";
 import recentOrderReducer from "@/features/admin/adminRecentOrderSlice";
 import adminUserReducer from "@/features/admin/adminUserSlice";
 import adminAllOrderReducer from "@/features/admin/adminAllOrderSlice";
+import adminCategoryReducer from "@/features/admin/adminCategorySlice";
+import adminProductReducer from "@/features/admin/adminProductSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -35,6 +37,8 @@ export const makeStore = () => {
       recentOrderReducer,
       adminUserReducer,
       adminAllOrderReducer,
+      adminCategoryReducer,
+      adminProductReducer,
     },
   });
 };

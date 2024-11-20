@@ -99,7 +99,7 @@ export interface OrderHistoryType {
 }
 
 export interface OrderStatusType {
-  value: "pending" | "settlement" | "cancelled" | "default";
+  value: "pending" | "settlement" | "cancelled" | "expire" | "default";
   label: string;
   color: string;
 }
@@ -152,4 +152,18 @@ export interface AdminStateType {
     totalOrder: string | null;
     totalAmount: string | null;
   };
+}
+
+export interface CategoryType {
+  ct_id?: number;
+  ct_name: string;
+}
+
+export interface ProductType {
+  pr_id?: number;
+  pr_ct_id: number;
+  pr_name: string;
+  pr_price: number;
+  pr_stock_quantity: number;
+  category?: CategoryType;
 }

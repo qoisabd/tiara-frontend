@@ -113,7 +113,7 @@ const GameDetail = () => {
   const sections = [
     {
       title: "Instant Process",
-      products: productDetail.slice(0, 6),
+      products: productDetail,
     },
   ];
 

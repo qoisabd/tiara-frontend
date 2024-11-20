@@ -14,10 +14,8 @@ import { Button } from "@/components/ui/button";
 import { OrderDetailModal } from "@/components/OrderDetailModal";
 import { CreditCard, FileTerminal } from "lucide-react";
 import useSnap from "@/hooks/useSnap";
-import { useRouter } from "next/navigation";
 
 export default function OrderHistoryPage() {
-  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { adminAllOrder, status, errorMessage } = useSelector(
     (state: RootState) => state.adminAllOrderReducer
