@@ -1,78 +1,76 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { CreditCard, FileTerminal } from "lucide-react";
+import { OrderAdminHeader } from "@/components/AdminComponents/Orders/OrderAdminHeader";
 import { StatusBadge } from "@/components/StatusBadge";
-import useSnap from "@/hooks/useSnap";
-import { fetchAllOrder } from "@/features/admin/adminThunk";
 import { OrderHistoryType } from "@/types/types";
-import { OrderDetailModal } from "@/components/OrderDetailModal";
-import DataTableComponent from "@/components/DataTables";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { OrderSearch } from "@/components/AdminComponents/Orders/OrderSearch";
+import { Skeleton } from "@/components/ui/skeleton";
+import { fetchAllOrder } from "@/features/admin/adminThunk";
+import DataTableComponent from "@/components/DataTables";
+import { Button } from "@/components/ui/button";
+import { OrderDetailModal } from "@/components/OrderDetailModal";
+import { CreditCard, FileTerminal } from "lucide-react";
+import useSnap from "@/hooks/useSnap";
+import { useRouter } from "next/navigation";
 
-export default function AdminOrderPage() {
+export default function OrderHistoryPage() {
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const { adminAllOrder, status, errorMessage } = useSelector(
+    (state: RootState) => state.adminAllOrderReducer
+  );
   const [filteredOrders, setFilteredOrders] = useState<OrderHistoryType[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<OrderHistoryType | null>(
     null
   );
-
-  const dispatch = useDispatch<AppDispatch>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { snapEmbed } = useSnap();
-  const { adminAllOrder, errorMessage, status } = useSelector(
-    (state: RootState) => state.adminAllOrderReducer
-  );
 
   useEffect(() => {
     dispatch(fetchAllOrder());
+  }, [dispatch]);
+
+  useEffect(() => {
     setFilteredOrders(adminAllOrder);
-  }, [dispatch, adminAllOrder]);
+  }, [adminAllOrder]);
 
-  const handleSearch = (searchTerm: string) => {
-    const filtered = adminAllOrder.filter((order) =>
-      Object.values(order).some(
-        (val) =>
-          val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-    setFilteredOrders(filtered);
-  };
-
-  const handleViewPayment = (row: OrderHistoryType) => {
+  const handleViewPayment = (row: any) => {
     const token = row.or_platform_token;
     snapEmbed(token, {
-      onSuccess: (result: any) => console.log("success", result),
-      onError: (result: any) => console.log("error", result),
-      onClose: () =>
-        console.log("customer closed the popup without finishing the payment"),
+      onSuccess: function (result: any) {
+        console.log("success", result);
+      },
+      onError: function (result: any) {
+        console.log("error", result);
+      },
+      onClose: function () {
+        console.log("customer closed the popup without finishing the payment");
+      },
     });
   };
 
   const columns = [
     {
-      name: "No",
+      name: "No.",
       selector: (row: OrderHistoryType, index: number) => index + 1,
-      sortable: true,
-      width: "60px",
+      sortable: false,
+      width: "80px",
     },
     {
       name: "Date",
       selector: (row: OrderHistoryType) =>
         new Date(row.or_created_at).toLocaleDateString(),
       sortable: true,
-      width: "120px",
+      width: "150px",
     },
     {
       name: "Platform ID",
       selector: (row: OrderHistoryType) => row.or_platform_id,
       sortable: true,
-      width: "200px",
+      width: "250px",
     },
     {
       name: "Game Name",
@@ -84,13 +82,13 @@ export default function AdminOrderPage() {
         return categories || "-";
       },
       sortable: true,
-      width: "200px",
+      width: "150px",
     },
     {
       name: "Total",
-      cell: (row: OrderHistoryType) => `Rp. ${row.or_total_amount.toFixed(0)}`,
+      cell: (row: OrderHistoryType) => `Rp. ${row.or_total_amount.toFixed()}`,
       sortable: true,
-      width: "120px",
+      width: "130px",
     },
     {
       name: "Status",
@@ -98,7 +96,7 @@ export default function AdminOrderPage() {
         <StatusBadge status={row.or_status || "pending"} />
       ),
       sortable: true,
-      width: "120px",
+      width: "150px",
     },
     {
       name: "Action",
@@ -112,56 +110,32 @@ export default function AdminOrderPage() {
               setIsModalOpen(true);
             }}
           >
-            <FileTerminal className="mr-2 h-4 w-4 text-yellow-400" />
+            <FileTerminal className="text-yellow-400" />
             View Details
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => handleViewPayment(row)}
+            onClick={() => {
+              handleViewPayment(row);
+            }}
           >
-            <CreditCard className="mr-2 h-4 w-4 text-green-500" />
+            <CreditCard className="text-green-500" />
             View Payment
           </Button>
         </div>
       ),
-      width: "300px",
+      sortable: true,
     },
   ];
-
-  const customStyles = {
-    table: {
-      style: {
-        backgroundColor: "transparent",
-      },
-    },
-    headRow: {
-      style: {
-        backgroundColor: "transparent",
-        borderBottomColor: "#e5e7eb",
-        borderBottomWidth: "1px",
-      },
-    },
-    rows: {
-      style: {
-        backgroundColor: "transparent",
-        "&:nth-of-type(odd)": {
-          backgroundColor: "#f9fafb",
-        },
-        "&:hover": {
-          backgroundColor: "#f3f4f6",
-        },
-        borderBottomColor: "#e5e7eb",
-        borderBottomWidth: "1px",
-      },
-    },
-    pagination: {
-      style: {
-        backgroundColor: "transparent",
-        borderTopColor: "#e5e7eb",
-        borderTopWidth: "1px",
-      },
-    },
+  const handleSearch = (searchTerm: string) => {
+    const filtered = adminAllOrder.filter((order) =>
+      Object.values(order).some(
+        (val) =>
+          val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+    setFilteredOrders(filtered);
   };
 
   if (status === "LOADING") {
@@ -187,33 +161,20 @@ export default function AdminOrderPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <OrderSearch
-        onSearch={handleSearch}
-        data={filteredOrders.length > 0 ? filteredOrders : adminAllOrder}
-      />
+      <OrderAdminHeader onSearch={handleSearch} data={filteredOrders} />
       <Card>
-        <CardContent>
-          {filteredOrders && (
-            <DataTableComponent
-              columns={columns}
-              data={filteredOrders}
-              pagination
-              customStyles={customStyles}
-              responsive
-            />
-          )}
+        <CardContent className="p-6">
+          <DataTableComponent columns={columns} data={filteredOrders} />
         </CardContent>
       </Card>
-      {selectedOrder && (
-        <OrderDetailModal
-          order={selectedOrder}
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setSelectedOrder(null);
-          }}
-        />
-      )}
+      <OrderDetailModal
+        order={selectedOrder}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedOrder(null);
+        }}
+      />
     </div>
   );
 }

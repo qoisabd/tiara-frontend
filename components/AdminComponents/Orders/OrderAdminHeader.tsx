@@ -3,12 +3,12 @@ import { Input } from "@/components/ui/input";
 import { Search, Download } from "lucide-react";
 import { OrderHistoryType } from "@/types/types";
 
-interface OrderSearchProps {
+interface OrderHistoryHeaderProps {
   onSearch: (value: string) => void;
   data: OrderHistoryType[];
 }
 
-export function OrderSearch({ onSearch, data }: OrderSearchProps) {
+export function OrderAdminHeader({ onSearch, data }: OrderHistoryHeaderProps) {
   const handleExport = () => {
     if (data.length === 0) return;
 
@@ -44,7 +44,7 @@ export function OrderSearch({ onSearch, data }: OrderSearchProps) {
       link.setAttribute("href", url);
       link.setAttribute(
         "download",
-        `order_history_rfq-topup_${new Date().toISOString().split("T")[0]}.csv`
+        `list_all_order_rfq-topup_${new Date().toISOString().split("T")[0]}.csv`
       );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
@@ -55,7 +55,7 @@ export function OrderSearch({ onSearch, data }: OrderSearchProps) {
 
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6 mx-5">
-      <h1 className="text-2xl font-semibold">List All Orders</h1>
+      <h1 className="text-2xl font-bold tracking-tight">List All Orders</h1>
       <div className="flex items-center gap-4">
         <div className="relative">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
