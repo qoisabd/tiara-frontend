@@ -1,5 +1,3 @@
-"use client";
-
 import UserDataTable from "@/components/AdminComponents/Users/UserDataTable";
 
 export default function UserManagementPage() {

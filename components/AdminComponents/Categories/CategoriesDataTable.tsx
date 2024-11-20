@@ -3,11 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
-import {
-  fetchNameCategory,
-  deleteProductById,
-  fetchAllProduct,
-} from "@/features/admin/adminThunk";
+import { fetchAllCategory, deleteCategory } from "@/features/admin/adminThunk";
 import {
   Dialog,
   DialogContent,
@@ -17,58 +13,59 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Trash2, Edit, Plus } from "lucide-react";
-import ProductCreateModal from "./ProductCreateModal";
+import CategoriesCreateModal from "./CategoriesCreateModal";
 import { RootState, AppDispatch } from "@/store/store";
-import { ProductType } from "@/types/types";
+import { CategoryType } from "@/types/types";
 import { Bounce, toast } from "react-toastify";
-import { ProductHeader } from "./ProductHeader";
+import Image from "next/image";
+import { CategoriesHeader } from "./CategoriesHeader";
 
-const ProductDataTable: React.FC = () => {
+const CategoryDataTable: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { products, status } = useSelector(
-    (state: RootState) => state.adminProductReducer
+  const { categories, status } = useSelector(
+    (state: RootState) => state.adminCategoryReducer
   );
 
-  const [deleteProductId, setDeleteProductId] = useState<number | null>(null);
-  const [editProduct, setEditProduct] = useState<ProductType | null>(null);
+  const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
+  const [editCategory, setEditCategory] = useState<CategoryType | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
+  const [filteredCategories, setFilteredCategories] = useState<CategoryType[]>(
+    []
+  );
 
   const refreshData = () => {
-    dispatch(fetchAllProduct());
+    dispatch(fetchAllCategory());
   };
 
   useEffect(() => {
-    dispatch(fetchNameCategory());
     refreshData();
   }, [dispatch]);
 
   useEffect(() => {
     if (searchTerm) {
-      const filtered = products.filter(
-        (product) =>
-          product.pr_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          product.category?.ct_name
-            ?.toLowerCase()
+      const filtered = categories.filter(
+        (category) =>
+          category.ct_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          category.ct_game_publisher
+            .toLowerCase()
             .includes(searchTerm.toLowerCase())
       );
-      setFilteredProducts(filtered);
+      setFilteredCategories(filtered);
     } else {
-      setFilteredProducts(products);
+      setFilteredCategories(categories);
     }
-  }, [searchTerm, products]);
+  }, [searchTerm, categories]);
 
   const handleDelete = async () => {
     try {
-      if (deleteProductId) {
-        await dispatch(deleteProductById(deleteProductId)).unwrap();
-        refreshData(); // Refresh the data after successful deletion
+      if (deleteCategoryId) {
+        await dispatch(deleteCategory(deleteCategoryId)).unwrap();
+        refreshData();
         setIsDeleteModalOpen(false);
-        setDeleteProductId(null);
-        toast.success("Product Deleted Successfully", {
+        setDeleteCategoryId(null);
+        toast.success("Category Deleted Successfully", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -81,7 +78,7 @@ const ProductDataTable: React.FC = () => {
         });
       }
     } catch (error) {
-      toast.error(`Failed to delete product: ${error}`, {
+      toast.error(`Failed to delete category: ${error}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -95,49 +92,55 @@ const ProductDataTable: React.FC = () => {
     }
   };
 
-  const formatCurrency = (amount: string | number) => {
-    const numberAmount =
-      typeof amount === "string" ? parseFloat(amount) : amount;
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(numberAmount);
-  };
-
   const columns = [
     {
       name: "No",
-      cell: (_: ProductType, index: number) => index + 1,
+      cell: (_: CategoryType, index: number) => index + 1,
       sortable: true,
       width: "80px",
     },
     {
-      name: "Product Name",
-      selector: (row: ProductType) => row.pr_name,
+      name: "Category Name",
+      selector: (row: CategoryType) => row.ct_name,
       sortable: true,
     },
     {
-      name: "Category",
-      selector: (row: ProductType) => row.category?.ct_name || "-",
+      name: "Code",
+      selector: (row: CategoryType) => row.ct_code,
       sortable: true,
     },
     {
-      name: "Price",
-      selector: (row: ProductType) => row.pr_price,
+      name: "Game Publisher",
+      selector: (row: CategoryType) => row.ct_game_publisher,
       sortable: true,
-      format: (row: ProductType) => formatCurrency(row.pr_price),
+    },
+    {
+      name: "Currency Type",
+      selector: (row: CategoryType) => row.ct_currency_type,
+      sortable: true,
+    },
+    {
+      name: "Image",
+      cell: (row: CategoryType) => (
+        <div className="h-16 w-16 relative">
+          <Image
+            src={row.ct_image}
+            alt={row.ct_name}
+            fill
+            className="object-cover rounded"
+          />
+        </div>
+      ),
     },
     {
       name: "Actions",
-      cell: (row: ProductType) => (
+      cell: (row: CategoryType) => (
         <div className="flex space-x-2">
           <Button
             variant="outline"
             size="icon"
             onClick={() => {
-              setEditProduct(row);
+              setEditCategory(row);
               setIsCreateModalOpen(true);
             }}
           >
@@ -147,7 +150,7 @@ const ProductDataTable: React.FC = () => {
             variant="destructive"
             size="icon"
             onClick={() => {
-              setDeleteProductId(row.pr_id as number);
+              setDeleteCategoryId(row.ct_id as number);
               setIsDeleteModalOpen(true);
             }}
           >
@@ -160,43 +163,45 @@ const ProductDataTable: React.FC = () => {
 
   return (
     <div className="p-4">
-      <ProductHeader onSearch={setSearchTerm} data={products} />
+      <CategoriesHeader onSearch={setSearchTerm} data={categories} />
 
       <Button
         className="mb-4"
         onClick={() => {
-          setEditProduct(null);
+          setEditCategory(null);
           setIsCreateModalOpen(true);
         }}
       >
-        <Plus className="mr-2 h-4 w-4" /> Create Product
+        <Plus className="mr-2 h-4 w-4" />
+        Add Category
       </Button>
 
       <DataTable
         columns={columns}
-        data={filteredProducts}
+        data={filteredCategories}
+        noHeader
         pagination
-        responsive
-        className="border"
-        progressPending={status === "LOADING"}
+        highlightOnHover
+        pointerOnHover
+        progressPending={status === "loading"}
         progressComponent={<div>Loading...</div>}
       />
 
-      <ProductCreateModal
+      <CategoriesCreateModal
         isOpen={isCreateModalOpen}
         onOpenChange={setIsCreateModalOpen}
-        initialData={editProduct}
+        initialData={editCategory}
         onSuccess={refreshData}
       />
 
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Product</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this product?
-            </DialogDescription>
+            <DialogTitle>Delete Category</DialogTitle>
           </DialogHeader>
+          <DialogDescription>
+            Are you sure you want to delete this category?
+          </DialogDescription>
           <div className="flex justify-end space-x-2">
             <Button
               variant="outline"
@@ -204,7 +209,7 @@ const ProductDataTable: React.FC = () => {
             >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button onClick={handleDelete} variant="destructive">
               Delete
             </Button>
           </div>
@@ -214,4 +219,4 @@ const ProductDataTable: React.FC = () => {
   );
 };
 
-export default ProductDataTable;
+export default CategoryDataTable;

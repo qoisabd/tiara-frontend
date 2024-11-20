@@ -31,7 +31,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   createProduct,
-  fetchAllCategory,
+  fetchNameCategory,
   updateProductById,
 } from "@/features/admin/adminThunk";
 import { ProductType, CategoryType } from "@/types/types";
@@ -45,9 +45,6 @@ const formSchema = z.object({
     .max(50, { message: "Product name must be at most 50 characters" }),
   pr_ct_id: z.string().min(1, { message: "Category is required" }),
   pr_price: z.string().min(1, { message: "Price is required" }),
-  pr_stock_quantity: z
-    .string()
-    .min(1, { message: "Stock quantity is required" }),
 });
 
 interface ProductCreateModalProps {
@@ -74,13 +71,12 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
       pr_name: "",
       pr_ct_id: "",
       pr_price: "",
-      pr_stock_quantity: "",
     },
   });
 
   useEffect(() => {
     if (isOpen) {
-      dispatch(fetchAllCategory());
+      dispatch(fetchNameCategory());
     }
   }, [isOpen, dispatch]);
 
@@ -90,14 +86,12 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
         pr_name: initialData.pr_name,
         pr_ct_id: initialData.pr_ct_id.toString(),
         pr_price: initialData.pr_price.toString(),
-        pr_stock_quantity: initialData.pr_stock_quantity.toString(),
       });
     } else if (isOpen) {
       form.reset({
         pr_name: "",
         pr_ct_id: "",
         pr_price: "",
-        pr_stock_quantity: "",
       });
     }
   }, [isOpen, initialData, form]);
@@ -108,7 +102,6 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
         pr_name: values.pr_name,
         pr_ct_id: parseInt(values.pr_ct_id),
         pr_price: parseFloat(values.pr_price),
-        pr_stock_quantity: parseInt(values.pr_stock_quantity),
       };
 
       if (initialData) {
@@ -238,24 +231,6 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                   <FormLabel>Price</FormLabel>
                   <FormControl>
                     <Input type="number" placeholder="Enter price" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="pr_stock_quantity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Stock Quantity</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter stock quantity"
-                      {...field}
-                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

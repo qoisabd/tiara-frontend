@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { RegisterType, ProductType } from "@/types/types";
+import { RegisterType, ProductType, CategoryType } from "@/types/types";
 
 export const fetchUserCount = createAsyncThunk(
   "admin/fetchUserCount",
@@ -187,8 +187,8 @@ export const deleteUserById = createAsyncThunk(
   }
 );
 
-export const fetchAllCategory = createAsyncThunk(
-  "admin/fetchAllCategory",
+export const fetchNameCategory = createAsyncThunk(
+  "admin/fetchNameCategory",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
@@ -246,25 +246,6 @@ export const updateProductById = createAsyncThunk(
   }
 );
 
-// ! unused
-export const fetchProductByCategory = createAsyncThunk(
-  "admin/getProductByCategory",
-  async (categoryCode: string, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/categories/${categoryCode}/products`
-      );
-
-      return response.data.data;
-    } catch (error: any) {
-      if (!error.response) {
-        throw error;
-      }
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
 export const deleteProductById = createAsyncThunk(
   "admin/deleteProductById",
   async (productId: number, { rejectWithValue }) => {
@@ -289,6 +270,89 @@ export const fetchAllProduct = createAsyncThunk(
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/get-all-product`
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// categories
+export const fetchAllCategory = createAsyncThunk(
+  "admin/fetchAllCategory",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/get-all-category`
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const createCategory = createAsyncThunk(
+  "admin/createCategory",
+  async (data: FormData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/create-category`,
+        data
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateCategory = createAsyncThunk(
+  "admin/updateCategory",
+  async (
+    { categoryId, data }: { categoryId: number; data: FormData },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/update-category/${categoryId}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteCategory = createAsyncThunk(
+  "admin/deleteCategory",
+  async (categoryId: number, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/delete-category/${categoryId}`
       );
 
       return response.data.data;

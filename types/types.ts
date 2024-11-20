@@ -157,6 +157,12 @@ export interface AdminStateType {
 export interface CategoryType {
   ct_id?: number;
   ct_name: string;
+  ct_code: string;
+  ct_game_publisher: string;
+  ct_image: string;
+  ct_image_cover: string;
+  ct_currency_type: string;
+  ct_currency_type_image: string;
 }
 
 export interface ProductType {
@@ -164,6 +170,5 @@ export interface ProductType {
   pr_ct_id: number;
   pr_name: string;
   pr_price: number;
-  pr_stock_quantity: number;
   category?: CategoryType;
 }

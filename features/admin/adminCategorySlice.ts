@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllCategory } from "./adminThunk";
+import {
+  fetchNameCategory,
+  fetchAllCategory,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from "./adminThunk";
 import { Status } from "@/utils/Status";
 import { CategoryType } from "@/types/types";
 
@@ -20,7 +26,21 @@ const adminCategorySlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // Get All Categories
+    // Get Name Categories
+    builder
+      .addCase(fetchNameCategory.pending, (state) => {
+        state.status = "LOADING";
+      })
+      .addCase(fetchNameCategory.fulfilled, (state, action) => {
+        state.status = "SUCCESS";
+        state.categories = action.payload;
+      })
+      .addCase(fetchNameCategory.rejected, (state, action) => {
+        state.status = "FAILED";
+        state.errorMessage = action.error.message || "Something went wrong";
+      });
+
+    // Fetch All Categories
     builder
       .addCase(fetchAllCategory.pending, (state) => {
         state.status = "LOADING";
@@ -32,6 +52,43 @@ const adminCategorySlice = createSlice({
       .addCase(fetchAllCategory.rejected, (state, action) => {
         state.status = "FAILED";
         state.errorMessage = action.error.message || "Something went wrong";
+      });
+
+    // Create Category
+    builder
+      .addCase(createCategory.fulfilled, (state, action) => {
+        state.categories.push(action.payload);
+      })
+      .addCase(createCategory.rejected, (state, action) => {
+        state.errorMessage =
+          action.error.message || "Failed to create category";
+      });
+
+    // Update Category
+    builder
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        const categoryIndex = state.categories.findIndex(
+          (category) => category.ct_id === action.payload.id
+        );
+        if (categoryIndex !== -1) {
+          state.categories[categoryIndex] = action.payload;
+        }
+      })
+      .addCase(updateCategory.rejected, (state, action) => {
+        state.errorMessage =
+          action.error.message || "Failed to update category";
+      });
+
+    // Delete Category
+    builder
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.categories = state.categories.filter(
+          (category) => category.ct_id !== action.payload.id
+        );
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        state.errorMessage =
+          action.error.message || "Failed to delete category";
       });
   },
 });

@@ -7,7 +7,6 @@ import {
 } from "./adminThunk";
 import { RegisterType } from "@/types/types";
 import { Status } from "@/utils/Status";
-import { Users } from "lucide-react";
 
 interface AdminUserState {
   users: RegisterType[];
@@ -46,6 +45,9 @@ const adminUserSlice = createSlice({
         state.users.push(action.payload);
         console.log(state.users);
       })
+      .addCase(createUser.rejected, (state, action) => {
+        state.errorMessage = action.error.message || "Failed to create user";
+      })
 
       //   Update User
       .addCase(updateUserById.fulfilled, (state, action) => {
@@ -56,12 +58,18 @@ const adminUserSlice = createSlice({
           state.users[userIndex] = action.payload;
         }
       })
+      .addCase(updateUserById.rejected, (state, action) => {
+        state.errorMessage = action.error.message || "Failed to update user";
+      })
 
       //   Delete User
       .addCase(deleteUserById.fulfilled, (state, action) => {
         state.users = state.users.filter(
           (user) => user.us_id !== action.payload.id
         );
+      })
+      .addCase(deleteUserById.rejected, (state, action) => {
+        state.errorMessage = action.error.message || "Failed to delete user";
       });
   },
 });
