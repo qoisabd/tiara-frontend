@@ -31,6 +31,7 @@ import Navbar from "@/components/Navbar";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import PromoModal from "@/components/PromoModal";
+import { orderSteps } from "@/lib/orderSteps";
 
 const formSchema = z.object({
   account_name: z.string().min(3, "Username must be at least 3 characters"),
@@ -246,19 +247,18 @@ const GameDetail = () => {
                         </span>{" "}
                         at a low price and with guaranteed safety.
                       </h4>
-                      {Array.isArray(category.ct_steps) &&
-                        category.ct_steps.map((step: any, index: number) => (
-                          <div key={index}>
-                            <ul className="flex flex-row gap-2">
-                              <li>
-                                <p>{index + 1}.</p>
-                              </li>
-                              <li>
-                                <p>{step.description}</p>
-                              </li>
-                            </ul>
-                          </div>
-                        ))}
+                      {orderSteps.map((step, index) => (
+                        <div key={index}>
+                          <ul className="flex flex-row gap-2">
+                            <li>
+                              <p>{step.step}.</p>
+                            </li>
+                            <li>
+                              <p>{step.description}</p>
+                            </li>
+                          </ul>
+                        </div>
+                      ))}
                       <p className="mt-3 md:mt-7">
                         For Customer Support, please contact Admin on our
                         official Whatsapp at +62 123-4567-8910 {""}

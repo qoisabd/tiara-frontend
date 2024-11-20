@@ -192,7 +192,7 @@ export const fetchAllCategory = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/get-all-category`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/get-name-category`
       );
 
       return response.data.data;
