@@ -1,7 +1,7 @@
 import { Status } from "@/utils/Status";
 import { createSlice } from "@reduxjs/toolkit";
 import { OrderHistoryType } from "@/types/types";
-import { fetchOrdersByUserId } from "./orderThunk";
+import { fetchOrdersByUserId, fetchAllOrder } from "./orderThunk";
 
 interface OrderHistoryState {
   orderHistory: OrderHistoryType[];
@@ -30,6 +30,19 @@ export const orderHistorySlice = createSlice({
         state.orderHistory = action.payload;
       })
       .addCase(fetchOrdersByUserId.rejected, (state, action) => {
+        state.status = Status.FAILED;
+        state.errorMessage =
+          action.error.message || "Failed to fetch order history";
+      })
+      .addCase(fetchAllOrder.pending, (state) => {
+        state.status = Status.LOADING;
+        state.errorMessage = "";
+      })
+      .addCase(fetchAllOrder.fulfilled, (state, action) => {
+        state.status = Status.SUCCESS;
+        state.orderHistory = action.payload;
+      })
+      .addCase(fetchAllOrder.rejected, (state, action) => {
         state.status = Status.FAILED;
         state.errorMessage =
           action.error.message || "Failed to fetch order history";

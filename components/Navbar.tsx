@@ -96,7 +96,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="flex items-center justify-between p-4 sticky top-0 z-40 border-b bg-header backdrop-blur-md md:px-8">
+      <nav className="flex items-center justify-between p-4 sticky top-0 z-40  bg-header backdrop-blur-md md:px-8">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
             <Image
@@ -132,7 +132,7 @@ export default function Navbar() {
               <span>Home</span>
             </Link>
             <Link
-              href="/notifications"
+              href="/transaction-check"
               className="flex items-center gap-2 text-white hover:text-blue-400"
             >
               <Search size={24} />
