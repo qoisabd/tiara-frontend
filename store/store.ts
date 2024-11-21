@@ -17,6 +17,7 @@ import adminUserReducer from "@/features/admin/adminUserSlice";
 import adminAllOrderReducer from "@/features/admin/adminAllOrderSlice";
 import adminCategoryReducer from "@/features/admin/adminCategorySlice";
 import adminProductReducer from "@/features/admin/adminProductSlice";
+import categorySearchReducer from "@/features/category/categorySearchSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -39,6 +40,7 @@ export const makeStore = () => {
       adminAllOrderReducer,
       adminCategoryReducer,
       adminProductReducer,
+      categorySearchReducer,
     },
   });
 };

@@ -62,3 +62,22 @@ export const fetchCategoryDetail = createAsyncThunk(
     }
   }
 );
+
+export const fetchSearchCategory = createAsyncThunk(
+  "category/searchCategory",
+  async (searchQuery: string) => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/category/search-category?categoryName=${searchQuery}`
+      );
+
+      const data = response.data.data;
+
+      return data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+    }
+  }
+);

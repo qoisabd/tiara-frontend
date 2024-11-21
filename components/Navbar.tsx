@@ -30,6 +30,7 @@ import { logoutUser } from "@/features/auth/authThunk";
 import { useRouter } from "next/navigation";
 import { Bounce, toast } from "react-toastify";
 import { ConfirmModal } from "./ConfirmModal";
+import SearchNavbar from "./SearchNavbar";
 
 export default function Navbar() {
   const [user, setUser] = useState<UserType | null>(null);
@@ -114,15 +115,7 @@ export default function Navbar() {
 
         {/* Desktop Center Section */}
         <div className="hidden md:flex items-center justify-center flex-1 px-8">
-          <div className="relative max-w-md w-full">
-            <Input
-              type="text"
-              placeholder="Search..."
-              className="w-full bg-white text-black border-gray-700 focus:border-blue-500"
-            />
-            <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-          </div>
-
+          <SearchNavbar />
           <div className="flex items-center gap-6 ml-6">
             <Link
               href="/"
@@ -137,13 +130,6 @@ export default function Navbar() {
             >
               <Search size={24} />
               <span>Transaction Check</span>
-            </Link>
-            <Link
-              href="/history"
-              className="flex items-center gap-2 text-white hover:text-blue-400"
-            >
-              <ScrollTextIcon size={24} />
-              <span>Create Ticket</span>
             </Link>
           </div>
         </div>
@@ -210,7 +196,6 @@ export default function Navbar() {
                   />
                   <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
                 </div>
-
                 <Link
                   href="/"
                   className="flex items-center gap-2 text-white hover:text-blue-400 p-2"
@@ -225,16 +210,7 @@ export default function Navbar() {
                   <Search size={24} />
                   <span>Transaction Check</span>
                 </Link>
-                <Link
-                  href="/history"
-                  className="flex items-center gap-2 text-white hover:text-blue-400 p-2"
-                >
-                  <ScrollTextIcon size={24} />
-                  <span>Create Ticket</span>
-                </Link>
-
                 <hr className="border-gray-800" />
-
                 {user ? (
                   <>
                     <Link
@@ -266,7 +242,6 @@ export default function Navbar() {
                     </Link>
                   </>
                 )}
-
                 <div className="pt-4">
                   <ThemeToggle />
                 </div>

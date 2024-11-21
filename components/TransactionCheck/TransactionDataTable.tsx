@@ -26,8 +26,6 @@ export default function TransactionDataTable() {
     setFilteredOrders(adminAllOrder);
   }, [adminAllOrder]);
 
-  console.log(adminAllOrder);
-
   const formatCurrency = (amount: string | number) => {
     const numberAmount =
       typeof amount === "string" ? parseFloat(amount) : amount;

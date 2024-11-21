@@ -22,7 +22,6 @@ import { registerUser } from "@/features/auth/authThunk";
 import { Bounce, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-// Schema for form validation
 const formSchema = z
   .object({
     username: z.string().min(3, "Username must be at least 3 characters"),

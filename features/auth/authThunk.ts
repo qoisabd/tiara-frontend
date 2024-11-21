@@ -121,3 +121,22 @@ export const loginWithGoogle = createAsyncThunk(
     }
   }
 );
+
+export const sendEmailVerification = createAsyncThunk(
+  "auth/sendEmailVerification",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/send-email-verification`,
+        {},
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

@@ -1,3 +1,4 @@
+import { AutocompleteItem } from "autocompleter";
 export interface RegisterType {
   us_id?: number;
   us_username: string;
@@ -27,6 +28,10 @@ export interface CategoryCardType {
   ct_game_publisher: string;
   ct_image: string;
 }
+
+export interface CategoryAutocompleteItem
+  extends AutocompleteItem,
+    CategoryCardType {}
 
 export interface CategoryDetailType {
   ct_id: number;
