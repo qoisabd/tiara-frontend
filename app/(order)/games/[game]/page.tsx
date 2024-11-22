@@ -32,6 +32,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import PromoModal from "@/components/PromoModal";
 import { orderSteps } from "@/lib/orderSteps";
+import { ApiErrorType } from "@/types/types";
 
 const formSchema = z.object({
   account_name: z.string().min(3, "Username must be at least 3 characters"),
@@ -149,13 +150,13 @@ const GameDetail = () => {
       // Open Midtrans snap after successful order creation
       if (result && result.order.or_platform_token) {
         snapEmbed(result.order.or_platform_token, {
-          onSuccess: function (result: any) {
+          onSuccess: function (result: unknown) {
             console.log("Payment success:", result);
           },
-          onPending: function (result: any) {
+          onPending: function (result: unknown) {
             console.log("Payment pending:", result);
           },
-          onError: function (result: any) {
+          onError: function (result: unknown) {
             console.log("Payment error:", result);
           },
           onClose: function () {
@@ -166,8 +167,8 @@ const GameDetail = () => {
         });
       }
       console.log("Order created successfully", result);
-    } catch (error: any) {
-      console.error(error);
+    } catch (error) {
+      const errorMessage = (error as ApiErrorType).message || "Unknown error";
     }
   };
 

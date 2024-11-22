@@ -22,6 +22,7 @@ import { AppDispatch, RootState } from "@/store/store";
 import { sendEmailVerification } from "@/features/auth/authThunk";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { ApiErrorType } from "@/types/types";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -68,8 +69,9 @@ const SendVerifyEmail = () => {
       );
 
       router.push("/sign-in");
-    } catch (error: any) {
-      toast.error(error, {
+    } catch (error) {
+      const errorMessage = (error as ApiErrorType).message || "Unknown error";
+      toast.error(errorMessage, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

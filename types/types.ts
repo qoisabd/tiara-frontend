@@ -177,3 +177,8 @@ export interface ProductType {
   pr_price: number;
   category?: CategoryType;
 }
+
+export interface ApiErrorType {
+  message: string;
+  statusCode: number;
+}

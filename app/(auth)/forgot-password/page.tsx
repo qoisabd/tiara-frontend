@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { forgotPassword } from "@/features/auth/authThunk";
 import { useRouter } from "next/navigation";
+import { ApiErrorType } from "@/types/types";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -39,9 +40,7 @@ const ForgotPassword = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { status, errorMessage } = useSelector(
-    (state: RootState) => state.sendEmailReducer
-  );
+  const { status } = useSelector((state: RootState) => state.sendEmailReducer);
 
   const handleSubmit = async (data: ForgotPasswordFormValues) => {
     try {
@@ -62,9 +61,9 @@ const ForgotPassword = () => {
         transition: Bounce,
       });
       router.push("/forgot-password/check-your-email");
-    } catch (error: any) {
-      const message = error.error || "An error occurred";
-      toast.error(`Failed to send email: ${message}`, {
+    } catch (error) {
+      const errorMessage = (error as ApiErrorType).message || "Unknown error";
+      toast.error(`Failed to send email: ${errorMessage}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

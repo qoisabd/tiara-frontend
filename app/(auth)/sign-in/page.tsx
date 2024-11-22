@@ -25,6 +25,7 @@ import { auth, googleProvider, signInWithPopup } from "@/lib/firebase";
 import { loginWithGoogle } from "@/features/auth/authThunk";
 import { resetLoginWithGoogle } from "@/features/auth/loginWithGoogleSlice";
 import { FcGoogle } from "react-icons/fc";
+import { ApiErrorType } from "@/types/types";
 
 // Schema for form validation
 const formSchema = z.object({
@@ -92,11 +93,11 @@ const Login = () => {
         });
         router.push("/");
       }
-    } catch (error: any) {
-      const message = error.message;
+    } catch (error) {
+      const errorMessage = (error as ApiErrorType).message || "Unknown error";
 
-      if (message === "Please verify your email first") {
-        toast.error(`User Login Failed: ${message}`, {
+      if (errorMessage === "Please verify your email first") {
+        toast.error(`User Login Failed: ${errorMessage}`, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -109,7 +110,7 @@ const Login = () => {
         });
         router.push(`/verify-email?email=${data.input}`);
       } else {
-        toast.error(`User Login Failed: ${message}`, {
+        toast.error(`User Login Failed: ${errorMessage}`, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -130,7 +131,6 @@ const Login = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       const idToken = await user.getIdToken();
-      console.log("idToken", idToken);
       await dispatch(loginWithGoogle({ idToken })).unwrap();
       toast.success("Google login success", {
         position: "top-right",
@@ -144,10 +144,10 @@ const Login = () => {
         transition: Bounce,
       });
       router.push("/");
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = (error as ApiErrorType).message || "Unknown error";
       dispatch(resetLoginWithGoogle());
-      console.error(error.message);
-      toast.error(`Google login failed: ${error.message}`, {
+      toast.error(`Google login failed: ${errorMessage}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
