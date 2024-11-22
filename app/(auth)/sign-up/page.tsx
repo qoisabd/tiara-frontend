@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -23,7 +22,6 @@ import { registerUser } from "@/features/auth/authThunk";
 import { Bounce, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-// Schema for form validation
 const formSchema = z
   .object({
     username: z.string().min(3, "Username must be at least 3 characters"),
@@ -88,8 +86,8 @@ const Register = () => {
         }
       );
       router.push("/sign-in");
-    } catch (error) {
-      toast.error(`User Creation Failed: ${errorMessage}`, {
+    } catch (error: any) {
+      toast.error(`User Creation Failed: ${error.message || errorMessage}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

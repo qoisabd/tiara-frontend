@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { MoveLeft } from "lucide-react";
 import Image from "next/image";
@@ -40,7 +40,7 @@ const ForgotPassword = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { status, errorMessage } = useSelector(
-    (state: RootState) => state.forgotPasswordReducer
+    (state: RootState) => state.sendEmailReducer
   );
 
   const handleSubmit = async (data: ForgotPasswordFormValues) => {
@@ -148,9 +148,14 @@ const ForgotPassword = () => {
             <Button
               type="submit"
               onClick={form.handleSubmit(handleSubmit)}
-              className="w-full bg-[#285CC4] hover:bg-[#1A4C8B] text-white"
+              className={`w-full ${
+                status === "LOADING"
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#285CC4] hover:bg-[#1A4C8B]"
+              } text-white`}
+              disabled={status === "loading"}
             >
-              Reset Password
+              {status === "loading" ? "Loading..." : "Reset Password"}
             </Button>
           </div>
         </div>

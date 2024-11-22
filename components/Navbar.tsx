@@ -1,131 +1,256 @@
-"use client";
-import { useState } from "react";
-import { Search, Menu, X, House, ScrollTextIcon } from "lucide-react";
+import { Search, Menu, House, LogOut, History } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import ThemeToggle from "./ThemeToggle";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
+import { UserType } from "@/types/types";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { logoutUser } from "@/features/auth/authThunk";
+import { useRouter } from "next/navigation";
+import { Bounce, toast } from "react-toastify";
+import { ConfirmModal } from "./ConfirmModal";
+import SearchNavbar from "./SearchNavbar";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<UserType | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const logoImage = "/assets/logos/logo-rifqi-top-up.svg";
 
-  return (
-    <nav className="flex items-center justify-between bg-header p-4 sticky top-0 z-40 border-b border-transparent backdrop-blur-md md:px-32">
-      <div className="flex items-center gap-4">
-        <Link href="/" className="flex items-center">
-          <Image
-            src={logoImage}
-            alt="Rifqi Top-up Logo"
-            width={50}
-            height={50}
-          />
-        </Link>
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
-        <div className="hidden md:flex items-center gap-4 ml-4">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-white font-bold hover:text-yellow-400"
-          >
-            <House size={24} />
-            <span>Home</span>
-          </Link>
-          <Link
-            href="/check-transaction"
-            className="flex items-center gap-2 text-white font-bold hover:text-yellow-400"
-          >
-            <Search size={24} />
-            <span>Transaction Check</span>
-          </Link>
-          <Link
-            href="/contact"
-            className="flex items-center gap-2 text-white font-bold hover:text-yellow-400"
-          >
-            <ScrollTextIcon size={24} />
-            <span>Create Ticket</span>
+  useEffect(() => {
+    const token = Cookies.get("Authentication");
+    if (token) {
+      try {
+        const decoded: UserType = jwtDecode(token);
+
+        if (decoded.exp * 1000 > Date.now()) {
+          setIsAuthenticated(true);
+          setUser(decoded);
+        } else {
+          console.warn("Token has expired.");
+          Cookies.remove("Authentication");
+        }
+      } catch (err) {
+        console.error("Failed to decode token", err);
+      }
+    }
+
+    console.log(token);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      Cookies.remove("Authentication");
+      setUser(null);
+      setIsAuthenticated(false);
+      toast.success("Logout Success", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        transition: Bounce,
+      });
+      router.push("/");
+    } catch (error: any) {
+      const message = error.message;
+      toast.error(`User Logout Failed: ${message}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        transition: Bounce,
+      });
+    }
+  };
+
+  const getInitials = (username: string, email: string) => {
+    const name = username || email || "Guest";
+    const parts = name.split(" ");
+    if (parts.length === 1) {
+      return parts[0][0].toUpperCase();
+    }
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  };
+
+  return (
+    <>
+      <nav className="flex items-center justify-between p-4 sticky top-0 z-40  bg-header backdrop-blur-md md:px-8">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src={logoImage}
+              alt="Rifqi Top-up Logo"
+              width={50}
+              height={50}
+            />
+            <span className="font-bold text-base lg:text-xl text-white">
+              Rifqi
+              <span className="text-[#FBB017]">TopUp</span>
+            </span>
           </Link>
         </div>
-      </div>
 
-      <div className="hidden sm:flex items-center gap-3">
-        <Button className="flex items-center gap-2 px-3 py-2 rounded-md border border-blue-500 bg-blue-600 text-white hover:bg-blue-300 hover:text-white">
-          <Search size={20} />
-          <span className="hidden lg:inline">Search</span>
-        </Button>
-        <Link
-          href="/sign-in"
-          className="px-4 py-2 bg-gray-200 rounded-lg text-black hover:bg-gray-300"
-        >
-          Sign in
-        </Link>
-        <Link
-          href="/sign-up"
-          className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-400"
-        >
-          Sign up
-        </Link>
-        <ThemeToggle />
-      </div>
-
-      <div className="sm:hidden">
-        <button onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white shadow-lg sm:hidden">
-          <div className="flex flex-col items-center space-y-4 py-4">
+        {/* Desktop Center Section */}
+        <div className="hidden md:flex items-center justify-center flex-1 px-8">
+          <SearchNavbar />
+          <div className="flex items-center gap-3 ml-6">
             <Link
               href="/"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 text-white hover:text-yellow-400"
+              className="text-sm lg:text-base flex items-center gap-2 text-white hover:text-blue-400"
             >
               <House size={20} />
               <span>Home</span>
             </Link>
             <Link
-              href="/check-transaction"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 text-white hover:text-yellow-400"
+              href="/transaction-check"
+              className="text-sm lg:text-base flex items-center gap-2 text-white hover:text-blue-400"
             >
-              <Search size={20} />
+              <Search size={24} />
               <span>Transaction Check</span>
             </Link>
-            <Link
-              href="/contact"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 text-white hover:text-yellow-400"
-            >
-              <ScrollTextIcon size={20} />
-              <span>Create Ticket</span>
-            </Link>
-            <Link
-              href="/sign-in"
-              onClick={() => setIsOpen(false)}
-              className="px-4 py-2 text-white bg-gray-200 rounded-lg hover:bg-gray-300"
-            >
-              Sign in
-            </Link>
-            <Link
-              href="/sign-up"
-              onClick={() => setIsOpen(false)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-400"
-            >
-              Sign up
-            </Link>
-          </div>
-
-          <div className="flex items-center bg-gray-100 rounded-full px-4 py-2 mx-4 mt-4">
-            <Search className="text-gray-500" size={20} />
-            <input
-              type="text"
-              placeholder="Cari Product di UXIOSTORE"
-              className="bg-transparent px-2 py-1 w-full focus:outline-none"
-            />
           </div>
         </div>
-      )}
-    </nav>
+
+        {/* Desktop Auth Section */}
+        <div className="hidden md:flex items-center gap-4">
+          {isAuthenticated && user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback>
+                    {getInitials(user.us_username, user.us_email)}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Link
+                    href="/order-history"
+                    className="w-full flex flex-row gap-3 "
+                  >
+                    <History className="text-yellow-500" />
+                    Order History
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setIsLogoutModalOpen(true)}>
+                  <LogOut className="text-yellow-500" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Link href="/sign-in" className="text-white hover:text-blue-400">
+                Log in
+              </Link>
+              <Link
+                href="/sign-up"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Register
+              </Link>
+            </>
+          )}
+          <ThemeToggle />
+        </div>
+
+        {/* Mobile Menu */}
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="bg-navy-900 border-gray-800">
+              <div className="flex flex-col space-y-4 mt-8">
+                <div className="relative">
+                  <SearchNavbar />
+                </div>
+                <Link
+                  href="/"
+                  className="flex items-center gap-2 text-white hover:text-blue-400 p-2"
+                >
+                  <House size={20} />
+                  <span>Home</span>
+                </Link>
+                <Link
+                  href="/notifications"
+                  className="flex items-center gap-2 text-white hover:text-blue-400 p-2"
+                >
+                  <Search size={24} />
+                  <span>Transaction Check</span>
+                </Link>
+                <hr className="border-gray-800" />
+                {user ? (
+                  <>
+                    <Link
+                      href="/orders"
+                      className="text-white hover:text-blue-400 p-2"
+                    >
+                      Order List
+                    </Link>
+                    <button
+                      onClick={() => setIsLogoutModalOpen(true)}
+                      className="text-white hover:text-blue-400 p-2"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/sign-in"
+                      className="text-white hover:text-blue-400 p-2"
+                    >
+                      Log in
+                    </Link>
+                    <Link
+                      href="/sign-up"
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center"
+                    >
+                      Register
+                    </Link>
+                  </>
+                )}
+                <div className="pt-4 text-right">
+                  <ThemeToggle />
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </nav>
+      <ConfirmModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={() => {
+          setIsLogoutModalOpen(false);
+          handleLogout();
+        }}
+        title="Confirm Logout"
+        description="Are you sure you want to log out?"
+        confirmText="Logout"
+        cancelText="Cancel"
+      />
+    </>
   );
 }

@@ -52,7 +52,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                href="/register"
+                href="/sign-up"
                 className="hover:text-yellow-300 text-white"
               >
                 Register
@@ -66,15 +66,6 @@ const Footer = () => {
                 Transaction Check
               </Link>
             </li>
-            <li>
-              <Link
-                href="https://wa.me/6285175999728?text=Halo,%20admin%20saya%20membutuhkan%20bantuan"
-                className="hover:text-yellow-300 text-white"
-                target="_blank"
-              >
-                Contact Us
-              </Link>
-            </li>
           </ul>
         </div>
 
@@ -83,10 +74,11 @@ const Footer = () => {
           <ul className="space-y-2">
             <li>
               <Link
-                href="/create-ticket"
-                className="text-white hover:text-yellow-300"
+                href="https://wa.me/6285175999728?text=Halo,%20admin%20saya%20membutuhkan%20bantuan"
+                className="hover:text-yellow-300 text-white"
+                target="_blank"
               >
-                Create Ticket
+                Contact Us
               </Link>
             </li>
           </ul>

@@ -38,11 +38,19 @@ html {
   }
 
   .bg-header {
-    background-color: hsla(213.818182, 38.5%, 40%, 0.7);
+    background-color: hsla(214, 39%, 40%, 0.75);
     opacity: 0.9;
   }
   .bg-swiper {
     background-color: hsla(214, 39%, 40%, 0.5);
+  }
+
+  .text-xxs {
+    font-size: 10px;
+  }
+
+  .decoration-yellow-500 {
+    text-decoration-color: #f5960b;
   }
 }
 

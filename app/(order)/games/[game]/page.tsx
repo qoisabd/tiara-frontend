@@ -25,8 +25,13 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { fetchProductDetail } from "@/features/product/productThunk";
 import { createOrder } from "@/features/order/orderThunk";
-import { OrderType } from "@/types/types";
+import { OrderType, UserType } from "@/types/types";
 import useSnap from "@/hooks/useSnap";
+import Navbar from "@/components/Navbar";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import PromoModal from "@/components/PromoModal";
+import { orderSteps } from "@/lib/orderSteps";
 
 const formSchema = z.object({
   account_name: z.string().min(3, "Username must be at least 3 characters"),
@@ -42,6 +47,7 @@ type OrderFormValues = z.infer<typeof formSchema>;
 
 const GameDetail = () => {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
   const { snapEmbed } = useSnap();
 
   const form = useForm<OrderFormValues>({
@@ -60,6 +66,10 @@ const GameDetail = () => {
   const params = useParams();
   const categoryCode = params.game as string;
 
+  const handleSelectPromo = (code: string) => {
+    form.setValue("order_promo_code", code);
+  };
+
   const dispatch = useDispatch<AppDispatch>();
   const { status, errorMessage, categoryDetail } = useSelector(
     (state: RootState) => state.categoryDetailReducer
@@ -68,6 +78,26 @@ const GameDetail = () => {
   const { productDetail } = useSelector(
     (state: RootState) => state.productDetailReducer
   );
+
+  useEffect(() => {
+    const token = Cookies.get("Authentication");
+    if (token) {
+      try {
+        const decoded: UserType = jwtDecode(token);
+
+        if (decoded.exp * 1000 > Date.now()) {
+          setUser(decoded);
+          form.setValue("order_email", decoded.us_email);
+          form.setValue("order_whatsapp", decoded.us_phone_number);
+        } else {
+          console.warn("Token has expired.");
+          Cookies.remove("Authentication");
+        }
+      } catch (err) {
+        console.error("Failed to decode token", err);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (categoryCode) {
@@ -86,7 +116,7 @@ const GameDetail = () => {
   const sections = [
     {
       title: "Instant Process",
-      products: productDetail.slice(0, 6),
+      products: productDetail,
     },
   ];
 
@@ -95,6 +125,8 @@ const GameDetail = () => {
       const orderProduct: any = productDetail.find(
         (product) => product.pr_id === selectedProduct
       );
+      const userId = user ? user.us_id : 777;
+
       const orderData: OrderType = {
         account_id: parseInt(data.account_id, 10),
         account_name: data.account_name,
@@ -103,12 +135,13 @@ const GameDetail = () => {
         quantity: data.order_quantity,
         price: orderProduct.pr_price,
         order_email: data.order_email,
+        category_name: categoryDetail[0].ct_name,
       };
       const result = await dispatch(
         createOrder({
           oi_product: [orderData],
           or_total_amount: data.order_quantity * orderProduct.pr_price,
-          userId: 777,
+          userId: userId,
           email: data.order_email,
           voucher_code: data.order_promo_code || null,
         })
@@ -140,6 +173,7 @@ const GameDetail = () => {
 
   return (
     <section className="">
+      <Navbar />
       {categoryDetail.length > 0 ? (
         categoryDetail.map((category) => (
           <div className="relative" key={category.ct_id}>
@@ -170,16 +204,20 @@ const GameDetail = () => {
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="flex flex-row gap-3">
-                        <h1 className="text-2xl font-semibold text-white">
+                        <h1 className="text-sm md:text-2xl font-semibold text-white">
                           {category.ct_name}
                         </h1>
-                        <Badge>{category.ct_currency_type}</Badge>
+                        <Badge className="text-xs">
+                          {category.ct_currency_type}
+                        </Badge>
                       </div>
-                      <p className="text-white">{category.ct_game_publisher}</p>
+                      <p className="text-white text-xs">
+                        {category.ct_game_publisher}
+                      </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-col flex-wrap md:flex-row  mt-4 gap-3 text-sm text-white">
+                  <div className="flex flex-col flex-wrap md:flex-row  mt-4 gap-3 text-xs text-white">
                     <div className="flex items-center gap-2">
                       <Zap color="#fbff00" size={16} />
                       <p>1-3 Minute Process</p>
@@ -211,20 +249,19 @@ const GameDetail = () => {
                         </span>{" "}
                         at a low price and with guaranteed safety.
                       </h4>
-                      {Array.isArray(category.ct_steps) &&
-                        category.ct_steps.map((step: any, index: number) => (
-                          <div key={index}>
-                            <ul className="flex flex-row gap-2">
-                              <li>
-                                <p>{index + 1}.</p>
-                              </li>
-                              <li>
-                                <p>{step.description}</p>
-                              </li>
-                            </ul>
-                          </div>
-                        ))}
-                      <p className="mt-10">
+                      {orderSteps.map((step, index) => (
+                        <div key={index}>
+                          <ul className="flex flex-row gap-2">
+                            <li>
+                              <p>{step.step}.</p>
+                            </li>
+                            <li>
+                              <p>{step.description}</p>
+                            </li>
+                          </ul>
+                        </div>
+                      ))}
+                      <p className="mt-3 md:mt-7">
                         For Customer Support, please contact Admin on our
                         official Whatsapp at +62 123-4567-8910 {""}
                         <span className="text-yellow-500">
@@ -267,7 +304,7 @@ const GameDetail = () => {
                                   <FormControl>
                                     <Input
                                       type="text"
-                                      placeholder="Enter your username"
+                                      placeholder="Enter your Account Name"
                                       {...field}
                                     />
                                   </FormControl>
@@ -338,7 +375,7 @@ const GameDetail = () => {
                                         <h4 className="mb-3 text-sm md:text-lg font-semibold text-white">
                                           {section.title}
                                         </h4>
-                                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
                                           {section.products.map((product) => (
                                             <Card
                                               key={product.pr_id}
@@ -354,10 +391,10 @@ const GameDetail = () => {
                                                 className="flex cursor-pointer items-center justify-between p-4"
                                               >
                                                 <div className="space-y-1">
-                                                  <div className="font-medium text-sm">
+                                                  <div className="font-medium text-xs lg:text-base">
                                                     {product.pr_name}
                                                   </div>
-                                                  <div className="text-sm text-blue-900">
+                                                  <div className="text-xs lg:text-sm text-blue-900">
                                                     Rp{" "}
                                                     {product.pr_price.toLocaleString(
                                                       "id-ID"
@@ -500,6 +537,7 @@ const GameDetail = () => {
                               </FormItem>
                             )}
                           />
+                          <PromoModal onSelectPromo={handleSelectPromo} />
                         </div>
                       </div>
 
@@ -529,6 +567,7 @@ const GameDetail = () => {
                                     placeholder="Enter your email address"
                                     {...field}
                                     className="mb-4"
+                                    disabled={user !== null}
                                   />
                                 </FormControl>
                                 <FormMessage />
