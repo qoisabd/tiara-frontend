@@ -88,6 +88,10 @@ const UserDataTable: React.FC = () => {
     }
   };
 
+  const handleChangePage = (page: number) => {};
+
+  const handleChangeRowsPerPage = (perPage: number, page: number) => {};
+
   const columns = [
     {
       name: "No",
@@ -164,6 +168,8 @@ const UserDataTable: React.FC = () => {
         className="border"
         progressPending={status === "LOADING"}
         progressComponent={<div>Loading...</div>}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
       />
 
       <UserCreateModal

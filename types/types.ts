@@ -13,7 +13,7 @@ export interface LoginType {
   us_password: string;
 }
 
-export interface ForgotPasswordType {
+export interface SendEmailType {
   us_email: string;
 }
 

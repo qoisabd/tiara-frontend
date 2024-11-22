@@ -1,11 +1,4 @@
-import {
-  Search,
-  Menu,
-  House,
-  ScrollTextIcon,
-  LogOut,
-  History,
-} from "lucide-react";
+import { Search, Menu, House, LogOut, History } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
@@ -58,6 +51,8 @@ export default function Navbar() {
         console.error("Failed to decode token", err);
       }
     }
+
+    console.log(token);
   }, []);
 
   const handleLogout = async () => {
@@ -189,12 +184,7 @@ export default function Navbar() {
             <SheetContent side="right" className="bg-navy-900 border-gray-800">
               <div className="flex flex-col space-y-4 mt-8">
                 <div className="relative">
-                  <Input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full bg-gray-800 text-white border-gray-700"
-                  />
-                  <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
+                  <SearchNavbar />
                 </div>
                 <Link
                   href="/"

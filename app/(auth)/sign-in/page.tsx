@@ -30,6 +30,7 @@ import { FcGoogle } from "react-icons/fc";
 const formSchema = z.object({
   input: z.string().min(5, "Username or email must be at least 5 characters"),
   password: z.string().min(8, "Password must be at least 8 characters"),
+  rememberMe: z.boolean(),
 });
 
 type SignInFormValues = z.infer<typeof formSchema>;
@@ -40,23 +41,27 @@ const Login = () => {
     defaultValues: {
       input: "",
       password: "",
+      rememberMe: false,
     },
   });
 
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const { status, errorMessage } = useSelector(
-    (state: RootState) => state.loginReducer
-  );
+  const { status } = useSelector((state: RootState) => state.loginReducer);
 
   const imgLogin = "/assets/images/img-sign-in.svg";
   const logoDiamond = "/assets/logos/logo-rifqi-top-up.svg";
 
   const onSubmit = async (data: SignInFormValues) => {
     try {
+      const rememberMeCheckbox = document.querySelector<HTMLInputElement>(
+        'input[type="checkbox"]'
+      );
+
       const dataValue = {
         input: data.input,
         us_password: data.password,
+        rememberMe: rememberMeCheckbox?.checked || false,
       };
       await dispatch(loginUser(dataValue)).unwrap();
 
@@ -89,17 +94,33 @@ const Login = () => {
       }
     } catch (error: any) {
       const message = error.message;
-      toast.error(`User Login Failed: ${message}`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+
+      if (message === "Please verify your email first") {
+        toast.error(`User Login Failed: ${message}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        router.push(`/verify-email?email=${data.input}`);
+      } else {
+        toast.error(`User Login Failed: ${message}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
     }
   };
 
@@ -109,6 +130,7 @@ const Login = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       const idToken = await user.getIdToken();
+      console.log("idToken", idToken);
       await dispatch(loginWithGoogle({ idToken })).unwrap();
       toast.success("Google login success", {
         position: "top-right",
