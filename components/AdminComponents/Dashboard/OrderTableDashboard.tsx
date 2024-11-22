@@ -51,9 +51,11 @@ export default function RecentOrdersPage() {
     {
       name: "Date",
       selector: (row: OrderHistoryType) =>
-        new Date(row.or_created_at).toLocaleDateString(),
+        new Date(row.or_created_at).toLocaleString("id-ID", {
+          timeZone: "Asia/Jakarta",
+        }),
       sortable: true,
-      width: "120px",
+      width: "160px",
     },
     {
       name: "Platform ID",
@@ -71,7 +73,7 @@ export default function RecentOrdersPage() {
         return categories || "-";
       },
       sortable: true,
-      width: "200px",
+      width: "150px",
     },
     {
       name: "Total",

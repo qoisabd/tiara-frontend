@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { fetchCategoryCard } from "@/features/category/categoryThunk";
@@ -14,11 +14,19 @@ const CardGame = () => {
     (state: RootState) => state.categoryReducer
   );
 
+  const [visibleGames, setVisibleGames] = useState(12);
+
   useEffect(() => {
     dispatch(fetchCategoryCard());
   }, [dispatch]);
 
+  const handleLoadMore = () => {
+    setVisibleGames((prev) => prev + 6);
+  };
+
   const imgCart = "/assets/images/img-cart.png";
+
+  const displayedGames = category?.slice(0, visibleGames);
 
   if (status === Status.LOADING) {
     return <CardGameSkeleton />;
@@ -37,7 +45,7 @@ const CardGame = () => {
       <p className="text-white mb-5">List of games</p>
 
       <div className="flex flex-row flex-wrap gap-2 sm:gap-5">
-        {category?.map((item, index) => (
+        {displayedGames?.map((item, index) => (
           <div
             key={index}
             className="relative w-[109px] sm:w-[180px] h-[163px] sm:h-[280px] group overflow-hidden rounded-2xl shadow-md transform transition duration-300 ease-in-out hover:shadow-2xl"
@@ -64,6 +72,17 @@ const CardGame = () => {
           </div>
         ))}
       </div>
+
+      {category && visibleGames < category.length && (
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={handleLoadMore}
+            className="bg-[#0e587c] hover:bg-[#007d98] text-white font-semibold py-2 px-6 rounded-lg transition duration-300"
+          >
+            Load More Games ...
+          </button>
+        </div>
+      )}
     </section>
   );
 };

@@ -87,6 +87,8 @@ const GameDetail = () => {
 
         if (decoded.exp * 1000 > Date.now()) {
           setUser(decoded);
+          form.setValue("order_email", decoded.us_email);
+          form.setValue("order_whatsapp", decoded.us_phone_number);
         } else {
           console.warn("Token has expired.");
           Cookies.remove("Authentication");
@@ -565,6 +567,7 @@ const GameDetail = () => {
                                     placeholder="Enter your email address"
                                     {...field}
                                     className="mb-4"
+                                    disabled={user !== null}
                                   />
                                 </FormControl>
                                 <FormMessage />

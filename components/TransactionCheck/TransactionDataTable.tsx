@@ -73,9 +73,11 @@ export default function TransactionDataTable() {
     {
       name: "Order Date",
       selector: (row: OrderHistoryType) =>
-        new Date(row.or_created_at).toLocaleDateString(),
+        new Date(row.or_created_at).toLocaleString("id-ID", {
+          timeZone: "Asia/Jakarta",
+        }),
       sortable: true,
-      width: "150px",
+      width: "200px",
     },
     {
       name: "Platform Number",

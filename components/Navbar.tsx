@@ -4,7 +4,6 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import ThemeToggle from "./ThemeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -101,7 +100,7 @@ export default function Navbar() {
               width={50}
               height={50}
             />
-            <span className="font-bold text-xl text-white">
+            <span className="font-bold text-base lg:text-xl text-white">
               Rifqi
               <span className="text-[#FBB017]">TopUp</span>
             </span>
@@ -111,17 +110,17 @@ export default function Navbar() {
         {/* Desktop Center Section */}
         <div className="hidden md:flex items-center justify-center flex-1 px-8">
           <SearchNavbar />
-          <div className="flex items-center gap-6 ml-6">
+          <div className="flex items-center gap-3 ml-6">
             <Link
               href="/"
-              className="flex items-center gap-2 text-white hover:text-blue-400"
+              className="text-sm lg:text-base flex items-center gap-2 text-white hover:text-blue-400"
             >
               <House size={20} />
               <span>Home</span>
             </Link>
             <Link
               href="/transaction-check"
-              className="flex items-center gap-2 text-white hover:text-blue-400"
+              className="text-sm lg:text-base flex items-center gap-2 text-white hover:text-blue-400"
             >
               <Search size={24} />
               <span>Transaction Check</span>
@@ -232,7 +231,7 @@ export default function Navbar() {
                     </Link>
                   </>
                 )}
-                <div className="pt-4">
+                <div className="pt-4 text-right">
                   <ThemeToggle />
                 </div>
               </div>

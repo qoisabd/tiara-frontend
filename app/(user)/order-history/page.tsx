@@ -80,9 +80,11 @@ export default function OrderHistoryPage() {
     {
       name: "Date",
       selector: (row: OrderHistoryType) =>
-        new Date(row.or_created_at).toLocaleDateString(),
+        new Date(row.or_created_at).toLocaleString("id-ID", {
+          timeZone: "Asia/Jakarta",
+        }),
       sortable: true,
-      width: "150px",
+      width: "200px",
     },
     {
       name: "Platform ID",

@@ -15,7 +15,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
       className: "bg-yellow-100 text-yellow-800",
     },
     settlement: {
-      label: "Settlement",
+      label: "Success",
       className: "bg-green-100 text-green-800",
     },
     cancelled: {

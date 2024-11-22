@@ -55,14 +55,16 @@ export default function OrderHistoryPage() {
       name: "No.",
       selector: (row: OrderHistoryType, index: number) => index + 1,
       sortable: false,
-      width: "80px",
+      width: "60px",
     },
     {
       name: "Date",
       selector: (row: OrderHistoryType) =>
-        new Date(row.or_created_at).toLocaleDateString(),
+        new Date(row.or_created_at).toLocaleString("id-ID", {
+          timeZone: "Asia/Jakarta",
+        }),
       sortable: true,
-      width: "150px",
+      width: "200px",
     },
     {
       name: "Platform ID",
@@ -94,7 +96,7 @@ export default function OrderHistoryPage() {
         <StatusBadge status={row.or_status || "pending"} />
       ),
       sortable: true,
-      width: "150px",
+      width: "100px",
     },
     {
       name: "Action",
