@@ -47,7 +47,7 @@ const CreateNewPassword = () => {
   const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { status, errorMessage } = useSelector(
+  const { status } = useSelector(
     (state: RootState) => state.updateResetPasswordReducer
   );
 

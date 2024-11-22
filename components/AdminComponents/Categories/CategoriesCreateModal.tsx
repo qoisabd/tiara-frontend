@@ -251,7 +251,7 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
             <FormField
               control={form.control}
               name="ct_image"
-              render={({ field: { value, onChange, ...field } }) => (
+              render={({ field: { onChange, ...field } }) => (
                 <FormItem>
                   <FormLabel>Category Image</FormLabel>
                   <FormControl>
@@ -270,7 +270,7 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
             <FormField
               control={form.control}
               name="ct_image_cover"
-              render={({ field: { value, onChange, ...field } }) => (
+              render={({ field: { onChange, ...field } }) => (
                 <FormItem>
                   <FormLabel>Cover Image</FormLabel>
                   <FormControl>
@@ -289,7 +289,7 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
             <FormField
               control={form.control}
               name="ct_currency_type_image"
-              render={({ field: { value, onChange, ...field } }) => (
+              render={({ field: { onChange, ...field } }) => (
                 <FormItem>
                   <FormLabel>Currency Type Image</FormLabel>
                   <FormControl>

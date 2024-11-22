@@ -1,5 +1,5 @@
 import { Status } from "@/utils/Status";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RegisterType } from "@/types/types";
 import { registerUser } from "./authThunk";
 

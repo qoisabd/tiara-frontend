@@ -44,9 +44,7 @@ const SendVerifyEmail = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { status, errorMessage } = useSelector(
-    (state: RootState) => state.sendEmailReducer
-  );
+  const { status } = useSelector((state: RootState) => state.sendEmailReducer);
 
   const handleSubmit = async (data: SendEmailVerificationFormValues) => {
     try {
