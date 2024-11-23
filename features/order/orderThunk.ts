@@ -11,7 +11,6 @@ export const createOrder = createAsyncThunk(
         order
       );
 
-      console.log(response.data.data);
       return response.data.data;
     } catch (error: any) {
       if (!error.response) {
@@ -30,7 +29,6 @@ export const verifyPayment = createAsyncThunk(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/order/verify-payment/${orderId}`
       );
 
-      console.log(response.data.data);
       return response.data.data;
     } catch (error: any) {
       if (!error.response) {

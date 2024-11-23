@@ -2,7 +2,7 @@ import { Status } from "@/utils/Status";
 import { createSlice } from "@reduxjs/toolkit";
 import { LoginType } from "@/types/types";
 import { loginUser } from "./authThunk";
-
+import Cookies from "js-cookie";
 interface LoginState {
   login: LoginType[];
   status: string;
@@ -28,6 +28,9 @@ export const loginSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = Status.SUCCESS;
         state.login = action.payload;
+        Cookies.set("Authentication-User-Rifqi-Topup", action.payload.token, {
+          expires: 1,
+        });
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = Status.FAILED;

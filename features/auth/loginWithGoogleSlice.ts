@@ -1,7 +1,7 @@
 import { Status } from "@/utils/Status";
 import { createSlice } from "@reduxjs/toolkit";
 import { loginWithGoogle } from "./authThunk";
-
+import Cookies from "js-cookie";
 interface LoginWithGoogleState {
   status: string;
   errorMessage: string;
@@ -27,8 +27,11 @@ export const loginWithGoogleSlice = createSlice({
         state.status = Status.LOADING;
         state.errorMessage = "";
       })
-      .addCase(loginWithGoogle.fulfilled, (state) => {
+      .addCase(loginWithGoogle.fulfilled, (state, action) => {
         state.status = Status.SUCCESS;
+        Cookies.set("Authentication-User-Rifqi-Topup", action.payload.token, {
+          expires: 1,
+        });
       })
       .addCase(loginWithGoogle.rejected, (state, action) => {
         state.status = Status.FAILED;
