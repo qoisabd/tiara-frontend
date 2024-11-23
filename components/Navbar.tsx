@@ -50,8 +50,6 @@ export default function Navbar() {
         console.error("Failed to decode token", err);
       }
     }
-
-    console.log(token);
   }, []);
 
   const handleLogout = async () => {

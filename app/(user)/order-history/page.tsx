@@ -53,9 +53,6 @@ export default function OrderHistoryPage() {
     setFilteredOrders(orderHistory);
   }, [orderHistory]);
 
-  console.log(orderHistory);
-  console.log(filteredOrders);
-
   const handleViewPayment = (row: any) => {
     const token = row.or_platform_token;
     snapEmbed(token, {

@@ -43,7 +43,6 @@ const adminUserSlice = createSlice({
       //   Create User
       .addCase(createUser.fulfilled, (state, action) => {
         state.users.push(action.payload);
-        console.log(state.users);
       })
       .addCase(createUser.rejected, (state, action) => {
         state.errorMessage = action.error.message || "Failed to create user";

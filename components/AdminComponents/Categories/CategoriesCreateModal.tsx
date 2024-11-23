@@ -123,7 +123,6 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
             data: formData,
           })
         ).unwrap();
-        console.log("FORM DATA", formData);
         toast.success("Category Successfully Updated", {
           position: "top-right",
           autoClose: 5000,
@@ -137,7 +136,6 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
         });
       } else {
         await dispatch(createCategory(formData)).unwrap();
-        console.log("FORM DATA", formData);
         toast.success("Category Successfully Created", {
           position: "top-right",
           autoClose: 5000,
