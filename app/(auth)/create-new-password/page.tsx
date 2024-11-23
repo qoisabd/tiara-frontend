@@ -20,6 +20,7 @@ import { AppDispatch, RootState } from "@/store/store";
 import { updateResetPassword } from "@/features/auth/authThunk";
 import { Bounce, toast } from "react-toastify";
 import { Status } from "@/utils/Status";
+import { ApiErrorType } from "@/types/types";
 
 const formSchema = z
   .object({
@@ -47,7 +48,7 @@ const CreateNewPassword = () => {
   const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { status, errorMessage } = useSelector(
+  const { status } = useSelector(
     (state: RootState) => state.updateResetPasswordReducer
   );
 
@@ -72,8 +73,9 @@ const CreateNewPassword = () => {
         transition: Bounce,
       });
       router.push("/create-new-password/success");
-    } catch (error: any) {
-      toast.error(`Failed to update password: ${error}`, {
+    } catch (error) {
+      const errorMessage = (error as ApiErrorType).message || "Unknown error";
+      toast.error(`Failed to update password: ${errorMessage}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

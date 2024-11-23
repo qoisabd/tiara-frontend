@@ -20,7 +20,7 @@ import { Bounce, toast } from "react-toastify";
 
 const UserDataTable: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { users, status, errorMessage } = useSelector(
+  const { users, status } = useSelector(
     (state: RootState) => state.adminUserReducer
   );
 
@@ -87,10 +87,6 @@ const UserDataTable: React.FC = () => {
       });
     }
   };
-
-  const handleChangePage = (page: number) => {};
-
-  const handleChangeRowsPerPage = (perPage: number, page: number) => {};
 
   const columns = [
     {
@@ -168,8 +164,6 @@ const UserDataTable: React.FC = () => {
         className="border"
         progressPending={status === "LOADING"}
         progressComponent={<div>Loading...</div>}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
       />
 
       <UserCreateModal

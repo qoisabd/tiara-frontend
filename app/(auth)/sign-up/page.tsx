@@ -21,6 +21,7 @@ import { AppDispatch, RootState } from "@/store/store";
 import { registerUser } from "@/features/auth/authThunk";
 import { Bounce, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { ApiErrorType } from "@/types/types";
 
 const formSchema = z
   .object({
@@ -86,8 +87,9 @@ const Register = () => {
         }
       );
       router.push("/sign-in");
-    } catch (error: any) {
-      toast.error(`User Creation Failed: ${error.message || errorMessage}`, {
+    } catch (error) {
+      const errorMessages = (error as ApiErrorType).message || "Unknown error";
+      toast.error(`User Creation Failed: ${errorMessages || errorMessage}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

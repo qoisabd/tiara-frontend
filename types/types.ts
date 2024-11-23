@@ -146,7 +146,7 @@ export interface ConfirmModalProps {
 }
 
 export interface AdminStateType {
-  totalUser: Object | null;
+  totalUser: object | null;
   totalProduct: object | null;
   totalOrder: object | null;
   totalAmount: object | null;
@@ -176,4 +176,9 @@ export interface ProductType {
   pr_name: string;
   pr_price: number;
   category?: CategoryType;
+}
+
+export interface ApiErrorType {
+  message: string;
+  statusCode: number;
 }
