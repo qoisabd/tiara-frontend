@@ -14,7 +14,7 @@ import {
 
 export default function DashboardPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const { totalUser, totalProduct, totalOrder, totalAmount, status, error } =
+  const { totalUser, totalProduct, totalOrder, totalAmount, error } =
     useSelector((state: RootState) => state.adminReducer);
 
   useEffect(() => {

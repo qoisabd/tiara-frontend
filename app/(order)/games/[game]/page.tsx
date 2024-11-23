@@ -169,6 +169,7 @@ const GameDetail = () => {
       console.log("Order created successfully", result);
     } catch (error) {
       const errorMessage = (error as ApiErrorType).message || "Unknown error";
+      console.error("Failed to create order", errorMessage);
     }
   };
 
