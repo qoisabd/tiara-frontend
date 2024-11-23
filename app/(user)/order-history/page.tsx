@@ -26,7 +26,6 @@ export default function OrderHistoryPage() {
     (state: RootState) => state.orderHistoryReducer
   );
   const [filteredOrders, setFilteredOrders] = useState<OrderHistoryType[]>([]);
-  const [user, setUser] = useState<UserType | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<OrderHistoryType | null>(
     null
   );
@@ -39,7 +38,6 @@ export default function OrderHistoryPage() {
       try {
         const decoded: UserType = jwtDecode(token);
         if (decoded.exp * 1000 > Date.now()) {
-          setUser(decoded);
           dispatch(fetchOrdersByUserId(decoded.us_id.toString()));
         } else {
           console.warn("Token has expired.");
@@ -54,6 +52,9 @@ export default function OrderHistoryPage() {
   useEffect(() => {
     setFilteredOrders(orderHistory);
   }, [orderHistory]);
+
+  console.log(orderHistory);
+  console.log(filteredOrders);
 
   const handleViewPayment = (row: any) => {
     const token = row.or_platform_token;
@@ -150,15 +151,23 @@ export default function OrderHistoryPage() {
   ];
 
   const handleSearch = (searchTerm: string) => {
-    const filtered = orderHistory.filter((order) =>
-      Object.values(order).some(
+    const filtered = orderHistory.filter((order) => {
+      const generalMatch = Object.values(order).some(
         (val) =>
           val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
+      );
+
+      const categoryMatch = order.orderItem?.oi_product?.some(
+        (product) =>
+          product.category_name &&
+          product.category_name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      return generalMatch || categoryMatch;
+    });
+
     setFilteredOrders(filtered);
   };
-
   if (status === "LOADING") {
     return (
       <div className="container mx-auto py-8">
