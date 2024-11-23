@@ -29,9 +29,13 @@ export const loginWithGoogleSlice = createSlice({
       })
       .addCase(loginWithGoogle.fulfilled, (state, action) => {
         state.status = Status.SUCCESS;
-        Cookies.set("Authentication-User-Rifqi-Topup", action.payload.token, {
-          expires: 1,
-        });
+        Cookies.set(
+          process.env.NEXT_PUBLIC_COOKIE_NAME || "",
+          action.payload.data.token,
+          {
+            expires: action.payload.data.rememberMe,
+          }
+        );
       })
       .addCase(loginWithGoogle.rejected, (state, action) => {
         state.status = Status.FAILED;

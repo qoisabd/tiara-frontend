@@ -81,7 +81,7 @@ const GameDetail = () => {
   );
 
   useEffect(() => {
-    const token = Cookies.get("Authentication");
+    const token = Cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME || "");
     if (token) {
       try {
         const decoded: UserType = jwtDecode(token);
@@ -92,7 +92,7 @@ const GameDetail = () => {
           form.setValue("order_whatsapp", decoded.us_phone_number);
         } else {
           console.warn("Token has expired.");
-          Cookies.remove("Authentication");
+          Cookies.remove(process.env.NEXT_PUBLIC_COOKIE_NAME || "");
         }
       } catch (err) {
         console.error("Failed to decode token", err);

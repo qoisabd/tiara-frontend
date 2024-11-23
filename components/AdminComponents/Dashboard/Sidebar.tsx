@@ -48,7 +48,7 @@ export const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser()).unwrap();
-      Cookies.remove("Authentication");
+      Cookies.remove(process.env.NEXT_PUBLIC_COOKIE_NAME || "");
       toast.success("Logout Success", {
         position: "top-right",
         autoClose: 5000,

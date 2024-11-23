@@ -3,7 +3,9 @@ import type { NextRequest } from "next/server";
 import { verifyAuth } from "./utils/auth";
 
 export async function middleware(req: NextRequest) {
-  const token = req.cookies.get("Authentication")?.value;
+  const token = req.cookies.get(
+    process.env.NEXT_PUBLIC_COOKIE_NAME || ""
+  )?.value;
   const verifiedToken = token ? await verifyAuth(token) : null;
 
   const isAdmin = verifiedToken?.payload?.us_is_admin === true;
