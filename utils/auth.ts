@@ -27,7 +27,8 @@ export const verifyAuth = async (token: string) => {
 
 export function getAccessToken(): string | undefined {
   const cookie = cookies();
-  const user = cookie.get("Authentication")?.value;
+  const user = cookie.get(process.env.NEXT_PUBLIC_COOKIE_NAME || "")?.value;
+  console.log(">>>>><> ini user token", user);
   return user;
 }
 

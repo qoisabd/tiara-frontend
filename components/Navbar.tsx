@@ -34,7 +34,7 @@ export default function Navbar() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const token = Cookies.get("Authentication");
+    const token = Cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME || "");
     if (token) {
       try {
         const decoded: UserType = jwtDecode(token);
@@ -44,7 +44,7 @@ export default function Navbar() {
           setUser(decoded);
         } else {
           console.warn("Token has expired.");
-          Cookies.remove("Authentication");
+          Cookies.remove(process.env.NEXT_PUBLIC_COOKIE_NAME || "");
         }
       } catch (err) {
         console.error("Failed to decode token", err);
@@ -55,7 +55,7 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser()).unwrap();
-      Cookies.remove("Authentication");
+      Cookies.remove(process.env.NEXT_PUBLIC_COOKIE_NAME || "");
       setUser(null);
       setIsAuthenticated(false);
       toast.success("Logout Success", {
