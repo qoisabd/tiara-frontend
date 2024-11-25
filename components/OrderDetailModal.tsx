@@ -7,6 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { OrderHistoryType } from "@/types/types";
 import { StatusBadge } from "./StatusBadge";
+import { OrderPDFGenerator } from "./OrderPdfGenerator";
 
 interface OrderDetailModalProps {
   order: OrderHistoryType | null;
@@ -24,6 +25,12 @@ export function OrderDetailModal({
       `Halo admin, saya butuh bantuan dengan nomor pesananan ${order?.or_platform_id}`
     );
     window.open(`https://wa.me/6285282810339?text=${message}`, "_blank");
+  };
+
+  const handleExportPDF = async () => {
+    if (!order) return;
+    const pdfGenerator = new OrderPDFGenerator(order);
+    await pdfGenerator.generate();
   };
 
   if (!order) return null;
@@ -44,7 +51,9 @@ export function OrderDetailModal({
             </div>
             <div>
               <p className="text-muted-foreground">Payment Method</p>
-              <p className="font-medium">{order.or_vaNumber[0]?.bank || "-"}</p>
+              <p className="font-medium uppercase">
+                {order.or_payment_type || "-"}
+              </p>
             </div>
             <div>
               <p className="text-muted-foreground">Status</p>
@@ -103,9 +112,12 @@ export function OrderDetailModal({
                 Rp. {order.or_total_amount.toFixed(0)}
               </p>
             </div>
-            <Button onClick={handleComplain} variant="secondary">
-              Need Help?
-            </Button>
+            <div className="flex space-x-2">
+              <Button onClick={handleComplain} variant="secondary">
+                Need Help?
+              </Button>
+              <Button onClick={handleExportPDF}>Export PDF</Button>
+            </div>
           </div>
         </div>
       </DialogContent>

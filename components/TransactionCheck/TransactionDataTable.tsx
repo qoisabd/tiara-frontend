@@ -53,12 +53,21 @@ export default function TransactionDataTable() {
   };
 
   const handleSearch = (searchTerm: string) => {
-    const filtered = adminAllOrder.filter((order) =>
-      Object.values(order).some(
+    const filtered = adminAllOrder.filter((order) => {
+      const generalMatch = Object.values(order).some(
         (val) =>
           val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
+      );
+
+      const categoryMatch = order.orderItem?.oi_product?.some(
+        (product) =>
+          product.category_name &&
+          product.category_name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      return generalMatch || categoryMatch;
+    });
+
     setFilteredOrders(filtered);
   };
 
@@ -79,7 +88,7 @@ export default function TransactionDataTable() {
       width: "200px",
     },
     {
-      name: "Platform Number",
+      name: "Transaction ID",
       selector: (row: OrderHistoryType) =>
         formatPlatformNumber(row.or_platform_id),
       sortable: true,
@@ -100,7 +109,6 @@ export default function TransactionDataTable() {
     {
       name: "Order Email",
       cell: (row: OrderHistoryType) => {
-        // Gunakan fungsi formatEmail untuk memformat email
         const formattedEmail = formatEmail(
           row.orderItem?.oi_product
             ?.map((product) => product.order_email)
@@ -151,7 +159,7 @@ export default function TransactionDataTable() {
   }
 
   return (
-    <section className="container bg-gradient-detail">
+    <section className="bg-gradient-detail">
       <SearchTransaction onSearch={handleSearch} />
       <div className="mt-5 px-4 md:px-32 pb-10">
         <h2 className="text-xl text-white">All Orders Created</h2>

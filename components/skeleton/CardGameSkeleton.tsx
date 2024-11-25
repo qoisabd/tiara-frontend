@@ -5,7 +5,7 @@ import Image from "next/image";
 const CardGameSkeleton = () => {
   const imgCart = "/assets/images/img-cart.png";
   return (
-    <section className="px-4 md:px-32 mt-10">
+    <section className="px-4 md:px-32 my-10">
       <div className="flex flex-row items-center gap-3">
         <Image src={imgCart} width={25} height={25} alt="cart" />
         <h2 className="text-2xl font-semibold">All Games</h2>

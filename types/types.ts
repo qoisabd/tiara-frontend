@@ -95,7 +95,7 @@ export interface OrderHistoryType {
   or_us_id: number;
   or_status: "pending" | "settlement" | "cancelled" | "default";
   or_platform_id: string;
-  or_vaNumber: { bank: string; va_number: string }[];
+  or_payment_type: string;
   or_total_amount: number;
   category_name?: string;
   or_created_at: string;

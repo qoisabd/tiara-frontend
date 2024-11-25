@@ -22,6 +22,7 @@ import { registerUser } from "@/features/auth/authThunk";
 import { Bounce, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { ApiErrorType } from "@/types/types";
+import { FaArrowLeft } from "react-icons/fa";
 
 const formSchema = z
   .object({
@@ -105,6 +106,14 @@ const Register = () => {
 
   return (
     <div className="w-full flex">
+      <div className="absolute top-4 left-4">
+        <Link
+          href="/"
+          className="flex items-center text-black sm:text-white hover:text-[#FBB017]"
+        >
+          <FaArrowLeft className="mr-2" /> Back to Home
+        </Link>
+      </div>
       <div className="sm:flex hidden flex-1 flex-col items-center justify-center min-h-screen bg-[#285CC4]">
         <div className="w-1/2">
           <img src={imgRegister} alt="login" />

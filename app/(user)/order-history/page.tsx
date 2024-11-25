@@ -85,7 +85,7 @@ export default function OrderHistoryPage() {
       width: "200px",
     },
     {
-      name: "Platform ID",
+      name: "Transaction ID",
       selector: (row: OrderHistoryType) => row.or_platform_id,
       sortable: true,
       width: "250px",
