@@ -126,7 +126,7 @@ const GameDetail = () => {
       const orderProduct: any = productDetail.find(
         (product) => product.pr_id === selectedProduct
       );
-      const userId = user ? user.us_id : 777;
+      const userId = user ? user.us_id : 4;
 
       const orderData: OrderType = {
         account_id: parseInt(data.account_id, 10),

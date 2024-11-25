@@ -166,7 +166,7 @@ const Login = () => {
       <div className="absolute top-4 left-4">
         <Link
           href="/"
-          className="flex items-center text-black lg:text-white hover:text-[#FBB017]"
+          className="flex items-center text-black sm:text-white hover:text-[#FBB017]"
         >
           <FaArrowLeft className="mr-2" /> Back to Home
         </Link>
