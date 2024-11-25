@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -26,6 +25,7 @@ import { loginWithGoogle } from "@/features/auth/authThunk";
 import { resetLoginWithGoogle } from "@/features/auth/loginWithGoogleSlice";
 import { FcGoogle } from "react-icons/fc";
 import { ApiErrorType } from "@/types/types";
+import { FaArrowLeft } from "react-icons/fa";
 
 // Schema for form validation
 const formSchema = z.object({
@@ -163,6 +163,14 @@ const Login = () => {
 
   return (
     <div className="w-full flex">
+      <div className="absolute top-4 left-4">
+        <Link
+          href="/"
+          className="flex items-center text-black lg:text-white hover:text-[#FBB017]"
+        >
+          <FaArrowLeft className="mr-2" /> Back to Home
+        </Link>
+      </div>
       <div className="sm:flex hidden w-1/2 flex-1 flex-col items-center justify-center min-h-screen bg-[#285CC4] ">
         <div className="text-center p-8">
           <h1 className="text-5xl font-bold text-white mb-4">Login</h1>

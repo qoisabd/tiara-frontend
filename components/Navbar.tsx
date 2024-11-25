@@ -2,7 +2,6 @@ import { Search, Menu, House, LogOut, History } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import ThemeToggle from "./ThemeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -23,33 +22,39 @@ import { useRouter } from "next/navigation";
 import { Bounce, toast } from "react-toastify";
 import { ConfirmModal } from "./ConfirmModal";
 import SearchNavbar from "./SearchNavbar";
+import SkeletonNavbar from "./skeleton/NavbarSkeleton";
 
 export default function Navbar() {
   const [user, setUser] = useState<UserType | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const logoImage = "/assets/logos/logo-rifqi-top-up.svg";
 
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const token = Cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME || "");
-    if (token) {
+    const fetchUserData = async () => {
       try {
-        const decoded: UserType = jwtDecode(token);
-
-        if (decoded.exp * 1000 > Date.now()) {
-          setIsAuthenticated(true);
-          setUser(decoded);
-        } else {
-          console.warn("Token has expired.");
-          Cookies.remove(process.env.NEXT_PUBLIC_COOKIE_NAME || "");
+        const token = Cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME || "");
+        if (token) {
+          const decoded: UserType = jwtDecode(token);
+          if (decoded.exp * 1000 > Date.now()) {
+            setIsAuthenticated(true);
+            setUser(decoded);
+          } else {
+            Cookies.remove(process.env.NEXT_PUBLIC_COOKIE_NAME || "");
+          }
         }
       } catch (err) {
         console.error("Failed to decode token", err);
+      } finally {
+        setLoading(false); // Ensure loading is false after the effect runs
       }
-    }
+    };
+
+    fetchUserData();
   }, []);
 
   const handleLogout = async () => {
@@ -67,8 +72,7 @@ export default function Navbar() {
       });
       router.push("/");
     } catch (error: any) {
-      const message = error.message;
-      toast.error(`User Logout Failed: ${message}`, {
+      toast.error(`User Logout Failed: ${error.message}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -81,15 +85,19 @@ export default function Navbar() {
   const getInitials = (username: string, email: string) => {
     const name = username || email || "Guest";
     const parts = name.split(" ");
-    if (parts.length === 1) {
-      return parts[0][0].toUpperCase();
-    }
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    return parts.length === 1
+      ? parts[0][0].toUpperCase()
+      : `${parts[0][0]}${parts[1][0]}`.toUpperCase();
   };
+
+  if (loading) {
+    return <SkeletonNavbar />; // Display SkeletonNavbar while loading
+  }
 
   return (
     <>
-      <nav className="flex items-center justify-between p-4 sticky top-0 z-40  bg-header backdrop-blur-md md:px-8">
+      <nav className="flex items-center justify-between p-4 sticky top-0 z-40 bg-header backdrop-blur-md md:px-8">
+        {/* Left Section */}
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
             <Image
@@ -99,8 +107,7 @@ export default function Navbar() {
               height={50}
             />
             <span className="font-bold text-base lg:text-xl text-white">
-              Rifqi
-              <span className="text-[#FBB017]">TopUp</span>
+              Rifqi<span className="text-[#FBB017]">TopUp</span>
             </span>
           </Link>
         </div>
@@ -167,7 +174,6 @@ export default function Navbar() {
               </Link>
             </>
           )}
-          <ThemeToggle />
         </div>
 
         {/* Mobile Menu */}
@@ -191,7 +197,7 @@ export default function Navbar() {
                   <span>Home</span>
                 </Link>
                 <Link
-                  href="/notifications"
+                  href="/transaction-check"
                   className="flex items-center gap-2 text-white hover:text-blue-400 p-2"
                 >
                   <Search size={24} />
@@ -201,10 +207,10 @@ export default function Navbar() {
                 {user ? (
                   <>
                     <Link
-                      href="/orders"
+                      href="/order-history"
                       className="text-white hover:text-blue-400 p-2"
                     >
-                      Order List
+                      Order History
                     </Link>
                     <button
                       onClick={() => setIsLogoutModalOpen(true)}
@@ -229,9 +235,6 @@ export default function Navbar() {
                     </Link>
                   </>
                 )}
-                <div className="pt-4 text-right">
-                  <ThemeToggle />
-                </div>
               </div>
             </SheetContent>
           </Sheet>

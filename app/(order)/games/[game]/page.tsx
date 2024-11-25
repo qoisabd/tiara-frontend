@@ -147,6 +147,7 @@ const GameDetail = () => {
           voucher_code: data.order_promo_code || null,
         })
       ).unwrap();
+
       // Open Midtrans snap after successful order creation
       if (result && result.order.or_platform_token) {
         snapEmbed(result.order.or_platform_token, {
@@ -179,7 +180,6 @@ const GameDetail = () => {
       {categoryDetail.length > 0 ? (
         categoryDetail.map((category) => (
           <div className="relative" key={category.ct_id}>
-            {/* Cover Image */}
             <div className="relative h-56 w-full lg:h-[340px]">
               <Image
                 src={category.ct_image_cover}
@@ -189,7 +189,6 @@ const GameDetail = () => {
               />
             </div>
 
-            {/* Detail game */}
             <div className="min-h-[120px] bg-[#3D92BF] shadow-2xl md:min-h-[140px]">
               <div className="container px-4 md:px-8 lg:px-32 flex flex-row flex-wrap items-center gap-4">
                 <div className="flex-shrink-0 my-2 sm:my-5">
@@ -237,10 +236,8 @@ const GameDetail = () => {
               </div>
             </div>
 
-            {/* main content */}
             <div className="px-4 md:px-8 lg:px-32 py-8 bg-gradient-detail">
               <div className="flex flex-col sm:flex-row gap-0 sm:gap-5 items-center sm:items-start justify-center">
-                {/* card to steps */}
                 <div className="basis-1/3">
                   <Card className="bg-blue-80 text-white">
                     <CardContent className="text-xs mt-3">
@@ -275,14 +272,12 @@ const GameDetail = () => {
                     </CardContent>
                   </Card>
                 </div>
-                {/* FORM DOWN BELOW */}
                 <div className="flex-grow sm:basis-2/3 flex items-center justify-center mt-5 sm:mt-0">
                   <Form {...form}>
                     <form
                       className="space-y-5 w-full"
                       onSubmit={form.handleSubmit(onSubmit)}
                     >
-                      {/* account detail*/}
                       <div className="rounded-xl bg-[#006994] shadow-2xl">
                         <div className="flex border-b border-blue-400">
                           <div className="flex h-10 w-10 items-center justify-center rounded-tl-xl bg-gradient-to-b from-amber-400 to-amber-600 text-base md:text-xl font-bold text-white">
@@ -346,7 +341,6 @@ const GameDetail = () => {
                         </div>
                       </div>
 
-                      {/* Amount */}
                       <div className="rounded-xl bg-[#006994] shadow-2xl">
                         <div className="flex border-b border-blue-400">
                           <div className="flex h-10 w-10 items-center justify-center rounded-tl-xl bg-gradient-to-b from-amber-400 to-amber-600 text-base md:text-xl font-bold text-white">
@@ -438,7 +432,6 @@ const GameDetail = () => {
                         </div>
                       </div>
 
-                      {/* Quantity */}
                       <div className="rounded-xl bg-[#006994] shadow-2xl">
                         <div className="flex border-b border-blue-400">
                           <div className="flex h-10 w-10 items-center justify-center rounded-tl-xl bg-gradient-to-b from-amber-400 to-amber-600 text-base md:text-xl font-bold text-white">
@@ -508,7 +501,6 @@ const GameDetail = () => {
                         </div>
                       </div>
 
-                      {/* Code Promo */}
                       <div className="rounded-xl bg-[#006994] shadow-2xl">
                         <div className="flex border-b border-blue-400">
                           <div className="flex h-10 w-10 items-center justify-center rounded-tl-xl bg-gradient-to-b from-amber-400 to-amber-600 text-base md:text-xl font-bold text-white">
@@ -543,7 +535,6 @@ const GameDetail = () => {
                         </div>
                       </div>
 
-                      {/* Detail Contact */}
                       <div className="rounded-xl bg-[#006994] shadow-2xl">
                         <div className="flex border-b border-blue-400">
                           <div className="flex h-10 w-10 items-center justify-center rounded-tl-xl bg-gradient-to-b from-amber-400 to-amber-600 text-base md:text-xl font-bold text-white">
@@ -576,7 +567,6 @@ const GameDetail = () => {
                               </FormItem>
                             )}
                           />
-                          {/* wa number */}
                           <FormField
                             control={form.control}
                             name="order_whatsapp"
@@ -607,7 +597,6 @@ const GameDetail = () => {
                         </div>
                       </div>
 
-                      {/* Submit Button */}
                       <div className="">
                         <Button
                           type="submit"

@@ -67,7 +67,7 @@ export default function OrderHistoryPage() {
       width: "200px",
     },
     {
-      name: "Platform ID",
+      name: "Transaction ID",
       selector: (row: OrderHistoryType) => row.or_platform_id,
       sortable: true,
       width: "250px",
@@ -129,12 +129,17 @@ export default function OrderHistoryPage() {
     },
   ];
   const handleSearch = (searchTerm: string) => {
-    const filtered = adminAllOrder.filter((order) =>
-      Object.values(order).some(
-        (val) =>
-          val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
+    const filtered = adminAllOrder.filter((order) => {
+      const generalMatch = Object.values(order).some((value) =>
+        String(value).toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      const categoryMatch = order.orderItem?.oi_product?.some(
+        (product) =>
+          product.category_name &&
+          product.category_name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      return generalMatch || categoryMatch;
+    });
     setFilteredOrders(filtered);
   };
 
