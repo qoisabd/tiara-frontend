@@ -54,7 +54,7 @@ export class OrderPDFGenerator {
       `Rp. ${(product.price * product.quantity).toFixed(0)}`,
     ]);
 
-    // @ts-ignore
+    // @ts-expect-error
     this.doc.autoTable({
       startY: 85,
       head: [["Product", "Game", "Qty", "Price", "Subtotal"]],
@@ -83,7 +83,6 @@ export class OrderPDFGenerator {
   }
 
   private addTotal() {
-    // @ts-ignore
     const finalY = (this.doc as any).lastAutoTable.finalY || 150;
 
     this.doc.setDrawColor(52, 152, 219);
