@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -60,6 +60,7 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
   onSuccess,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -96,6 +97,7 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
   }, [isOpen, initialData, form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("ct_name", values.ct_name);
@@ -156,7 +158,6 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
       onOpenChange(false);
       form.reset();
     } catch (error) {
-      console.error("errorrr <<<<<<<<<", error);
       toast.error(
         `Failed to ${initialData ? "update" : "create"} category: ${error}`,
         {
@@ -171,6 +172,8 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
           transition: Bounce,
         }
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -249,7 +252,7 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
             <FormField
               control={form.control}
               name="ct_image"
-              render={({ field: { onChange, ...field } }) => (
+              render={({ field: { onChange } }) => (
                 <FormItem>
                   <FormLabel>Category Image</FormLabel>
                   <FormControl>
@@ -257,7 +260,6 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
                       type="file"
                       accept="image/*"
                       onChange={(e) => onChange(e.target.files)}
-                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -268,7 +270,7 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
             <FormField
               control={form.control}
               name="ct_image_cover"
-              render={({ field: { onChange, ...field } }) => (
+              render={({ field: { onChange } }) => (
                 <FormItem>
                   <FormLabel>Cover Image</FormLabel>
                   <FormControl>
@@ -276,7 +278,6 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
                       type="file"
                       accept="image/*"
                       onChange={(e) => onChange(e.target.files)}
-                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -287,7 +288,7 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
             <FormField
               control={form.control}
               name="ct_currency_type_image"
-              render={({ field: { onChange, ...field } }) => (
+              render={({ field: { onChange } }) => (
                 <FormItem>
                   <FormLabel>Currency Type Image</FormLabel>
                   <FormControl>
@@ -295,7 +296,6 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
                       type="file"
                       accept="image/*"
                       onChange={(e) => onChange(e.target.files)}
-                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -311,8 +311,12 @@ const CategoriesCreateModal: React.FC<CategoriesCreateModalProps> = ({
               >
                 Cancel
               </Button>
-              <Button type="submit">
-                {initialData ? "Update Category" : "Create Category"}
+              <Button type="submit" disabled={loading}>
+                {loading
+                  ? "Processing..."
+                  : initialData
+                  ? "Update Category"
+                  : "Create Category"}
               </Button>
             </div>
           </form>
