@@ -197,9 +197,7 @@ const UserCreateModal: React.FC<UserCreateModalProps> = ({
                     <Input
                       type="password"
                       placeholder={
-                        initialData
-                          ? "Leave blank to keep existing password"
-                          : "Enter password"
+                        initialData ? "Enter new password" : "Enter password"
                       }
                       {...field}
                     />
