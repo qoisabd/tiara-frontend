@@ -1,7 +1,6 @@
 # 🎮 Rifqi Top Up - Frontend 🎮
 
-![Preview](public\assets\gif\preview-rifqi-top-up.gif)
-
+![Preview](public/assets/gif/preview-rifqi-top-up.gif)
 Rifqi Top Up is a user-friendly frontend web application for purchasing game top-ups, designed with scalability and performance in mind. This project leverages modern web technologies and tools to deliver a seamless user experience, including a robust admin interface for efficient management.
 
 ## 🧑🏻‍💻 Author
@@ -10,7 +9,7 @@ Rifqi Top Up is a user-friendly frontend web application for purchasing game top
 
 ## 🛠️ Tech Stack
 
-![TechStack](public\assets\images/img-tech-stack.jpg)
+![TechStack](public/assets/images/img-tech-stack.jpg)
 
 ### Core Frameworks & Language
 
