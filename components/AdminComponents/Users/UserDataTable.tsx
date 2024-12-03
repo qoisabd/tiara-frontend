@@ -15,7 +15,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit, Plus, UserRoundX, UserRoundCheck } from "lucide-react";
+import { Edit, Plus, UserRoundX, UserRoundCheck } from "lucide-react";
 import UserCreateModal from "./UserCreateModal";
 import { UserManagementHeader } from "./UserHeader";
 import { RootState, AppDispatch } from "@/store/store";
