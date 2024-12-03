@@ -174,7 +174,25 @@ export const deleteUserById = createAsyncThunk(
   async (userId: number, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/delete-user/${userId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/set-inactive-user/${userId}`
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const setActiveUser = createAsyncThunk(
+  "admin/setActiveUser",
+  async (userId: number, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/set-active-user/${userId}`
       );
 
       return response.data.data;

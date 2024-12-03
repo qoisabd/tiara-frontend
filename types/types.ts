@@ -5,6 +5,7 @@ export interface RegisterType {
   us_email: string;
   us_password: string;
   us_phone_number: string;
+  us_is_active: number;
   confirmPassword?: string;
 }
 

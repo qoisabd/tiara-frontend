@@ -468,7 +468,7 @@ const GameDetail = () => {
                                       onClick={() =>
                                         form.setValue(
                                           "order_quantity",
-                                          field.value + 1
+                                          Number(field.value) + 1
                                         )
                                       }
                                       className="bg-blue-900 text-white ml-2 rounded-lg hover:bg-blue-700"
