@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
-import { fetchAllUser, deleteUserById } from "@/features/admin/adminThunk";
+import {
+  fetchAllUser,
+  deleteUserById,
+  setActiveUser,
+} from "@/features/admin/adminThunk";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +15,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit, Plus } from "lucide-react";
+import { Edit, Plus, UserRoundX, UserRoundCheck } from "lucide-react";
 import UserCreateModal from "./UserCreateModal";
 import { UserManagementHeader } from "./UserHeader";
 import { RootState, AppDispatch } from "@/store/store";
@@ -25,9 +29,11 @@ const UserDataTable: React.FC = () => {
   );
 
   const [deleteUserId, setDeleteUserId] = useState<number | null>(null);
+  const [isActive, setIsActive] = useState<number | null>(null);
   const [editUser, setEditUser] = useState<RegisterType | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isUpdateUserModalOpen, setIsUpdateUserModalOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<RegisterType[]>([]);
@@ -61,7 +67,7 @@ const UserDataTable: React.FC = () => {
         refreshData();
         setIsDeleteModalOpen(false);
         setDeleteUserId(null);
-        toast.success("User Delete Successfully", {
+        toast.success("User has been disable successfully", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -74,7 +80,41 @@ const UserDataTable: React.FC = () => {
         });
       }
     } catch (error) {
-      toast.error(`Failed to delete user: ${error}`, {
+      toast.error(`Failed to disable user: ${error}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  };
+
+  const handleActiveUser = async () => {
+    try {
+      if (isActive) {
+        await dispatch(setActiveUser(isActive)).unwrap();
+        refreshData();
+        setIsUpdateUserModalOpen(false);
+        setDeleteUserId(null);
+        toast.success("User has been enable successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+    } catch (error) {
+      toast.error(`Failed to update status: ${error}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -111,6 +151,11 @@ const UserDataTable: React.FC = () => {
       sortable: true,
     },
     {
+      name: "User is active",
+      cell: (row: RegisterType) => (row.us_is_active ? "true" : "false"),
+      sortable: true,
+    },
+    {
       name: "Actions",
       cell: (row: RegisterType) => (
         <div className="flex space-x-2">
@@ -124,16 +169,29 @@ const UserDataTable: React.FC = () => {
           >
             <Edit className="h-4 w-4" />
           </Button>
-          <Button
-            variant="destructive"
-            size="icon"
-            onClick={() => {
-              setDeleteUserId(row.us_id as number);
-              setIsDeleteModalOpen(true);
-            }}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          {row.us_is_active ? (
+            <Button
+              variant="destructive"
+              size="icon"
+              onClick={() => {
+                setDeleteUserId(row.us_id as number);
+                setIsDeleteModalOpen(true);
+              }}
+            >
+              <UserRoundX className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button
+              variant="default"
+              size="icon"
+              onClick={() => {
+                setIsActive(row.us_id as number);
+                setIsUpdateUserModalOpen(true);
+              }}
+            >
+              <UserRoundCheck className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       ),
     },
@@ -176,9 +234,9 @@ const UserDataTable: React.FC = () => {
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete User</DialogTitle>
+            <DialogTitle>Disable User</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this user?
+              Are you sure you want to disable this user?
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end space-x-2">
@@ -189,7 +247,32 @@ const UserDataTable: React.FC = () => {
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleDelete}>
-              Delete
+              Disable
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={isUpdateUserModalOpen}
+        onOpenChange={setIsUpdateUserModalOpen}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Enable User</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to Enable this user?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end space-x-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsUpdateUserModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleActiveUser}>
+              Enable
             </Button>
           </div>
         </DialogContent>
