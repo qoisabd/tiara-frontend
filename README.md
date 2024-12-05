@@ -26,7 +26,7 @@ Rifqi Top Up is a user-friendly frontend web application for purchasing game top
 
 # Rifqi Top Up Demo
 
-![Demo Rifqi Top Up](public/assets/video/rifqi-top-up-demo.mp4)
+![Demo Preview](https://github.com/user-attachments/assets/55d595c2-ddbe-4854-a198-6c8beac9b426)
 
 ## 🧑🏻‍💻 Author
 
