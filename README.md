@@ -3,6 +3,31 @@
 ![Preview](public/assets/gif/preview-rifqi-top-up.gif)
 Rifqi Top Up is a user-friendly frontend web application for purchasing game top-ups, designed with scalability and performance in mind. This project leverages modern web technologies and tools to deliver a seamless user experience, including a robust admin interface for efficient management.
 
+# 🧾 Table of Contents
+
+- [Rifqi Top Up Demo](#rifqi-top-up-demo)
+- [🧑🏻‍💻 Author](#-author)
+- [🛠️ Tech Stack](#️-tech-stack)
+  - [Core Frameworks & Language](#core-frameworks--language)
+  - [Styling](#styling)
+  - [State Management](#state-management)
+  - [API & Utilities](#api--utilities)
+  - [Features](#features)
+- [📁 Project Structure](#project-structure)
+- [🌟 Features](#features-1)
+  - [🙍🏽 User Features](#-user-features)
+  - [👷🏽 Admin Features](#-admin-features)
+- [🌐 Environment Variables](#environment-variables)
+- [🚀 Getting Started](#getting-started)
+- [🤝 Contribution](#contribution)
+- [🔧 Backend Repository](#backend-repository)
+- [🔗 Live Preview](#live-preview)
+- [📝 License](#license)
+
+# Rifqi Top Up Demo
+
+![Demo Rifqi Top Up](public/assets/video/rifqi-top-up-demo.mp4)
+
 ## 🧑🏻‍💻 Author
 
 - [@Muhammad Rifqi Setiawan](https://github.com/rifqi142) as Full Stack Developer.
@@ -209,10 +234,14 @@ git push origin feature/branch-name
 
 ### 8. Thank you for your contribution!
 
-## 📝 License
+## 🔧 Backend Repository
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+The backend repository for this project can be found [here](https://github.com/rifqi142/backend-top-up)
 
 ## 🔗 Live Preview
 
 Check out the live preview of the project [here](https://www.rifqitopup.my.id/).
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
