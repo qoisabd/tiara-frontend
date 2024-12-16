@@ -13,27 +13,57 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Top Up Game Terpercaya - Cepat & Aman",
+  metadataBase: new URL("https://rifqitopup.my.id"),
+  title: {
+    default: "Top Up Game Terpercaya - Rifqi Top Up",
+    template: "%s | Rifqi Top Up",
+  },
   description:
-    "Website top up game online terpercaya. Dapatkan diamond, coin, dan voucher dengan cepat dan aman untuk game favorit Anda.",
-  keywords:
-    "top up game, beli diamond, top up online, voucher game, top up terpercaya, harga murah",
+    "Rifqi Top Up Platform Top Up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer. Dapatkan diamond, coin, dan voucher game dengan mudah.",
+  keywords: [
+    "top up game",
+    "beli diamond",
+    "top up online",
+    "voucher game",
+    "top up terpercaya",
+    "harga murah",
+    "diamond game",
+    "top up game murah",
+    "jual voucher game",
+  ],
   robots: "index, follow",
-  authors: null,
-
-  // openGraph: {
-  //   title: "Top Up Game Terpercaya - Cepat & Aman",
-  //   description:
-  //     "Website top up game online terpercaya. Dapatkan diamond, coin, dan voucher dengan cepat dan aman untuk game favorit Anda.",
-  //   url: "https://website-anda.com",
-  //   site_name: "Top Up Game",
-  // },
+  alternates: {
+    canonical: "https://rifqitopup.my.id",
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: "https://rifqitopup.my.id",
+    title: "Top Up Game Terpercaya - Rifqi Topup",
+    description:
+      "Platform top up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer.",
+    siteName: "Rifqi Topup",
+    images: [
+      {
+        url: "/public/assets/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Rifqi Topup - Top Up Game Terpercaya",
+      },
+    ],
+  },
   twitter: {
     card: "summary_large_image",
-    title: "Top Up Game Terpercaya - Cepat & Aman",
+    title: "Top Up Game Terpercaya - Rifqi Topup",
     description:
-      "Website top up game online terpercaya. Dapatkan diamond, coin, dan voucher dengan cepat dan aman untuk game favorit Anda.",
+      "Platform top up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer.",
+    images: ["/public/assets/images/og-image.jpg"],
   },
+  applicationName: "Rifqi Topup",
+  authors: [{ name: "Rifqi Topup Team" }],
+  generator: "Next.js",
+  creator: "Rifqi Topup Team",
+  publisher: "Rifqi Topup Team",
 };
 
 export default function RootLayout({
