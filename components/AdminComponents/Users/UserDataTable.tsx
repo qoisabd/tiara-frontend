@@ -151,8 +151,8 @@ const UserDataTable: React.FC = () => {
       sortable: true,
     },
     {
-      name: "User is active",
-      cell: (row: RegisterType) => (row.us_is_active ? "true" : "false"),
+      name: "Status",
+      cell: (row: RegisterType) => (row.us_is_active ? "Active" : "Inactive"),
       sortable: true,
     },
     {
@@ -184,6 +184,7 @@ const UserDataTable: React.FC = () => {
             <Button
               variant="default"
               size="icon"
+              className="bg-green-600 hover:bg-green-500"
               onClick={() => {
                 setIsActive(row.us_id as number);
                 setIsUpdateUserModalOpen(true);
@@ -271,7 +272,11 @@ const UserDataTable: React.FC = () => {
             >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleActiveUser}>
+            <Button
+              variant="default"
+              onClick={handleActiveUser}
+              className="bg-green-600 hover:bg-green-500"
+            >
               Enable
             </Button>
           </div>

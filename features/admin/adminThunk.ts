@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { RegisterType, ProductType, CategoryType } from "@/types/types";
+import { RegisterType, ProductType } from "@/types/types";
 
 export const fetchUserCount = createAsyncThunk(
   "admin/fetchUserCount",
@@ -264,12 +264,30 @@ export const updateProductById = createAsyncThunk(
   }
 );
 
-export const deleteProductById = createAsyncThunk(
-  "admin/deleteProductById",
+export const setInactiveProduct = createAsyncThunk(
+  "admin/setInactiveProduct",
   async (productId: number, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/delete-product/${productId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/set-inactive-product/${productId}`
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const setActiveProduct = createAsyncThunk(
+  "admin/setActiveProduct",
+  async (productId: number, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/set-active-product/${productId}`
       );
 
       return response.data.data;
@@ -365,12 +383,30 @@ export const updateCategory = createAsyncThunk(
   }
 );
 
-export const deleteCategory = createAsyncThunk(
+export const setInactiveCategory = createAsyncThunk(
   "admin/deleteCategory",
   async (categoryId: number, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/delete-category/${categoryId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/set-inactive-category/${categoryId}`
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const setActiveCategory = createAsyncThunk(
+  "admin/activateCategory",
+  async (categoryId: number, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/set-active-category/${categoryId}`
       );
 
       return response.data.data;

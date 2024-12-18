@@ -169,6 +169,7 @@ export interface CategoryType {
   ct_image_cover: string;
   ct_currency_type: string;
   ct_currency_type_image: string;
+  ct_is_active: boolean;
 }
 
 export interface ProductType {
@@ -177,6 +178,7 @@ export interface ProductType {
   pr_name: string;
   pr_price: number;
   category?: CategoryType;
+  pr_is_active: boolean;
 }
 
 export interface ApiErrorType {

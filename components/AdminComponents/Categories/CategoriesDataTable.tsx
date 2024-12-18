@@ -3,7 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
-import { fetchAllCategory, deleteCategory } from "@/features/admin/adminThunk";
+import {
+  fetchAllCategory,
+  setInactiveCategory,
+  setActiveCategory,
+} from "@/features/admin/adminThunk";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +16,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit, Plus } from "lucide-react";
+import { Trash2, Edit, Plus, SquareCheck } from "lucide-react";
 import CategoriesCreateModal from "./CategoriesCreateModal";
 import { RootState, AppDispatch } from "@/store/store";
 import { CategoryType } from "@/types/types";
@@ -28,8 +32,11 @@ const CategoryDataTable: React.FC = () => {
 
   const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
   const [editCategory, setEditCategory] = useState<CategoryType | null>(null);
+  const [isActive, setIsActive] = useState<number | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isUpdateCategoryModalOpen, setIsUpdateCategoryModalOpen] =
+    useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCategories, setFilteredCategories] = useState<CategoryType[]>(
     []
@@ -58,10 +65,10 @@ const CategoryDataTable: React.FC = () => {
     }
   }, [searchTerm, categories]);
 
-  const handleDelete = async () => {
+  const handleInactiveCategory = async () => {
     try {
       if (deleteCategoryId) {
-        await dispatch(deleteCategory(deleteCategoryId)).unwrap();
+        await dispatch(setInactiveCategory(deleteCategoryId)).unwrap();
         refreshData();
         setIsDeleteModalOpen(false);
         setDeleteCategoryId(null);
@@ -79,6 +86,40 @@ const CategoryDataTable: React.FC = () => {
       }
     } catch (error) {
       toast.error(`Failed to delete category: ${error}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  };
+
+  const handleActiveCategory = async () => {
+    try {
+      if (isActive) {
+        await dispatch(setActiveCategory(isActive)).unwrap();
+        refreshData();
+        setIsUpdateCategoryModalOpen(false);
+        setIsActive(null);
+        toast.success("Category Activated Successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+    } catch (error) {
+      toast.error(`Failed to active category: ${error}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -133,6 +174,10 @@ const CategoryDataTable: React.FC = () => {
       ),
     },
     {
+      name: "Status",
+      cell: (row: CategoryType) => (row.ct_is_active ? "Active" : "Inactive"),
+    },
+    {
       name: "Actions",
       cell: (row: CategoryType) => (
         <div className="flex space-x-2">
@@ -146,16 +191,30 @@ const CategoryDataTable: React.FC = () => {
           >
             <Edit className="h-4 w-4" />
           </Button>
-          <Button
-            variant="destructive"
-            size="icon"
-            onClick={() => {
-              setDeleteCategoryId(row.ct_id as number);
-              setIsDeleteModalOpen(true);
-            }}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          {row.ct_is_active ? (
+            <Button
+              variant="destructive"
+              size="icon"
+              onClick={() => {
+                setDeleteCategoryId(row.ct_id as number);
+                setIsDeleteModalOpen(true);
+              }}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button
+              variant="default"
+              size="icon"
+              className="bg-green-600 hover:bg-green-500"
+              onClick={() => {
+                setIsActive(row.ct_id as number);
+                setIsUpdateCategoryModalOpen(true);
+              }}
+            >
+              <SquareCheck className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       ),
     },
@@ -197,10 +256,10 @@ const CategoryDataTable: React.FC = () => {
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Category</DialogTitle>
+            <DialogTitle>Disable Category</DialogTitle>
           </DialogHeader>
           <DialogDescription>
-            Are you sure you want to delete this category?
+            Are you sure you want to disable this category?
           </DialogDescription>
           <div className="flex justify-end space-x-2">
             <Button
@@ -209,8 +268,37 @@ const CategoryDataTable: React.FC = () => {
             >
               Cancel
             </Button>
-            <Button onClick={handleDelete} variant="destructive">
-              Delete
+            <Button onClick={handleInactiveCategory} variant="destructive">
+              Disable
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={isUpdateCategoryModalOpen}
+        onOpenChange={setIsUpdateCategoryModalOpen}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Active Category</DialogTitle>
+          </DialogHeader>
+          <DialogDescription>
+            Are you sure you want to active this category?
+          </DialogDescription>
+          <div className="flex justify-end space-x-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsUpdateCategoryModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleActiveCategory}
+              variant="default"
+              className="bg-green-600 hover:bg-green-500"
+            >
+              Active
             </Button>
           </div>
         </DialogContent>

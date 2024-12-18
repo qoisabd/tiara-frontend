@@ -4,7 +4,8 @@ import {
   fetchAllCategory,
   createCategory,
   updateCategory,
-  deleteCategory,
+  setInactiveCategory,
+  setActiveCategory,
 } from "./adminThunk";
 import { Status } from "@/utils/Status";
 import { CategoryType } from "@/types/types";
@@ -79,16 +80,31 @@ const adminCategorySlice = createSlice({
           action.error.message || "Failed to update category";
       });
 
-    // Delete Category
+    // Inactive Category
     builder
-      .addCase(deleteCategory.fulfilled, (state, action) => {
+      .addCase(setInactiveCategory.fulfilled, (state, action) => {
         state.categories = state.categories.filter(
           (category) => category.ct_id !== action.payload.id
         );
       })
-      .addCase(deleteCategory.rejected, (state, action) => {
+      .addCase(setInactiveCategory.rejected, (state, action) => {
         state.errorMessage =
-          action.error.message || "Failed to delete category";
+          action.error.message || "Failed to inactive category";
+      });
+
+    // Active Category
+    builder
+      .addCase(setActiveCategory.fulfilled, (state, action) => {
+        const categoryIndex = state.categories.findIndex(
+          (category) => category.ct_id === action.payload.id
+        );
+        if (categoryIndex !== -1) {
+          state.categories[categoryIndex] = action.payload;
+        }
+      })
+      .addCase(setActiveCategory.rejected, (state, action) => {
+        state.errorMessage =
+          action.error.message || "Failed to active category";
       });
   },
 });
