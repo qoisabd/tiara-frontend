@@ -178,7 +178,7 @@ export interface ProductType {
   pr_name: string;
   pr_price: number;
   category?: CategoryType;
-  pr_is_active: boolean;
+  pr_is_active?: boolean;
 }
 
 export interface ApiErrorType {
