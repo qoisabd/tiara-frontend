@@ -127,7 +127,7 @@ const Register = () => {
           </p>
         </div>
       </div>
-      <div className="flex flex-1 justify-center py-14">
+      <div className="flex flex-1 justify-center py-14 px-3">
         <div>
           <div className="flex justify-center">
             <Image
