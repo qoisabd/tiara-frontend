@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
 import {
   fetchNameCategory,
-  deleteProductById,
+  setInactiveProduct,
+  setActiveProduct,
   fetchAllProduct,
 } from "@/features/admin/adminThunk";
 import {
@@ -16,7 +17,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit, Plus } from "lucide-react";
+import { Trash2, Edit, Plus, SquareCheck } from "lucide-react";
 import ProductCreateModal from "./ProductCreateModal";
 import { RootState, AppDispatch } from "@/store/store";
 import { ProductType } from "@/types/types";
@@ -30,9 +31,12 @@ const ProductDataTable: React.FC = () => {
   );
 
   const [deleteProductId, setDeleteProductId] = useState<number | null>(null);
+  const [isActive, setIsActive] = useState<number | null>(null);
   const [editProduct, setEditProduct] = useState<ProductType | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isUpdateProductModalOpen, setIsUpdateProductModalOpen] =
+    useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
@@ -61,11 +65,11 @@ const ProductDataTable: React.FC = () => {
     }
   }, [searchTerm, products]);
 
-  const handleDelete = async () => {
+  const handleInactiveProduct = async () => {
     try {
       if (deleteProductId) {
-        await dispatch(deleteProductById(deleteProductId)).unwrap();
-        refreshData(); // Refresh the data after successful deletion
+        await dispatch(setInactiveProduct(deleteProductId)).unwrap();
+        refreshData();
         setIsDeleteModalOpen(false);
         setDeleteProductId(null);
         toast.success("Product Deleted Successfully", {
@@ -82,6 +86,40 @@ const ProductDataTable: React.FC = () => {
       }
     } catch (error) {
       toast.error(`Failed to delete product: ${error}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  };
+
+  const handleActiveProduct = async () => {
+    try {
+      if (isActive) {
+        await dispatch(setActiveProduct(isActive)).unwrap();
+        refreshData();
+        setIsUpdateProductModalOpen(false);
+        setIsActive(null);
+        toast.success("Product Activated Successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+    } catch (error) {
+      toast.error(`Failed to activate product: ${error}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -130,6 +168,12 @@ const ProductDataTable: React.FC = () => {
       format: (row: ProductType) => formatCurrency(row.pr_price),
     },
     {
+      name: "Status",
+      selector: (row: ProductType) =>
+        row.pr_is_active ? "Active" : "Inactive",
+      sortable: true,
+    },
+    {
       name: "Actions",
       cell: (row: ProductType) => (
         <div className="flex space-x-2">
@@ -143,16 +187,30 @@ const ProductDataTable: React.FC = () => {
           >
             <Edit className="h-4 w-4" />
           </Button>
-          <Button
-            variant="destructive"
-            size="icon"
-            onClick={() => {
-              setDeleteProductId(row.pr_id as number);
-              setIsDeleteModalOpen(true);
-            }}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          {row.pr_is_active ? (
+            <Button
+              variant="destructive"
+              size="icon"
+              onClick={() => {
+                setDeleteProductId(row.pr_id as number);
+                setIsDeleteModalOpen(true);
+              }}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button
+              variant="default"
+              size="icon"
+              className="bg-green-600 hover:bg-green-500"
+              onClick={() => {
+                setIsActive(row.pr_id as number);
+                setIsUpdateProductModalOpen(true);
+              }}
+            >
+              <SquareCheck className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       ),
     },
@@ -192,9 +250,9 @@ const ProductDataTable: React.FC = () => {
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Product</DialogTitle>
+            <DialogTitle>Disable Product</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this product?
+              Are you sure you want to disable this product?
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end space-x-2">
@@ -202,10 +260,42 @@ const ProductDataTable: React.FC = () => {
               variant="outline"
               onClick={() => setIsDeleteModalOpen(false)}
             >
+              Disable
+            </Button>
+            <Button variant="destructive" onClick={handleInactiveProduct}>
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={isUpdateProductModalOpen}
+        onOpenChange={setIsUpdateProductModalOpen}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Activate Product</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to activate this product?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end space-x-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsUpdateProductModalOpen(false)}
+            >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
-              Delete
+            <Button
+              variant="default"
+              className="bg-green-600 hover:bg-green-500"
+              onClick={() => {
+                handleActiveProduct();
+                setIsUpdateProductModalOpen(false);
+              }}
+            >
+              Activate
             </Button>
           </div>
         </DialogContent>
