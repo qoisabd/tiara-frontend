@@ -289,7 +289,7 @@ const Login = () => {
                   {status === "loading" ? "Signing In..." : "Sign In"}
                 </Button>
 
-                {/* <div className="my-1 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
+                <div className="my-1 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
                   <p className="mx-2 mb-0 text-center font-semibold text-slate-500">
                     Or
                   </p>
@@ -303,7 +303,7 @@ const Login = () => {
                 >
                   <FcGoogle />
                   Sign In with Google
-                </Button> */}
+                </Button>
 
                 <p className="text-center text-gray-400 mt-1">
                   Don't have an account?{" "}
