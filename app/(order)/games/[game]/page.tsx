@@ -262,9 +262,9 @@ const GameDetail = () => {
                       ))}
                       <p className="mt-3 md:mt-7">
                         For Customer Support, please contact Admin on our
-                        official Whatsapp at +62 123-4567-8910 {""}
+                        official Whatsapp at +62 851-9530-0828 {""}
                         <span className="text-yellow-500">
-                          <a href="https://wa.me/12345678910" target="_blank">
+                          <a href="https://wa.me/6285195300828" target="_blank">
                             or click here
                           </a>
                         </span>
