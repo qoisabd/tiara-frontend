@@ -47,7 +47,7 @@ export function OrderHistoryHeader({
       link.setAttribute("href", url);
       link.setAttribute(
         "download",
-        `order_history_rfq-topup_${new Date().toISOString().split("T")[0]}.csv`
+        `order_history_tiara-topup_${new Date().toISOString().split("T")[0]}.csv`
       );
       link.style.visibility = "hidden";
       document.body.appendChild(link);

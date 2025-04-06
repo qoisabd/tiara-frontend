@@ -79,7 +79,7 @@ export const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
           <div className="p-4 flex items-center justify-between">
             <h1 className={`font-bold text-xl ${!isSidebarOpen && "hidden"}`}>
               Admin Panel <br />
-              <span>Rifqi Topup</span>
+              <span>Tiara Topup</span>
             </h1>
             <Button
               variant="ghost"

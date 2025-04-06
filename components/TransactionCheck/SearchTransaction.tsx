@@ -35,7 +35,7 @@ const SearchTransaction = ({ onSearch }: SearchTransactionProps) => {
           <div className="relative">
             <Search className="absolute z-10 left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black pointer-events-none" />
             <Input
-              placeholder="Rfqtopupxxxxxxx"
+              placeholder="Trxxxxxxxx"
               className="pl-10 text-black placeholder-blue-300"
               onChange={(e) => onSearch(e.target.value)}
             />

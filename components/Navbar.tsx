@@ -102,12 +102,12 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2">
             <Image
               src={logoImage}
-              alt="Rifqi Top-up Logo"
+              alt="Tiara Games Logo"
               width={50}
               height={50}
             />
             <span className="font-bold text-base lg:text-xl text-white">
-              Rifqi<span className="text-[#FBB017]">TopUp</span>
+            Hahahaa<span className="text-[#FBB017]"> Games</span>
             </span>
           </Link>
         </div>

@@ -15,7 +15,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   metadataBase: new URL("https://tiaragames.netlify.app/"),
   title: {
-    default: "Top Up Game Terpercaya - Tiara Top Up",
+    default: "Tiara Games",
     template: "%s | Tiara Top Up",
   },
   description:
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "id_ID",
     url: "https://tiaragames.netlify.app/",
-    title: "Top Up Game Terpercaya - Tiara Topup",
+    title: "Tiara Games",
     description:
       "Platform top up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer.",
     siteName: "Tiara Topup",
@@ -48,13 +48,13 @@ export const metadata: Metadata = {
         url: "/public/assets/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Tiara Topup - Top Up Game Terpercaya",
+        alt: "Tiara Games",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Top Up Game Terpercaya - Tiara Topup",
+    title: "Tiara Games",
     description:
       "Platform top up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer.",
     images: ["/public/assets/images/og-image.jpg"],

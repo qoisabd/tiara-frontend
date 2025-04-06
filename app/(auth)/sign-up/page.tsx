@@ -120,7 +120,7 @@ const Register = () => {
         </div>
         <div className="mt-10">
           <p className="text-white text-lg text-center">
-            Start your journey with us Tiara top-ups!
+            Start your journey with us Tiara Games!
           </p>
           <p className="text-white text-sm text-center">
             Create a free account now! And start exploring the world of Top Up.
@@ -137,9 +137,11 @@ const Register = () => {
               width={50}
               height={50}
             />
-            <h2 className="flex items-center justify-center text-[#285CC4] font-bold text-2xl">
-              Tiara <span className="text-[#FBB017]">Top-up</span>
-            </h2>
+            <div className="flex items-center">
+              <h2 className="text-[#285CC4] font-bold text-2xl">
+                Tiara<span className="text-[#FBB017]"> Games</span>
+              </h2>
+            </div>
           </div>
           <div className="mt-5">
             <h2 className="text-3xl font-semibold">Create an account</h2>

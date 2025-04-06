@@ -187,7 +187,7 @@ const Login = () => {
         <div className="text-center p-8">
           <h1 className="text-5xl font-bold text-white mb-4">Login</h1>
           <p className="text-white text-lg">
-            Level up your gaming experience with Rifqi top-ups!
+            Level up your gaming experience with Tiara Games!
           </p>
           <div className="mt-8 flex items-center justify-center">
             <Image
@@ -213,7 +213,7 @@ const Login = () => {
             </div>
             <div className="flex items-center">
               <h2 className="text-[#285CC4] font-bold text-2xl">
-                Rifqi<span className="text-[#FBB017]">Top-up</span>
+                Tiara<span className="text-[#FBB017]"> Games</span>
               </h2>
             </div>
           </div>

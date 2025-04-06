@@ -335,7 +335,7 @@ const GameDetail = () => {
                         <div className="px-4 pb-4 text-[10px] sm:px-6 sm:pb-6">
                           <div>
                             <p className="text-white">
-                              <em>Contoh = Rifqi#1234</em>
+                              <em>Contoh = Tiara#1234</em>
                             </p>
                           </div>
                         </div>

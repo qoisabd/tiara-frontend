@@ -125,7 +125,7 @@ const Footer = () => {
           <FaWhatsapp />
         </Link>
         <Link
-          href="mailto:rfqtopup@gmail.com"
+          href="mailto:doelkussoy@gmail.com"
           className="text-white hover:text-blue-500"
           rel="noopener noreferrer"
         >

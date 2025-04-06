@@ -38,7 +38,7 @@ export default function TransactionDataTable() {
 
   const formatPlatformNumber = (platformId = "") =>
     !platformId || platformId.length <= 6
-      ? "rfqxxxxxx"
+      ? "tiaraxxxxxx"
       : `${platformId.substring(0, 3)}xxxxxx${platformId.substring(
           platformId.length - 3
         )}`;
