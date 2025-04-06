@@ -13,13 +13,13 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rifqitopup.my.id"),
+  metadataBase: new URL("https://tiaragames.netlify.app/"),
   title: {
-    default: "Top Up Game Terpercaya - Rifqi Top Up",
-    template: "%s | Rifqi Top Up",
+    default: "Top Up Game Terpercaya - Tiara Top Up",
+    template: "%s | Tiara Top Up",
   },
   description:
-    "Rifqi Top Up Platform Top Up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer. Dapatkan diamond, coin, dan voucher game dengan mudah.",
+    "Tiara Top Up Platform Top Up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer. Dapatkan diamond, coin, dan voucher game dengan mudah.",
   keywords: [
     "top up game",
     "beli diamond",
@@ -33,37 +33,37 @@ export const metadata: Metadata = {
   ],
   robots: "index, follow",
   alternates: {
-    canonical: "https://rifqitopup.my.id",
+    canonical: "https://tiaragames.netlify.app/",
   },
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://rifqitopup.my.id",
-    title: "Top Up Game Terpercaya - Rifqi Topup",
+    url: "https://tiaragames.netlify.app/",
+    title: "Top Up Game Terpercaya - Tiara Topup",
     description:
       "Platform top up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer.",
-    siteName: "Rifqi Topup",
+    siteName: "Tiara Topup",
     images: [
       {
         url: "/public/assets/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Rifqi Topup - Top Up Game Terpercaya",
+        alt: "Tiara Topup - Top Up Game Terpercaya",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Top Up Game Terpercaya - Rifqi Topup",
+    title: "Top Up Game Terpercaya - Tiara Topup",
     description:
       "Platform top up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer.",
     images: ["/public/assets/images/og-image.jpg"],
   },
-  applicationName: "Rifqi Topup",
-  authors: [{ name: "Rifqi Topup Team" }],
+  applicationName: "Tiara Topup",
+  authors: [{ name: "Tiara Topup Team" }],
   generator: "Next.js",
-  creator: "Rifqi Topup Team",
-  publisher: "Rifqi Topup Team",
+  creator: "Tiara Topup Team",
+  publisher: "Tiara Topup Team",
 };
 
 export default function RootLayout({

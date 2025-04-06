@@ -1,11 +1,10 @@
-# 🎮 Rifqi Top Up - Frontend 🎮
+# 🎮 Tiara Games - Frontend 🎮
 
-![Preview](public/assets/gif/preview-rifqi-top-up.gif)
-Rifqi Top Up is a user-friendly frontend web application for purchasing game top-ups, designed with scalability and performance in mind. This project leverages modern web technologies and tools to deliver a seamless user experience, including a robust admin interface for efficient management.
+![Preview](public/assets/gif/preview-tiara-games.gif)
+Tiara Games is a user-friendly frontend web application for purchasing game top-ups, designed with scalability and performance in mind. This project leverages modern web technologies and tools to deliver a seamless user experience, including a robust admin interface for efficient management.
 
 # 🧾 Table of Contents
 
-- [Rifqi Top Up Demo](#rifqi-top-up-demo)
 - [🧑🏻‍💻 Author](#-author)
 - [🛠️ Tech Stack](#️-tech-stack)
   - [Core Frameworks & Language](#core-frameworks--language)
@@ -24,13 +23,9 @@ Rifqi Top Up is a user-friendly frontend web application for purchasing game top
 - [🔗 Live Preview](#live-preview)
 - [📝 License](#license)
 
-# Rifqi Top Up Demo
-
-https://github.com/user-attachments/assets/55d595c2-ddbe-4854-a198-6c8beac9b426
-
 ## 🧑🏻‍💻 Author
 
-- [@Muhammad Rifqi Setiawan](https://github.com/rifqi142) as Full Stack Developer.
+- [@Qois Abdul Qudus](https://github.com/qoisabd) as Full Stack Developer.
 
 ## 🛠️ Tech Stack
 
@@ -178,8 +173,8 @@ This project uses the following environment variables:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/rifqi142/frontend-top-up
-cd frontend-top-up
+git clone https://github.com/qoisabd/tiara-frontend.git
+cd tiara-frontend
 ```
 
 ### 2. Install dependencies
@@ -236,11 +231,11 @@ git push origin feature/branch-name
 
 ## 🔧 Backend Repository
 
-The backend repository for this project can be found [here](https://github.com/rifqi142/backend-top-up)
+The backend repository for this project can be found [here](https://github.com/doelkussoy/backend-tiara.git/)
 
 ## 🔗 Live Preview
 
-Check out the live preview of the project [here](https://www.rifqitopup.my.id/).
+Check out the live preview of the project [here](https://tiaragames.netlify.app/).
 
 ## 📝 License
 
