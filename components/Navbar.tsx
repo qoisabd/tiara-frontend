@@ -107,7 +107,7 @@ export default function Navbar() {
               height={50}
             />
             <span className="font-bold text-base lg:text-xl text-white">
-            Hahahaa<span className="text-[#FBB017]"> Games</span>
+            Tiara<span className="text-[#FBB017]"> Games</span>
             </span>
           </Link>
         </div>
