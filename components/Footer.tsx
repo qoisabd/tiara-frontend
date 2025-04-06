@@ -27,7 +27,7 @@ const Footer = () => {
           </div>
 
           <p className="text-sm text-justify text-white">
-          Tiara topup is the ideal website for gamers looking to top up their
+          Tiara Games is the ideal website for gamers looking to top up their
             accounts at affordable and reliable prices. We are trusted as the
             fastest and most responsive top-up provider in Indonesia. We offer
             various secure payment methods, including bank transfers, virtual

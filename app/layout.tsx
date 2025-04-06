@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "Tiara Games",
     description:
       "Platform top up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer.",
-    siteName: "Tiara Topup",
+    siteName: "Tiara Games",
     images: [
       {
         url: "/public/assets/images/og-image.jpg",
@@ -59,11 +59,11 @@ export const metadata: Metadata = {
       "Platform top up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer.",
     images: ["/public/assets/images/og-image.jpg"],
   },
-  applicationName: "Tiara Topup",
-  authors: [{ name: "Tiara Topup Team" }],
+  applicationName: "Tiara Games",
+  authors: [{ name: "Tiara Games Team" }],
   generator: "Next.js",
-  creator: "Tiara Topup Team",
-  publisher: "Tiara Topup Team",
+  creator: "Tiara Games Team",
+  publisher: "Tiara Games Team",
 };
 
 export default function RootLayout({
