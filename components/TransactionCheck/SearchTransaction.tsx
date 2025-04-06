@@ -20,7 +20,7 @@ const SearchTransaction = ({ onSearch }: SearchTransactionProps) => {
             ordered? Please wait 1-5 minutes. But if the order still does not
             appear, you can{" "}
             <Link
-              href="https://wa.me/6285282810339?text=Hello%20I%20want%20to%20ask%20about%20my%20order"
+              href="https://wa.me/6285195300828?text=Hello%20I%20want%20to%20ask%20about%20my%20order"
               target="_blank"
               className="underline underline-offset-2 decoration-yellow-500"
             >
