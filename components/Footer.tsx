@@ -74,7 +74,7 @@ const Footer = () => {
           <ul className="space-y-2">
             <li>
               <Link
-                href="https://wa.me/6285175999728?text=Halo,%20admin%20saya%20membutuhkan%20bantuan"
+                href="https://wa.me/6285195300828?text=Halo,%20admin%20saya%20membutuhkan%20bantuan"
                 className="hover:text-yellow-300 text-white"
                 target="_blank"
               >
@@ -117,7 +117,7 @@ const Footer = () => {
           <FaInstagram />
         </Link>
         <Link
-          href="https://wa.me/6285175999728?text=Halo,%20admin%20saya%20membutuhkan%20bantuan"
+          href="https://wa.me/6285195300828?text=Halo,%20admin%20saya%20membutuhkan%20bantuan"
           target="_blank"
           rel="noopener noreferrer"
           className="text-white hover:text-green-500"
