@@ -22,7 +22,7 @@ const Footer = () => {
             />
             <h3 className="text-xl font-semibold text-white">
             Tiara
-              <span className="text-[#FBB017]"> Top Up</span>
+              <span className="text-[#FBB017]"> Games</span>
             </h3>
           </div>
 

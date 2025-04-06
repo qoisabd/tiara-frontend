@@ -16,10 +16,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://tiaragames.netlify.app/"),
   title: {
     default: "Tiara Games",
-    template: "%s | Tiara Top Up",
+    template: "%s | Tiara Games",
   },
   description:
-    "Tiara Top Up Platform Top Up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer. Dapatkan diamond, coin, dan voucher game dengan mudah.",
+    "Tiara Games Platform Top Up game online terpercaya. Proses cepat, aman, dan murah untuk semua game populer. Dapatkan diamond, coin, dan voucher game dengan mudah.",
   keywords: [
     "top up game",
     "beli diamond",
