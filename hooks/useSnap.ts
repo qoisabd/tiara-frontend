@@ -6,7 +6,7 @@ export default function useSnap() {
     const myMidtransClientKey =
       process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || "";
     const script = document.createElement("script");
-    script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+    script.src = "https://app.midtrans.com/snap/snap.js";
     script.setAttribute("data-client-key", myMidtransClientKey);
     script.async = true;
     script.onload = () => {
