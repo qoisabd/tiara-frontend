@@ -120,7 +120,7 @@ const Register = () => {
         </div>
         <div className="mt-10">
           <p className="text-white text-lg text-center">
-            Start your journey with us Rifqi top-ups!
+            Start your journey with us Tiara top-ups!
           </p>
           <p className="text-white text-sm text-center">
             Create a free account now! And start exploring the world of Top Up.
@@ -138,7 +138,7 @@ const Register = () => {
               height={50}
             />
             <h2 className="flex items-center justify-center text-[#285CC4] font-bold text-2xl">
-              Rifqi <span className="text-[#FBB017]">Top-up</span>
+              Tiara <span className="text-[#FBB017]">Top-up</span>
             </h2>
           </div>
           <div className="mt-5">

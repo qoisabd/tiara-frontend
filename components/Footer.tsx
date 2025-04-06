@@ -15,19 +15,19 @@ const Footer = () => {
           <div className="flex flex-row items-center gap-3">
             <Image
               src={logoImage}
-              alt="RifqiTopUp Logo"
+              alt="TiaraTopUp Logo"
               width={50}
               height={50}
               className="mb-4"
             />
             <h3 className="text-xl font-semibold text-white">
-              Rifqi
+            Tiara
               <span className="text-[#FBB017]"> Top Up</span>
             </h3>
           </div>
 
           <p className="text-sm text-justify text-white">
-            Rifqitopup is the ideal website for gamers looking to top up their
+          Tiara topup is the ideal website for gamers looking to top up their
             accounts at affordable and reliable prices. We are trusted as the
             fastest and most responsive top-up provider in Indonesia. We offer
             various secure payment methods, including bank transfers, virtual
@@ -109,7 +109,7 @@ const Footer = () => {
 
       <div className="container mx-auto px-4 md:px-32 mt-8 flex space-x-4 text-2xl">
         <Link
-          href="https://instagram.com/rifqi.setiawan18"
+          href="https://instagram.com/doelkussoy"
           target="_blank"
           rel="noopener noreferrer"
           className="text-white hover:text-yellow-300"
@@ -135,7 +135,7 @@ const Footer = () => {
 
       <div className="mt-8 text-center text-sm text-[#64AFD0]">
         <div className="px-4 md:px-32 max-w-screen-lg mx-auto border-t border-[#989898] pt-4">
-          © {getYear} RIFQITOPUP All rights reserved.
+          Tiara Games © {getYear} by Asoyy Dev.
         </div>
       </div>
     </footer>
